@@ -103,14 +103,24 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
   // 🐱 Stars (all repos including org)
   const stars = allRepos.reduce((s, r) => s + r.stargazers_count, 0);
 
-  // 🐱 Languages (all repos, skip forks)
+  // 🐱 Languages — byte count from each repo's /languages endpoint
+  const nonForkRepos = allRepos.filter(r => !r.fork);
   const languages: Record<string, number> = {};
-  for (const r of allRepos) {
-    if (r.language && !r.fork) languages[r.language] = (languages[r.language] || 0) + 1;
-  }
+
+  const langFetches = nonForkRepos.map(async (repo) => {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${repo.full_name}/languages`, { headers: h });
+      if (!res.ok) return;
+      const data: Record<string, number> = await res.json();
+      for (const [lang, bytes] of Object.entries(data)) {
+        languages[lang] = (languages[lang] || 0) + bytes;
+      }
+    } catch {}
+  });
+  await Promise.all(langFetches);
 
   // 🐱 Total repo count (non-fork only)
-  const repositories = allRepos.filter(r => !r.fork).length;
+  const repositories = nonForkRepos.length;
 
   // 🐱 Commits (Search API already includes org commits)
   let commits = 0;
