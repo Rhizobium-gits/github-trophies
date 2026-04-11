@@ -233,7 +233,7 @@ export async function GET(req: NextRequest) {
     const hasAct = !!activity;
     // Activity: breakdown bars + heatmap
     const actBreakdownH = hasAct ? Math.min(activity.breakdown.length, 5) * 18 + 4 : 0;
-    const actHeatmapH = hasAct ? 42 : 0; // 30-day heatmap grid
+    const actHeatmapH = hasAct ? 46 : 0; // 30-day heatmap (14px cells + 14 label + 14 date + gaps)
     const actLabelH = hasAct ? 20 : 0;
     const actTotalH = actLabelH + actBreakdownH + 10 + actHeatmapH;
     const actDiv = hasAct ? 20 : 0;
@@ -344,36 +344,30 @@ export async function GET(req: NextRequest) {
       });
       y += actBreakdownH;
 
-      // 🐱 30-day contribution heatmap
+      // 🐱 30-day heatmap — one row, full width
       o += `<text x="${pad}" y="${y + 10}" font-size="9" fill="${t.sectionLabel}" font-family="${F}">Last 30 days</text>`;
       y += 14;
 
-      const cellSize = 12, cellGap = 2;
-      const cols = 15, rows = 2;
+      const days = activity.heatmap.length;
+      const cellGap = 2;
+      const cellSize = (contentW - (days - 1) * cellGap) / days;
       const maxDay = Math.max(...activity.heatmap.map(d => d.count), 1);
 
       activity.heatmap.forEach((day, i) => {
-        const col = i % cols, row = Math.floor(i / cols);
-        const cx = pad + col * (cellSize + cellGap);
-        const cy = y + row * (cellSize + cellGap);
+        const cellX = pad + i * (cellSize + cellGap);
         const intensity = day.count === 0 ? 0.08 : 0.2 + (day.count / maxDay) * 0.8;
-        o += `<rect x="${cx}" y="${cy}" width="${cellSize}" height="${cellSize}" rx="2" fill="${t.bar}" opacity="${intensity.toFixed(2)}"/>`;
-        // 🐱 Show count inside cell if > 0
-        if (day.count > 0) {
-          o += `<text x="${cx + cellSize / 2}" y="${cy + cellSize / 2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="7" fill="${t.value}" font-family="${M}" opacity="0.8">${day.count}</text>`;
-        }
+        o += `<rect x="${cellX.toFixed(1)}" y="${y}" width="${cellSize.toFixed(1)}" height="14" rx="2" fill="${t.bar}" opacity="${intensity.toFixed(2)}"/>`;
       });
+      y += 18;
 
-      // 🐱 Date markers (first, mid, last)
-      const dateMarkers = [0, 14, 29];
-      dateMarkers.forEach(i => {
+      // 🐱 Date labels — first, every 7 days, last
+      [0, 7, 14, 21, days - 1].forEach(i => {
         if (i < activity.heatmap.length) {
-          const col = i % cols;
-          const cx = pad + col * (cellSize + cellGap) + cellSize / 2;
-          o += `<text x="${cx}" y="${y + rows * (cellSize + cellGap) + 10}" text-anchor="middle" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${activity.heatmap[i].date}</text>`;
+          const cellX = pad + i * (cellSize + cellGap) + cellSize / 2;
+          o += `<text x="${cellX.toFixed(1)}" y="${y + 8}" text-anchor="middle" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${activity.heatmap[i].date}</text>`;
         }
       });
-      y += actHeatmapH;
+      y += 10;
 
       o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
       y += actDiv;
