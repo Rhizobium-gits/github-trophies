@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
 import { langIcon, getLangColor, prefetchIcons, getAllDefs } from "@/lib/lang-icons";
-import { getPartyCatBase64 } from "@/lib/partycat";
 
 // 🐱 Theme system - VSCode-style named themes
 interface Theme {
@@ -212,13 +211,8 @@ export async function GET(req: NextRequest) {
     // 🐱 Collect defs from devicon icons
     const iconDefs = getAllDefs();
 
-    // 🐱 Party Cat GIF as base64 (speed adjusted by score)
-    const catType = sp.get("cat") || "vibe";
-    const catSize = 40;
-    const [catGifB64, avatarB64] = await Promise.all([
-      getPartyCatBase64(catType, score),
-      fetchAvatarBase64(s.user.avatar_url),
-    ]);
+    // 🐱 Avatar
+    const avatarB64 = await fetchAvatarBase64(s.user.avatar_url);
 
     let o = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
@@ -246,15 +240,12 @@ export async function GET(req: NextRequest) {
       o += `<text x="${tx}" y="${y + 54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
     }
 
-    // 🐱 Rank circle (shifted left for cat)
-    const cx = W - pad - catSize - 12 - 28, cy2 = y + 24, cr = 24;
+    // 🐱 Rank circle
+    const cx = W - pad - 28, cy2 = y + 24, cr = 24;
     const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
     o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
-
-    // 🐱 Party Cat GIF (right of rank circle, base64 embedded)
-    o += `<image x="${W - pad - catSize}" y="${y + 4}" width="${catSize}" height="${catSize}" href="${catGifB64}"/>`;
 
     y += headerH;
 
