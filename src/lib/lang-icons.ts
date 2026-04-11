@@ -1,6 +1,5 @@
-// 🐱 Language icons - fetch devicon SVGs and embed as inline SVG (no <image> tag)
-// GitHub README strips <image> and base64 data URIs from SVGs for security.
-// Instead we fetch the SVG source, extract its content, and inline it directly.
+// 🐱 Language icons from devicons
+// Fetched SVGs have their IDs uniquified to avoid conflicts when inlined
 
 const DEVICON_URLS: Record<string, string> = {
   Python: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
@@ -56,14 +55,39 @@ const LANG_COLORS: Record<string, string> = {
   Makefile: "#427819", TeX: "#3D6117", Svelte: "#ff3e00", Zig: "#ec915c",
   "Emacs Lisp": "#7F5AB6", Vim: "#199f4b", "Vim Script": "#199f4b",
   SCSS: "#CD6799", PowerShell: "#012456", Groovy: "#4298b8", Erlang: "#B83998",
-  Nix: "#7EBAE4", "Common Lisp": "#3fb68b", "F#": "#b845fc", Fortran: "#4d41b1",
-  Assembly: "#6E4C13", MATLAB: "#e16737",
+  Nix: "#7EBAE4", "Common Lisp": "#3fb68b", "F#": "#b845fc",
 };
 
-// 🐱 Cache: stores the inner SVG content (everything between <svg> and </svg>)
-const svgCache = new Map<string, string | null>();
+// 🐱 Cache: stores processed SVG content with uniquified IDs
+interface SvgData {
+  defs: string;   // <defs> content to put in parent SVG
+  body: string;   // paths/shapes to render
+  viewBox: string;
+}
 
-async function fetchSvgContent(lang: string): Promise<string | null> {
+const svgCache = new Map<string, SvgData | null>();
+let idCounter = 0;
+
+function uniquifyIds(svgText: string, prefix: string): string {
+  // 🐱 Replace all id="..." and url(#...) and href="#..." references with unique prefixed versions
+  const ids = new Set<string>();
+  const idPattern = /id="([^"]*)"/g;
+  let match;
+  while ((match = idPattern.exec(svgText)) !== null) {
+    ids.add(match[1]);
+  }
+  let result = svgText;
+  ids.forEach(id => {
+    const uid = `${prefix}_${id}`;
+    result = result.replace(new RegExp(`id="${id}"`, 'g'), `id="${uid}"`);
+    result = result.replace(new RegExp(`url\\(#${id}\\)`, 'g'), `url(#${uid})`);
+    result = result.replace(new RegExp(`href="#${id}"`, 'g'), `href="#${uid}"`);
+    result = result.replace(new RegExp(`xlink:href="#${id}"`, 'g'), `xlink:href="#${uid}"`);
+  });
+  return result;
+}
+
+async function fetchAndProcess(lang: string): Promise<SvgData | null> {
   if (svgCache.has(lang)) return svgCache.get(lang) || null;
 
   const url = DEVICON_URLS[lang];
@@ -72,24 +96,33 @@ async function fetchSvgContent(lang: string): Promise<string | null> {
   try {
     const res = await fetch(url);
     if (!res.ok) { svgCache.set(lang, null); return null; }
-    const text = await res.text();
+    let text = await res.text();
 
-    // 🐱 Extract viewBox and inner content
-    const viewBoxMatch = text.match(/viewBox="([^"]*)"/);
-    const viewBox = viewBoxMatch ? viewBoxMatch[1] : "0 0 128 128";
+    // 🐱 Uniquify IDs
+    const prefix = `li${idCounter++}`;
+    text = uniquifyIds(text, prefix);
 
-    // 🐱 Extract everything between <svg...> and </svg>
+    // 🐱 Extract viewBox
+    const vbMatch = text.match(/viewBox="([^"]*)"/);
+    const viewBox = vbMatch ? vbMatch[1] : "0 0 128 128";
+
+    // 🐱 Extract inner content
     const innerMatch = text.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
-    const inner = innerMatch ? innerMatch[1] : "";
+    let inner = innerMatch ? innerMatch[1] : "";
 
-    // 🐱 Remove any nested <svg>, <script>, <style> tags for safety
-    const cleaned = inner
-      .replace(/<script[\s\S]*?<\/script>/gi, "")
-      .replace(/<style[\s\S]*?<\/style>/gi, "");
+    // 🐱 Remove <style> and <script>
+    inner = inner.replace(/<script[\s\S]*?<\/script>/gi, "");
+    inner = inner.replace(/<style[\s\S]*?<\/style>/gi, "");
 
-    const result = `viewBox="${viewBox}">${cleaned}`;
-    svgCache.set(lang, result);
-    return result;
+    // 🐱 Separate <defs>...</defs> (gradients etc) from body
+    let defs = "";
+    inner = inner.replace(/<defs>([\s\S]*?)<\/defs>/gi, (_, d) => { defs += d; return ""; });
+    // 🐱 Also extract standalone gradient/clipPath elements outside <defs>
+    inner = inner.replace(/(<(?:linearGradient|radialGradient|clipPath)[^>]*>[\s\S]*?<\/(?:linearGradient|radialGradient|clipPath)>)/gi, (m) => { defs += m; return ""; });
+
+    const data: SvgData = { defs, body: inner.trim(), viewBox };
+    svgCache.set(lang, data);
+    return data;
   } catch {
     svgCache.set(lang, null);
     return null;
@@ -97,16 +130,27 @@ async function fetchSvgContent(lang: string): Promise<string | null> {
 }
 
 export async function prefetchIcons(langs: string[]): Promise<void> {
-  await Promise.all(langs.map(l => fetchSvgContent(l)));
+  await Promise.all(langs.map(l => fetchAndProcess(l)));
 }
 
-// 🐱 Render: uses nested <svg> with the devicon paths directly inlined
-export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
-  const cached = svgCache.get(lang);
+// 🐱 Get defs for all prefetched icons (to be placed in parent <defs>)
+export function getAllDefs(): string {
+  let defs = "";
+  svgCache.forEach(data => { if (data) defs += data.defs; });
+  return defs;
+}
 
-  if (cached) {
-    // 🐱 Inline SVG - no <image> tag, GitHub-safe
-    return `<svg x="${x}" y="${y}" width="${size}" height="${size}" ${cached}</svg>`;
+// 🐱 Render icon using <g transform> (no nested <svg>, no <image>)
+export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
+  const data = svgCache.get(lang);
+
+  if (data && data.body) {
+    // 🐱 Calculate scale from viewBox to target size
+    const vbParts = data.viewBox.split(/\s+/).map(Number);
+    const vbW = vbParts[2] || 128;
+    const vbH = vbParts[3] || 128;
+    const scale = size / Math.max(vbW, vbH);
+    return `<g transform="translate(${x},${y}) scale(${scale.toFixed(4)})">${data.body}</g>`;
   }
 
   // 🐱 Fallback: colored circle

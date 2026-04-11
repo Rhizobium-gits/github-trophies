@@ -1,10 +1,8 @@
-// 🐱 Nyan Cat pixel art SVG with speed-based animation
-// Speed is based on rank score (0-100): higher = faster
+// 🐱 Nyan Cat pixel art with CSS animation
+// GitHub README supports <style> with @keyframes inside SVGs
 
 const P = 2; // pixel size
 
-// 🐱 Pixel grid for the cat body (pop-tart + cat)
-// Colors: 0=transparent, 1=body(pink), 2=frosting(dark pink), 3=cat(gray), 4=cheek(pink), 5=eye, 6=mouth, 7=tail(gray)
 const CAT_PIXELS = [
   [0,0,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,3,3,3,0,0,0,3,3,3,0,0,0,0,0,0],
@@ -24,71 +22,61 @@ const CAT_PIXELS = [
 ];
 
 const COLORS: Record<number, string> = {
-  1: "#ffaaaa", // pop-tart body (light pink)
-  2: "#ff6699", // frosting (dark pink)
-  3: "#999999", // cat body (gray)
-  4: "#ff9999", // cheek
-  5: "#333333", // eye
-  6: "#ff6666", // mouth
-  7: "#888888", // tail
+  1: "#ffaaaa", 2: "#ff6699", 3: "#999999", 4: "#ff9999", 5: "#333333", 6: "#ff6666", 7: "#888888",
 };
 
-// 🐱 Rainbow trail colors
 const RAINBOW = ["#ff0000", "#ff9900", "#ffff00", "#33ff00", "#0099ff", "#6633ff"];
 
-export function renderNyanCat(x: number, y: number, score: number, theme: "light" | "dark"): string {
-  const catW = CAT_PIXELS[0].length * P;
+// 🐱 Returns { style, body } — style goes in parent <style>, body goes in SVG
+export function renderNyanCat(x: number, y: number, score: number): { style: string; body: string } {
   const catH = CAT_PIXELS.length * P;
-  const trailW = 24;
-  const totalW = catW + trailW + 4;
+  const trailW = 20;
+  const dur = Math.max(0.8, 5 - (score / 100) * 4.2);
 
-  // 🐱 Animation speed: score 0=6s, score 100=1s
-  const duration = Math.max(1, 6 - (score / 100) * 5);
+  let style = `
+@keyframes nyan-bounce {
+  0%, 100% { transform: translate(${x}px, ${y}px); }
+  50% { transform: translate(${x + 6}px, ${y - 3}px); }
+}
+@keyframes nyan-trail {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+@keyframes nyan-star {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.1; }
+}
+.nyan-cat { animation: nyan-bounce ${dur.toFixed(2)}s ease-in-out infinite; }
+.nyan-trail { animation: nyan-trail ${(dur * 0.4).toFixed(2)}s ease-in-out infinite; }
+.nyan-s1 { animation: nyan-star ${(dur * 0.6).toFixed(2)}s ease-in-out infinite; }
+.nyan-s2 { animation: nyan-star ${(dur * 0.6).toFixed(2)}s ease-in-out 0.2s infinite; }
+.nyan-s3 { animation: nyan-star ${(dur * 0.6).toFixed(2)}s ease-in-out 0.4s infinite; }
+`;
 
-  let svg = "";
+  let body = `<g class="nyan-cat">`;
 
-  // 🐱 Animated group - bounces horizontally
-  svg += `<g>`;
-  svg += `<animateTransform attributeName="transform" type="translate" values="${x},${y}; ${x + 8},${y - 2}; ${x},${y}" dur="${duration}s" repeatCount="indefinite"/>`;
-
-  // 🐱 Rainbow trail (left of cat)
-  const rainbowX = 0;
-  const rainbowStartY = 3 * P;
+  // 🐱 Rainbow trail
   const stripH = Math.floor(catH / RAINBOW.length);
+  const rainbowY = 3 * P;
   RAINBOW.forEach((color, i) => {
-    const ry = rainbowStartY + i * stripH;
-    // 🐱 Trail with slight wave animation
-    svg += `<rect x="${rainbowX}" y="${ry}" width="${trailW}" height="${stripH}" fill="${color}" opacity="0.8">`;
-    svg += `<animate attributeName="width" values="${trailW};${trailW - 4};${trailW}" dur="${duration * 0.5}s" repeatCount="indefinite"/>`;
-    svg += `</rect>`;
+    body += `<rect class="nyan-trail" x="0" y="${rainbowY + i * stripH}" width="${trailW}" height="${stripH}" fill="${color}"/>`;
   });
 
-  // 🐱 Cat pixels
+  // 🐱 Cat body
   const catOffX = trailW + 2;
   CAT_PIXELS.forEach((row, ry) => {
     row.forEach((pixel, rx) => {
       if (pixel === 0) return;
-      const color = COLORS[pixel] || "#999";
-      svg += `<rect x="${catOffX + rx * P}" y="${ry * P}" width="${P}" height="${P}" fill="${color}"/>`;
+      body += `<rect x="${catOffX + rx * P}" y="${ry * P}" width="${P}" height="${P}" fill="${COLORS[pixel]}"/>`;
     });
   });
 
-  // 🐱 Sparkle stars around the cat
-  const sparkleColor = theme === "light" ? "#ffcc00" : "#ffee88";
-  const sparkles = [
-    { sx: -8, sy: 4, delay: 0 },
-    { sx: totalW + 2, sy: 8, delay: 0.3 },
-    { sx: totalW - 4, sy: -4, delay: 0.6 },
-    { sx: -4, sy: catH - 4, delay: 0.9 },
-  ];
-  sparkles.forEach(({ sx, sy, delay }) => {
-    svg += `<text x="${sx}" y="${sy + 6}" font-size="6" fill="${sparkleColor}" opacity="0.8">`;
-    svg += `*`;
-    svg += `<animate attributeName="opacity" values="0.8;0.2;0.8" dur="${duration * 0.7}s" begin="${delay}s" repeatCount="indefinite"/>`;
-    svg += `</text>`;
-  });
+  // 🐱 Sparkles
+  body += `<text class="nyan-s1" x="${catOffX - 12}" y="8" font-size="7" fill="#ffee88">✦</text>`;
+  body += `<text class="nyan-s2" x="${catOffX + 46}" y="4" font-size="5" fill="#ffee88">✦</text>`;
+  body += `<text class="nyan-s3" x="${catOffX + 44}" y="26" font-size="6" fill="#ffee88">✦</text>`;
 
-  svg += `</g>`;
+  body += `</g>`;
 
-  return svg;
+  return { style, body };
 }
