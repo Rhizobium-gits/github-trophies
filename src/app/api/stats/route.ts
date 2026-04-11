@@ -56,68 +56,36 @@ THEMES.v6 = THEMES.nord;
 THEMES.v7 = THEMES.light;
 THEMES.v8 = THEMES.catppuccin;
 
-// 🐱 Recent activity: type breakdown + daily heatmap
+// 🐱 Contribution calendar (1 year) via GitHub GraphQL API
 interface ActivityData {
-  breakdown: { label: string; count: number; color: string }[];
-  heatmap: { date: string; count: number }[]; // last 30 days
-  total: number;
+  weeks: { total: number; month: string }[];  // 53 weeks, each with total contributions
+  totalContributions: number;
 }
 
-async function fetchRecentActivity(username: string): Promise<ActivityData | null> {
-  const h: Record<string, string> = { Accept: "application/vnd.github+json" };
-  if (process.env.GITHUB_TOKEN) h.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+async function fetchContributions(username: string): Promise<ActivityData | null> {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return null;
+
   try {
-    // 🐱 Fetch up to 300 events (3 pages)
-    const allEvents: { type: string; created_at: string }[] = [];
-    for (let p = 1; p <= 3; p++) {
-      const res = await fetch(`https://api.github.com/users/${username}/events?per_page=100&page=${p}`, { headers: h });
-      if (!res.ok) break;
-      const batch = await res.json();
-      if (!batch.length) break;
-      allEvents.push(...batch);
-    }
-    if (!allEvents.length) return null;
+    const query = `query{user(login:"${username}"){contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{contributionCount date}}}}}}`;
+    const res = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: { Authorization: `bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const cal = json?.data?.user?.contributionsCollection?.contributionCalendar;
+    if (!cal) return null;
 
-    // 🐱 Type breakdown
-    const types: Record<string, number> = {};
-    for (const ev of allEvents) types[ev.type] = (types[ev.type] || 0) + 1;
-
-    // 🐱 Map to readable labels
-    const typeMap: Record<string, { label: string; color: string }> = {
-      PushEvent: { label: "Pushes", color: "#4CAF50" },
-      PullRequestEvent: { label: "Pull Requests", color: "#2196F3" },
-      IssuesEvent: { label: "Issues", color: "#FF9800" },
-      PullRequestReviewEvent: { label: "Reviews", color: "#9C27B0" },
-      CreateEvent: { label: "Branches/Tags", color: "#00BCD4" },
-      IssueCommentEvent: { label: "Comments", color: "#607D8B" },
-      WatchEvent: { label: "Stars Given", color: "#FFC107" },
-      ForkEvent: { label: "Forks", color: "#795548" },
-      DeleteEvent: { label: "Deletions", color: "#F44336" },
-      ReleaseEvent: { label: "Releases", color: "#E91E63" },
-    };
-
-    const breakdown = Object.entries(types)
-      .map(([type, count]) => ({
-        label: typeMap[type]?.label || type.replace("Event", ""),
-        count,
-        color: typeMap[type]?.color || "#888",
-      }))
-      .sort((a, b) => b.count - a.count);
-
-    // 🐱 Daily heatmap (last 30 days)
-    const now = Date.now();
-    const dayMs = 24 * 60 * 60 * 1000;
-    const dayCounts = new Array(30).fill(0);
-    for (const ev of allEvents) {
-      const daysAgo = Math.floor((now - new Date(ev.created_at).getTime()) / dayMs);
-      if (daysAgo < 30) dayCounts[29 - daysAgo]++;
-    }
-    const heatmap = dayCounts.map((count, i) => {
-      const d = new Date(now - (29 - i) * dayMs);
-      return { date: `${d.getMonth() + 1}/${d.getDate()}`, count };
+    const weeks = cal.weeks.map((w: { contributionDays: { contributionCount: number; date: string }[] }) => {
+      const total = w.contributionDays.reduce((s: number, d: { contributionCount: number }) => s + d.contributionCount, 0);
+      const firstDay = w.contributionDays[0]?.date || "";
+      const m = firstDay ? new Date(firstDay).getMonth() + 1 : 0;
+      return { total, month: `${m}` };
     });
 
-    return { breakdown, heatmap, total: allEvents.length };
+    return { weeks, totalContributions: cal.totalContributions };
   } catch { return null; }
 }
 
@@ -216,7 +184,7 @@ export async function GET(req: NextRequest) {
   const t = THEMES[themeKey] || THEMES.noir;
 
   try {
-    const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchRecentActivity(username)]);
+    const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchContributions(username)]);
     const { rank, score } = calcRank(s.commits, s.pullRequests, s.issues, s.stars, s.followers);
 
     const W = 480, pad = 28, contentW = W - pad * 2;
@@ -231,11 +199,10 @@ export async function GET(req: NextRequest) {
     // 🐱 Height
     const headerH = 64, div = 20, statsH = 132;
     const hasAct = !!activity;
-    // Activity: breakdown bars + heatmap
-    const actBreakdownH = hasAct ? Math.min(activity.breakdown.length, 5) * 18 + 4 : 0;
-    const actHeatmapH = hasAct ? 46 : 0; // 30-day heatmap (14px cells + 14 label + 14 date + gaps)
+    // Activity: 1-year contribution graph (53 weeks)
     const actLabelH = hasAct ? 20 : 0;
-    const actTotalH = actLabelH + actBreakdownH + 10 + actHeatmapH;
+    const actGraphH = hasAct ? 30 : 0; // bar height + date labels
+    const actTotalH = actLabelH + actGraphH;
     const actDiv = hasAct ? 20 : 0;
     // 🐱 Languages: icon(18) + name + pct per row, 2 cols, 24px per row
     const langRows = Math.ceil(langSorted.length / 2);
@@ -311,63 +278,39 @@ export async function GET(req: NextRequest) {
     o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
     y += div;
 
-    // ==================== ACTIVITY ====================
+    // ==================== CONTRIBUTIONS (1 YEAR) ====================
     if (hasAct && activity) {
-      o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">RECENT ACTIVITY</text>`;
-      o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.total} events</text>`;
+      o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
+      o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
       y += actLabelH;
 
-      // 🐱 Type breakdown — horizontal stacked bar + legend
-      const top5 = activity.breakdown.slice(0, 5);
-      const breakdownTotal = activity.breakdown.reduce((s, b) => s + b.count, 0);
+      // 🐱 53-week bar graph, full width, edge to edge
+      const wks = activity.weeks;
+      const gap = 1;
+      const barW = (contentW - (wks.length - 1) * gap) / wks.length;
+      const maxWk = Math.max(...wks.map(w => w.total), 1);
+      const barMaxH = 16;
 
-      // Stacked bar
-      const barW = contentW;
-      let bx = pad;
-      o += `<clipPath id="abclip"><rect x="${pad}" y="${y}" width="${barW}" height="8" rx="4"/></clipPath><g clip-path="url(#abclip)">`;
-      for (const item of top5) {
-        const w = (item.count / breakdownTotal) * barW;
-        o += `<rect x="${bx.toFixed(1)}" y="${y}" width="${Math.max(w, 2).toFixed(1)}" height="8" fill="${item.color}"/>`;
-        bx += w;
-      }
-      o += `</g>`;
-      y += 14;
-
-      // Legend rows
-      top5.forEach((item, i) => {
-        const pct = ((item.count / breakdownTotal) * 100).toFixed(0);
-        const lx = pad + (i % 3) * Math.floor(contentW / 3);
-        const ly = y + Math.floor(i / 3) * 18;
-        o += `<circle cx="${lx + 4}" cy="${ly + 5}" r="3" fill="${item.color}"/>`;
-        o += `<text x="${lx + 12}" y="${ly + 9}" font-size="10" fill="${t.legendText}" font-family="${F}">${item.label}</text>`;
-        o += `<text x="${lx + 12}" y="${ly + 9}" font-size="10" fill="${t.legendSub}" font-family="${M}" dx="${item.label.length * 5.5 + 4}">${item.count} (${pct}%)</text>`;
+      wks.forEach((wk, i) => {
+        const bx = pad + i * (barW + gap);
+        const bh = wk.total === 0 ? 1 : Math.max((wk.total / maxWk) * barMaxH, 2);
+        const by = y + barMaxH - bh;
+        const op = wk.total === 0 ? 0.08 : 0.25 + (wk.total / maxWk) * 0.75;
+        o += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${Math.max(barW, 1).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="${t.bar}" opacity="${op.toFixed(2)}"/>`;
       });
-      y += actBreakdownH;
+      y += barMaxH + 2;
 
-      // 🐱 30-day heatmap — one row, full width
-      o += `<text x="${pad}" y="${y + 10}" font-size="9" fill="${t.sectionLabel}" font-family="${F}">Last 30 days</text>`;
-      y += 14;
-
-      const days = activity.heatmap.length;
-      const cellGap = 2;
-      const cellSize = (contentW - (days - 1) * cellGap) / days;
-      const maxDay = Math.max(...activity.heatmap.map(d => d.count), 1);
-
-      activity.heatmap.forEach((day, i) => {
-        const cellX = pad + i * (cellSize + cellGap);
-        const intensity = day.count === 0 ? 0.08 : 0.2 + (day.count / maxDay) * 0.8;
-        o += `<rect x="${cellX.toFixed(1)}" y="${y}" width="${cellSize.toFixed(1)}" height="14" rx="2" fill="${t.bar}" opacity="${intensity.toFixed(2)}"/>`;
-      });
-      y += 18;
-
-      // 🐱 Date labels — first, every 7 days, last
-      [0, 7, 14, 21, days - 1].forEach(i => {
-        if (i < activity.heatmap.length) {
-          const cellX = pad + i * (cellSize + cellGap) + cellSize / 2;
-          o += `<text x="${cellX.toFixed(1)}" y="${y + 8}" text-anchor="middle" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${activity.heatmap[i].date}</text>`;
+      // 🐱 Month labels along the bottom
+      let lastMonth = "";
+      wks.forEach((wk, i) => {
+        if (wk.month !== lastMonth && wk.month !== "0") {
+          const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          const bx = pad + i * (barW + gap);
+          o += `<text x="${bx.toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${months[parseInt(wk.month)] || ""}</text>`;
+          lastMonth = wk.month;
         }
       });
-      y += 10;
+      y += 12;
 
       o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
       y += actDiv;
