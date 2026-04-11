@@ -36,7 +36,6 @@ export interface GitHubStats {
   followers: number;
   languages: Record<string, number>;
   experience: number;
-  techStack: string[];  // detected from repo topics + dependency files
 }
 
 // 🐱 Per-user in-memory cache
@@ -113,69 +112,6 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
   // 🐱 Total repo count (non-fork only)
   const repositories = allRepos.filter(r => !r.fork).length;
 
-  // 🐱 Tech Stack — from repo topics + dependency file detection
-  const topicSet = new Set<string>();
-  for (const r of allRepos) {
-    if (r.topics) r.topics.forEach(t => topicSet.add(t));
-  }
-
-  // 🐱 Detect frameworks from dependency files (top repos only to limit API calls)
-  const FRAMEWORK_PATTERNS: Record<string, string> = {
-    next: "Next.js", react: "React", vue: "Vue.js", angular: "Angular",
-    svelte: "Svelte", nuxt: "Nuxt", express: "Express", nestjs: "NestJS",
-    django: "Django", flask: "Flask", fastapi: "FastAPI", pytorch: "PyTorch",
-    tensorflow: "TensorFlow", "scikit-learn": "scikit-learn", pandas: "pandas",
-    numpy: "NumPy", docker: "Docker", tailwindcss: "Tailwind CSS",
-    prisma: "Prisma", supabase: "Supabase", firebase: "Firebase",
-    electron: "Electron", "react-native": "React Native", flutter: "Flutter",
-    ollama: "Ollama", langchain: "LangChain", streamlit: "Streamlit",
-    qiime2: "QIIME 2", biom: "BIOM",
-  };
-
-  // 🐱 Check package.json and requirements.txt for non-fork repos (limit to 10)
-  const reposToCheck = allRepos.filter(r => !r.fork).slice(0, 10);
-  if (process.env.GITHUB_TOKEN) {
-    const depChecks = reposToCheck.map(async (repo) => {
-      const depFiles = ["package.json", "requirements.txt", "Pipfile", "pyproject.toml"];
-      for (const file of depFiles) {
-        try {
-          const res = await fetch(
-            `https://api.github.com/repos/${repo.full_name}/contents/${file}`,
-            { headers: { ...h, Accept: "application/vnd.github.raw" } }
-          );
-          if (!res.ok) continue;
-          const content = await res.text();
-          const lower = content.toLowerCase();
-          for (const [key, label] of Object.entries(FRAMEWORK_PATTERNS)) {
-            if (lower.includes(key)) topicSet.add(label);
-          }
-          break; // found a dep file, no need to check others
-        } catch {}
-      }
-    });
-    await Promise.all(depChecks);
-  }
-
-  // 🐱 Also map common topic names to proper labels
-  const TOPIC_MAP: Record<string, string> = {
-    nextjs: "Next.js", react: "React", vuejs: "Vue.js", angular: "Angular",
-    svelte: "Svelte", django: "Django", flask: "Flask", fastapi: "FastAPI",
-    docker: "Docker", kubernetes: "Kubernetes", pytorch: "PyTorch",
-    tensorflow: "TensorFlow", "machine-learning": "ML", "deep-learning": "Deep Learning",
-    tailwindcss: "Tailwind CSS", graphql: "GraphQL", postgresql: "PostgreSQL",
-    mongodb: "MongoDB", redis: "Redis", vercel: "Vercel", aws: "AWS",
-    ollama: "Ollama", langchain: "LangChain",
-  };
-
-  const techStack: string[] = [];
-  const seen = new Set<string>();
-  for (const t of topicSet) {
-    const label = TOPIC_MAP[t] || t;
-    const key = label.toLowerCase();
-    if (!seen.has(key)) { seen.add(key); techStack.push(label); }
-  }
-  techStack.sort();
-
   // 🐱 Commits (Search API already includes org commits)
   let commits = 0;
   try {
@@ -201,7 +137,7 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
 
   const experience = Math.floor((Date.now() - new Date(user.created_at).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
-  const stats: GitHubStats = { user, commits, pullRequests, issues, repositories, stars, followers: user.followers, languages, experience, techStack };
+  const stats: GitHubStats = { user, commits, pullRequests, issues, repositories, stars, followers: user.followers, languages, experience };
 
   // 🐱 Cache with eviction
   if (cache.size >= MAX_ENTRIES) {
