@@ -1,47 +1,108 @@
-// 🐱 Language icons from devicons — comprehensive mapping
-// GitHub language name → devicon icon name
+// 🐱 Language icons — devicons (primary) + Simple Icons (fallback)
+// GitHub language name → [devicon name, simple-icons slug]
 
-const LANG_TO_DEVICON: Record<string, string> = {
+interface IconSource { devicon?: string; simple?: string }
+
+const LANG_ICONS: Record<string, IconSource> = {
   // 🐱 Major languages
-  Python: "python", JavaScript: "javascript", TypeScript: "typescript",
-  HTML: "html5", CSS: "css3", Shell: "bash", R: "r",
-  "Jupyter Notebook": "jupyter", Go: "go", Rust: "rust",
-  Java: "java", C: "c", "C++": "cplusplus", "C#": "csharp",
-  Ruby: "ruby", PHP: "php", Swift: "swift", Kotlin: "kotlin",
-  Dart: "dart", Lua: "lua", Vue: "vuejs", Scala: "scala",
-  Haskell: "haskell", Perl: "perl", Elixir: "elixir",
-  Clojure: "clojure", OCaml: "ocaml", Julia: "julia",
-  Dockerfile: "docker", TeX: "latex", Svelte: "svelte",
-  Zig: "zig", "Emacs Lisp": "emacs", Vim: "vim",
-  "Vim Script": "vim", SCSS: "sass", PowerShell: "powershell",
-  Groovy: "groovy", Erlang: "erlang", Nix: "nixos",
-  // 🐱 Extended — only exact devicon matches (no mismatched logos)
-  "Objective-C": "objectivec", "Objective-C++": "objectivec",
-  Fortran: "fortran", MATLAB: "matlab",
-  COBOL: "cobol", Crystal: "crystal", Elm: "elm",
-  "F#": "fsharp", CoffeeScript: "coffeescript", Solidity: "solidity",
-  Prolog: "prolog", PureScript: "purescript",
-  Nim: "nim", Racket: "racket", Vala: "vala",
-  ClojureScript: "clojurescript",
-  // 🐱 Markup & data — only exact matches
-  Markdown: "markdown", JSON: "json", XML: "xml", YAML: "yaml",
-  CMake: "cmake",
+  Python:            { devicon: "python", simple: "python" },
+  JavaScript:        { devicon: "javascript", simple: "javascript" },
+  TypeScript:        { devicon: "typescript", simple: "typescript" },
+  HTML:              { devicon: "html5", simple: "html5" },
+  CSS:               { devicon: "css3", simple: "css3" },
+  Shell:             { devicon: "bash", simple: "gnubash" },
+  R:                 { devicon: "r", simple: "r" },
+  "Jupyter Notebook":{ devicon: "jupyter", simple: "jupyter" },
+  Go:                { devicon: "go", simple: "go" },
+  Rust:              { devicon: "rust", simple: "rust" },
+  Java:              { devicon: "java", simple: "openjdk" },
+  C:                 { devicon: "c", simple: "c" },
+  "C++":             { devicon: "cplusplus", simple: "cplusplus" },
+  "C#":              { devicon: "csharp", simple: "csharp" },
+  Ruby:              { devicon: "ruby", simple: "ruby" },
+  PHP:               { devicon: "php", simple: "php" },
+  Swift:             { devicon: "swift", simple: "swift" },
+  Kotlin:            { devicon: "kotlin", simple: "kotlin" },
+  Dart:              { devicon: "dart", simple: "dart" },
+  Lua:               { devicon: "lua", simple: "lua" },
+  Vue:               { devicon: "vuejs", simple: "vuedotjs" },
+  Scala:             { devicon: "scala", simple: "scala" },
+  Haskell:           { devicon: "haskell", simple: "haskell" },
+  Perl:              { devicon: "perl", simple: "perl" },
+  Elixir:            { devicon: "elixir", simple: "elixir" },
+  Clojure:           { devicon: "clojure", simple: "clojure" },
+  OCaml:             { devicon: "ocaml", simple: "ocaml" },
+  Julia:             { devicon: "julia", simple: "julia" },
+  Dockerfile:        { devicon: "docker", simple: "docker" },
+  TeX:               { devicon: "latex", simple: "latex" },
+  Svelte:            { devicon: "svelte", simple: "svelte" },
+  Zig:               { devicon: "zig", simple: "zig" },
+  "Emacs Lisp":      { devicon: "emacs", simple: "gnuemacs" },
+  Vim:               { devicon: "vim", simple: "vim" },
+  "Vim Script":      { devicon: "vim", simple: "vim" },
+  SCSS:              { devicon: "sass", simple: "sass" },
+  PowerShell:        { devicon: "powershell", simple: "powershell" },
+  Groovy:            { devicon: "groovy", simple: "apachegroovy" },
+  Erlang:            { devicon: "erlang", simple: "erlang" },
+  Nix:               { devicon: "nixos", simple: "nixos" },
+  // 🐱 Extended (devicon)
+  "Objective-C":     { devicon: "objectivec" },
+  "Objective-C++":   { devicon: "objectivec" },
+  Fortran:           { devicon: "fortran", simple: "fortran" },
+  MATLAB:            { devicon: "matlab" },
+  COBOL:             { devicon: "cobol" },
+  Crystal:           { devicon: "crystal", simple: "crystal" },
+  Elm:               { devicon: "elm" },
+  "F#":              { devicon: "fsharp" },
+  CoffeeScript:      { devicon: "coffeescript", simple: "coffeescript" },
+  Solidity:          { devicon: "solidity", simple: "solidity" },
+  Prolog:            { devicon: "prolog" },
+  PureScript:        { devicon: "purescript" },
+  Nim:               { devicon: "nim", simple: "nim" },
+  Racket:            { devicon: "racket", simple: "racket" },
+  Vala:              { devicon: "vala" },
+  ClojureScript:     { devicon: "clojurescript" },
+  // 🐱 Markup & data
+  Markdown:          { devicon: "markdown", simple: "markdown" },
+  JSON:              { devicon: "json", simple: "json" },
+  XML:               { devicon: "xml", simple: "xml" },
+  YAML:              { devicon: "yaml", simple: "yaml" },
+  CMake:             { devicon: "cmake", simple: "cmake" },
   // 🐱 Web/template
-  Astro: "astro", Handlebars: "handlebars", Pug: "pug",
-  Less: "less", Stylus: "stylus", PostCSS: "postcss",
+  Astro:             { devicon: "astro", simple: "astro" },
+  Handlebars:        { devicon: "handlebars", simple: "handlebarsdotjs" },
+  Pug:               { devicon: "pug", simple: "pug" },
+  Less:              { devicon: "less", simple: "less" },
+  Stylus:            { devicon: "stylus", simple: "stylus" },
+  PostCSS:           { devicon: "postcss", simple: "postcss" },
   // 🐱 Shell variants
-  Bash: "bash", Zsh: "bash", Fish: "bash",
-  "Shell Script": "bash", ShellSession: "bash",
-  // 🐱 Exact devicon matches only
-  Pascal: "delphi", GDScript: "godot", Processing: "processing",
-  Arduino: "arduino", AWK: "awk",
-  Gradle: "gradle", Bazel: "bazel",
-  Ceylon: "ceylon", Rexx: "rexx", APL: "apl",
-  Delphi: "delphi", "Visual Basic": "visualbasic",
-  Ballerina: "ballerina",
+  Bash:              { devicon: "bash", simple: "gnubash" },
+  Zsh:               { simple: "gnubash" },
+  Fish:              { simple: "gnubash" },
+  // 🐱 Simple Icons only (no devicon)
+  "Common Lisp":     { simple: "commonlisp" },
+  TOML:              { simple: "toml" },
+  HCL:               { simple: "hcl" },
+  Terraform:         { simple: "terraform" },
+  Ada:               { simple: "ada" },
+  D:                 { simple: "d" },
+  WebAssembly:       { simple: "webassembly" },
+  Wasm:              { simple: "webassembly" },
+  Makefile:          { simple: "cmake" },
+  // 🐱 Devicon only
+  Pascal:            { devicon: "delphi" },
+  GDScript:          { devicon: "godot" },
+  Processing:        { devicon: "processing" },
+  Arduino:           { devicon: "arduino" },
+  AWK:               { devicon: "awk" },
+  Gradle:            { devicon: "gradle", simple: "gradle" },
+  Bazel:             { devicon: "bazel" },
+  Delphi:            { devicon: "delphi" },
+  "Visual Basic":    { devicon: "visualbasic" },
+  APL:               { devicon: "apl" },
 };
 
-// 🐱 Language brand colors (GitHub linguist)
+// 🐱 Language brand colors
 const LANG_COLORS: Record<string, string> = {
   Python: "#3572A5", JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
   CSS: "#1572B6", Shell: "#89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
@@ -59,14 +120,33 @@ const LANG_COLORS: Record<string, string> = {
   Racket: "#3c5caa", Solidity: "#AA6746", YAML: "#cb171e", Markdown: "#083fa1",
   JSON: "#292929", XML: "#0060ac", Less: "#1d365d", Stylus: "#ff6347",
   Astro: "#ff5a03", GDScript: "#355570", Arduino: "#00979D", Processing: "#0096D8",
-  Cuda: "#3A4E3A", Wasm: "#654FF0", Starlark: "#76d275", Cython: "#fedf5b",
-  CMake: "#DA3434", Reason: "#ff5847", ReScript: "#E6484F", ClojureScript: "#db5855",
-  D: "#BA595E", Ada: "#02f88c", Pascal: "#E3F171", Scheme: "#1e4aec",
-  Tcl: "#e4cc98", Raku: "#0000fb", PureScript: "#1D222D", Hack: "#878787",
-  Apex: "#1797c0", Prolog: "#74283c", COBOL: "#234", HCL: "#844FBA",
+  Wasm: "#654FF0", WebAssembly: "#654FF0", D: "#BA595E", Ada: "#02f88c",
+  Pascal: "#E3F171", Scheme: "#1e4aec", Tcl: "#e4cc98", Raku: "#0000fb",
+  PureScript: "#1D222D", HCL: "#844FBA", TOML: "#9c4221", Terraform: "#7B42BC",
+  ClojureScript: "#db5855", COBOL: "#234",
 };
 
-// 🐱 Cache for fetched SVG data
+// 🐱 Abbreviations for badge fallback
+const LANG_SHORT: Record<string, string> = {
+  "Common Lisp": "CL", Scheme: "Sc", Assembly: "As", TOML: "Tm",
+  HCL: "HC", Makefile: "Mk", VHDL: "VH", SystemVerilog: "SV",
+  Tcl: "Tc", Hack: "Hk", Starlark: "St", Cython: "Cy",
+  Jsonnet: "Jn", Dhall: "Dh", D: "D", Ada: "Ad",
+  Batchfile: "Bt", Wasm: "Wa", WebAssembly: "Wa", GLSL: "GL",
+  Cuda: "Cu", Raku: "Rk", GDScript: "GD", CMake: "CM",
+  Shell: "Sh", R: "R", C: "C", Go: "Go", "C++": "++",
+  "C#": "C#", "F#": "F#", OCaml: "ML",
+};
+
+function isLightColor(hex: string): boolean {
+  if (!hex || hex.length < 7) return false;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 > 160;
+}
+
+// 🐱 SVG cache
 interface SvgData { defs: string; body: string; viewBox: string }
 const svgCache = new Map<string, SvgData | null>();
 let idCounter = 0;
@@ -87,50 +167,62 @@ function uniquifyIds(text: string, prefix: string): string {
   return result;
 }
 
+function processSvgText(text: string): SvgData {
+  const prefix = `li${idCounter++}`;
+  text = uniquifyIds(text, prefix);
+
+  const vbMatch = text.match(/viewBox="([^"]*)"/);
+  const viewBox = vbMatch ? vbMatch[1] : "0 0 24 24";
+
+  const innerMatch = text.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
+  let inner = innerMatch ? innerMatch[1] : "";
+  inner = inner.replace(/<script[\s\S]*?<\/script>/gi, "");
+  inner = inner.replace(/<style[\s\S]*?<\/style>/gi, "");
+
+  let defs = "";
+  inner = inner.replace(/<defs>([\s\S]*?)<\/defs>/gi, (_, d) => { defs += d; return ""; });
+  inner = inner.replace(/(<(?:linearGradient|radialGradient|clipPath)[^>]*>[\s\S]*?<\/(?:linearGradient|radialGradient|clipPath)>)/gi, (m) => { defs += m; return ""; });
+
+  return { defs, body: inner.trim(), viewBox };
+}
+
 async function fetchAndProcess(lang: string): Promise<SvgData | null> {
   if (svgCache.has(lang)) return svgCache.get(lang) || null;
 
-  const iconName = LANG_TO_DEVICON[lang];
-  if (!iconName) { svgCache.set(lang, null); return null; }
+  const src = LANG_ICONS[lang];
+  if (!src) { svgCache.set(lang, null); return null; }
 
-  // 🐱 Try -original.svg first, then -plain.svg as fallback
-  const urls = [
-    `https://raw.githubusercontent.com/devicons/devicon/master/icons/${iconName}/${iconName}-original.svg`,
-    `https://raw.githubusercontent.com/devicons/devicon/master/icons/${iconName}/${iconName}-plain.svg`,
-  ];
-  let text: string | null = null;
-  for (const url of urls) {
+  // 🐱 Try devicon first (-original, then -plain)
+  if (src.devicon) {
+    const base = `https://raw.githubusercontent.com/devicons/devicon/master/icons/${src.devicon}/${src.devicon}`;
+    for (const variant of ["-original.svg", "-plain.svg"]) {
+      try {
+        const res = await fetch(base + variant);
+        if (res.ok) {
+          const data = processSvgText(await res.text());
+          if (data.body) { svgCache.set(lang, data); return data; }
+        }
+      } catch {}
+    }
+  }
+
+  // 🐱 Fallback to Simple Icons
+  if (src.simple) {
     try {
-      const res = await fetch(url);
-      if (res.ok) { text = await res.text(); break; }
+      const res = await fetch(`https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/${src.simple}.svg`);
+      if (res.ok) {
+        let text = await res.text();
+        // 🐱 Simple Icons are monochrome — colorize with language color
+        const color = LANG_COLORS[lang] || "#888";
+        text = text.replace(/<svg/, `<svg fill="${color}"`);
+        const data = processSvgText(text);
+        if (data.body) { svgCache.set(lang, data); return data; }
+      }
     } catch {}
   }
-  if (!text) { svgCache.set(lang, null); return null; }
 
-  try {
-
-    const prefix = `li${idCounter++}`;
-    text = uniquifyIds(text, prefix);
-
-    const vbMatch = text.match(/viewBox="([^"]*)"/);
-    const viewBox = vbMatch ? vbMatch[1] : "0 0 128 128";
-
-    const innerMatch = text.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
-    let inner = innerMatch ? innerMatch[1] : "";
-    inner = inner.replace(/<script[\s\S]*?<\/script>/gi, "");
-    inner = inner.replace(/<style[\s\S]*?<\/style>/gi, "");
-
-    let defs = "";
-    inner = inner.replace(/<defs>([\s\S]*?)<\/defs>/gi, (_, d) => { defs += d; return ""; });
-    inner = inner.replace(/(<(?:linearGradient|radialGradient|clipPath)[^>]*>[\s\S]*?<\/(?:linearGradient|radialGradient|clipPath)>)/gi, (m) => { defs += m; return ""; });
-
-    const data: SvgData = { defs, body: inner.trim(), viewBox };
-    svgCache.set(lang, data);
-    return data;
-  } catch {
-    svgCache.set(lang, null);
-    return null;
-  }
+  svgCache.set(lang, null);
+  return null;
 }
 
 export async function prefetchIcons(langs: string[]): Promise<void> {
@@ -143,44 +235,6 @@ export function getAllDefs(): string {
   return defs;
 }
 
-// 🐱 Abbreviations for fallback badges
-const LANG_SHORT: Record<string, string> = {
-  "Common Lisp": "CL", Scheme: "Sc", Assembly: "As", TOML: "Tm",
-  HCL: "HC", Makefile: "Mk", VHDL: "VH", SystemVerilog: "SV",
-  Tcl: "Tc", Hack: "Hk", Meson: "Me", Starlark: "St",
-  Cython: "Cy", Jsonnet: "Jn", Dhall: "Dh", D: "D",
-  Ada: "Ad", Batchfile: "Bt", Wasm: "Wa", WebAssembly: "Wa",
-  GLSL: "GL", Cuda: "Cu", Raku: "Rk", "Objective-C++": "O+",
-  Terraform: "Tf", Nix: "Nx", "Emacs Lisp": "EL",
-  "Vim Script": "Vi", GDScript: "GD", ReScript: "Re",
-  CMake: "CM", Gradle: "Gr", Bazel: "Bz",
-  PowerShell: "Ps", Groovy: "Gy", Erlang: "Er",
-  Shell: "Sh", Bash: "Sh", R: "R", C: "C", Go: "Go",
-  Rust: "Rs", Lua: "Lu", Zig: "Zg", Nim: "Ni",
-  Dart: "Da", PHP: "Ph", Ruby: "Rb", Perl: "Pl",
-  Julia: "Jl", Scala: "Sc", Elm: "El", "F#": "F#",
-  "C#": "C#", "C++": "++", OCaml: "ML", APL: "AP",
-  COBOL: "CO", Crystal: "Cr", Fortran: "Fn", MATLAB: "Mt",
-  Solidity: "So", Prolog: "Pr", PureScript: "PS",
-  Haskell: "Hs", Racket: "Rk", Vala: "Va",
-  CoffeeScript: "Cf", Clojure: "Cj", Swift: "Sw",
-  Kotlin: "Kt", Java: "Jv", Python: "Py",
-  JavaScript: "JS", TypeScript: "TS", HTML: "HT",
-  CSS: "CS", Svelte: "Sv", Vue: "Vu",
-  Markdown: "Md", JSON: "Js", XML: "Xm", YAML: "Ym",
-  Dockerfile: "Dk", TeX: "Tx", Astro: "As",
-  Less: "Le", Stylus: "St", PostCSS: "Pc",
-  SCSS: "Ss", Handlebars: "Hb", Pug: "Pu",
-};
-
-function isLightColor(hex: string): boolean {
-  if (!hex || hex.length < 7) return false;
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return (r * 299 + g * 587 + b * 114) / 1000 > 160;
-}
-
 export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
   const data = svgCache.get(lang);
   if (data && data.body) {
@@ -188,7 +242,7 @@ export function langIcon(x: number, y: number, lang: string, size: number = 18):
     const scale = size / Math.max(vb[2] || 128, vb[3] || 128);
     return `<g transform="translate(${x},${y}) scale(${scale.toFixed(4)})">${data.body}</g>`;
   }
-  // 🐱 Fallback: styled badge with language color + abbreviation
+  // 🐱 Fallback: styled badge
   const color = LANG_COLORS[lang] || "#555";
   const short = LANG_SHORT[lang] || lang.slice(0, 2);
   const textColor = isLightColor(color) ? "#000" : "#fff";
