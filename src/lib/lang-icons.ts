@@ -143,6 +143,44 @@ export function getAllDefs(): string {
   return defs;
 }
 
+// 🐱 Abbreviations for fallback badges
+const LANG_SHORT: Record<string, string> = {
+  "Common Lisp": "CL", Scheme: "Sc", Assembly: "As", TOML: "Tm",
+  HCL: "HC", Makefile: "Mk", VHDL: "VH", SystemVerilog: "SV",
+  Tcl: "Tc", Hack: "Hk", Meson: "Me", Starlark: "St",
+  Cython: "Cy", Jsonnet: "Jn", Dhall: "Dh", D: "D",
+  Ada: "Ad", Batchfile: "Bt", Wasm: "Wa", WebAssembly: "Wa",
+  GLSL: "GL", Cuda: "Cu", Raku: "Rk", "Objective-C++": "O+",
+  Terraform: "Tf", Nix: "Nx", "Emacs Lisp": "EL",
+  "Vim Script": "Vi", GDScript: "GD", ReScript: "Re",
+  CMake: "CM", Gradle: "Gr", Bazel: "Bz",
+  PowerShell: "Ps", Groovy: "Gy", Erlang: "Er",
+  Shell: "Sh", Bash: "Sh", R: "R", C: "C", Go: "Go",
+  Rust: "Rs", Lua: "Lu", Zig: "Zg", Nim: "Ni",
+  Dart: "Da", PHP: "Ph", Ruby: "Rb", Perl: "Pl",
+  Julia: "Jl", Scala: "Sc", Elm: "El", "F#": "F#",
+  "C#": "C#", "C++": "++", OCaml: "ML", APL: "AP",
+  COBOL: "CO", Crystal: "Cr", Fortran: "Fn", MATLAB: "Mt",
+  Solidity: "So", Prolog: "Pr", PureScript: "PS",
+  Haskell: "Hs", Racket: "Rk", Vala: "Va",
+  CoffeeScript: "Cf", Clojure: "Cj", Swift: "Sw",
+  Kotlin: "Kt", Java: "Jv", Python: "Py",
+  JavaScript: "JS", TypeScript: "TS", HTML: "HT",
+  CSS: "CS", Svelte: "Sv", Vue: "Vu",
+  Markdown: "Md", JSON: "Js", XML: "Xm", YAML: "Ym",
+  Dockerfile: "Dk", TeX: "Tx", Astro: "As",
+  Less: "Le", Stylus: "St", PostCSS: "Pc",
+  SCSS: "Ss", Handlebars: "Hb", Pug: "Pu",
+};
+
+function isLightColor(hex: string): boolean {
+  if (!hex || hex.length < 7) return false;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 > 160;
+}
+
 export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
   const data = svgCache.get(lang);
   if (data && data.body) {
@@ -150,8 +188,12 @@ export function langIcon(x: number, y: number, lang: string, size: number = 18):
     const scale = size / Math.max(vb[2] || 128, vb[3] || 128);
     return `<g transform="translate(${x},${y}) scale(${scale.toFixed(4)})">${data.body}</g>`;
   }
+  // 🐱 Fallback: styled badge with language color + abbreviation
   const color = LANG_COLORS[lang] || "#555";
-  return `<circle cx="${x + size / 2}" cy="${y + size / 2}" r="${size / 2}" fill="${color}"/>`;
+  const short = LANG_SHORT[lang] || lang.slice(0, 2);
+  const textColor = isLightColor(color) ? "#000" : "#fff";
+  const fontSize = short.length > 2 ? 7 : 8;
+  return `<rect x="${x}" y="${y}" width="${size}" height="${size}" rx="4" fill="${color}"/><text x="${x + size / 2}" y="${y + size / 2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize}" font-weight="700" fill="${textColor}" font-family="ui-monospace, SFMono-Regular, monospace">${short}</text>`;
 }
 
 export function getLangColor(lang: string): string {
