@@ -100,6 +100,9 @@ const LANG_ICONS: Record<string, IconSource> = {
   Delphi:            { devicon: "delphi" },
   "Visual Basic":    { devicon: "visualbasic" },
   APL:               { devicon: "apl" },
+  // 🐱 Languages without devicon or simple-icons (will use badge fallback)
+  Batchfile:         { simple: "windowsterminal" },  // no exact match, badge fallback
+  Gnuplot:           {},  // no icon anywhere, badge fallback
 };
 
 // 🐱 Language brand colors
@@ -124,6 +127,7 @@ const LANG_COLORS: Record<string, string> = {
   Pascal: "#E3F171", Scheme: "#1e4aec", Tcl: "#e4cc98", Raku: "#0000fb",
   PureScript: "#1D222D", HCL: "#844FBA", TOML: "#9c4221", Terraform: "#7B42BC",
   ClojureScript: "#db5855", COBOL: "#234",
+  Gnuplot: "#f0c040", Batchfile: "#C1F12E",
 };
 
 // 🐱 Abbreviations for badge fallback
@@ -133,7 +137,7 @@ const LANG_SHORT: Record<string, string> = {
   Tcl: "Tc", Hack: "Hk", Starlark: "St", Cython: "Cy",
   Jsonnet: "Jn", Dhall: "Dh", D: "D", Ada: "Ad",
   Batchfile: "Bt", Wasm: "Wa", WebAssembly: "Wa", GLSL: "GL",
-  Cuda: "Cu", Raku: "Rk", GDScript: "GD", CMake: "CM",
+  Cuda: "Cu", Raku: "Rk", GDScript: "GD", CMake: "CM", Gnuplot: "Gp",
   Shell: "Sh", R: "R", C: "C", Go: "Go", "C++": "++",
   "C#": "C#", "F#": "F#", OCaml: "ML",
 };

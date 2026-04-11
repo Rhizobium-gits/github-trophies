@@ -202,8 +202,10 @@ export async function GET(req: NextRequest) {
     const W = 480, pad = 28, contentW = W - pad * 2;
 
     // 🐱 ALL languages
-    const langSorted = Object.entries(s.languages).sort((a, b) => b[1] - a[1]);
-    const langTotal = langSorted.reduce((sum, [, c]) => sum + c, 0);
+    const langAll = Object.entries(s.languages).sort((a, b) => b[1] - a[1]);
+    const langTotal = langAll.reduce((sum, [, c]) => sum + c, 0);
+    // 🐱 Filter out languages with < 0.1% (too small to show)
+    const langSorted = langAll.filter(([, c]) => langTotal > 0 && (c / langTotal) >= 0.001);
 
     // 🐱 Prefetch devicon SVGs as base64
     await prefetchIcons(langSorted.map(([l]) => l));
