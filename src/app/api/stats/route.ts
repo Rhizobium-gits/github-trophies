@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
 import { langIcon, getLangColor, prefetchIcons, getAllDefs } from "@/lib/lang-icons";
-import { renderNyanCat } from "@/lib/nyancat";
 
 // 🐱 Theme system - VSCode-style named themes
 interface Theme {
@@ -115,7 +114,7 @@ export async function GET(req: NextRequest) {
     const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchRecentActivity(username)]);
     const { rank, score } = calcRank(s.commits, s.pullRequests, s.stars, s.followers);
 
-    const W = 500, pad = 28, contentW = W - pad * 2;
+    const W = 480, pad = 28, contentW = W - pad * 2;
 
     // 🐱 ALL languages
     const langSorted = Object.entries(s.languages).sort((a, b) => b[1] - a[1]);
@@ -146,10 +145,6 @@ export async function GET(req: NextRequest) {
       { label: "Experience", value: `${s.experience} yr` },
     ];
 
-    // 🐱 Nyan Cat (CSS animation)
-    const nyanW = 70;
-    const nyan = renderNyanCat(W - pad - nyanW, pad + 10, score);
-
     // 🐱 Collect defs from devicon icons
     const iconDefs = getAllDefs();
 
@@ -158,7 +153,6 @@ export async function GET(req: NextRequest) {
   <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient>
   ${iconDefs}
 </defs>
-<style>${nyan.style}</style>
 <rect width="${W}" height="${H}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
 `;
     let y = pad;
@@ -173,14 +167,11 @@ export async function GET(req: NextRequest) {
     }
 
     // 🐱 Rank circle
-    const cx = W - pad - nyanW - 36, cy2 = y + 24, cr = 24;
+    const cx = W - pad - 28, cy2 = y + 24, cr = 24;
     const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
     o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
-
-    // 🐱 Nyan Cat right of rank circle
-    o += nyan.body;
 
     y += headerH;
 

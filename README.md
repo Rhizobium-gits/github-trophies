@@ -1,24 +1,48 @@
-# GitHub Trophies
+# GitHub Trophies <img src="https://cultofthepartyparrot.com/guests/catparrot.gif" width="30" height="30"/>
 
-Dynamic GitHub stats card for your README. Devicon logos, activity graph, animated Nyan Cat, 20 themes.
+Dynamic GitHub stats card for your README. Devicon logos, activity graph, 20 themes.
 
-![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
+<p>
+  <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir" alt="GitHub Stats"/>
+  <img src="https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif" width="40" height="40"/>
+</p>
 
 ## Features
 
 - Commits / PRs / Issues / Stars / Repos / Experience
 - 12-week activity bar chart with counts and dates
 - Language donut chart with devicon logos and percentages
-- Animated Nyan Cat that runs faster the higher your rank
 - 20 color themes (15 dark, 5 light)
+- Party Cat GIF <img src="https://cultofthepartyparrot.com/guests/catparrot.gif" width="20" height="20"/>
 
 ## Usage
 
 `username=` を自分のGitHubユーザー名に変えて使ってください。
 
+Stats + Party Cat を横並びで表示:
+
+```html
+<p>
+  <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir" alt="GitHub Stats"/>
+  <img src="https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif" width="40" height="40"/>
+</p>
+```
+
+Stats のみ:
+
 ```markdown
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 ```
+
+## Party Cat GIFs (free, from [cultofthepartyparrot.com](https://cultofthepartyparrot.com))
+
+好きなのを選んで Stats の横に置いてね:
+
+| Cat | URL | Preview |
+|-----|-----|---------|
+| Cat Parrot | `https://cultofthepartyparrot.com/guests/catparrot.gif` | <img src="https://cultofthepartyparrot.com/guests/catparrot.gif" width="30"/> |
+| Party Blob Cat (HD) | `https://cultofthepartyparrot.com/guests/hd/partyblobcat.gif` | <img src="https://cultofthepartyparrot.com/guests/hd/partyblobcat.gif" width="30"/> |
+| Vibe Party Cat (HD) | `https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif` | <img src="https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif" width="30"/> |
 
 ## Themes — Copy & Paste
 
