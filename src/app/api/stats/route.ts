@@ -2,7 +2,106 @@ import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
 import { LANG_COLORS } from "@/lib/svg";
 
-// 🐱 Fetch avatar as base64 for embedding in SVG
+// 🐱 Theme color system
+interface Theme {
+  bgGrad1: string;
+  bgGrad2: string;
+  stroke: string;
+  title: string;
+  subtitle: string;
+  label: string;
+  value: string;
+  sectionLabel: string;
+  dot: string;
+  divider: string;
+  dashLine: string;
+  bar: string;
+  rankCircleBg: string;
+  rankCircleTrack: string;
+  rankCircleArc: string;
+  rankText: string;
+  avatarStroke: string;
+  legendText: string;
+  legendSub: string;
+  donutCenter: string;
+}
+
+const THEMES: Record<string, Theme> = {
+  // 🐱 v1 - Noir (default)
+  v1: {
+    bgGrad1: "#111", bgGrad2: "#0a0a0a", stroke: "#2a2a2a",
+    title: "#fff", subtitle: "#555", label: "#888", value: "#eee",
+    sectionLabel: "#555", dot: "#444", divider: "#1e1e1e", dashLine: "#1a1a1a",
+    bar: "#fff", rankCircleBg: "#151515", rankCircleTrack: "#222",
+    rankCircleArc: "#fff", rankText: "#fff", avatarStroke: "#333",
+    legendText: "#bbb", legendSub: "#555", donutCenter: "#fff",
+  },
+  // 🐱 v2 - Ocean
+  v2: {
+    bgGrad1: "#0b1628", bgGrad2: "#0a1220", stroke: "#1e3a5f",
+    title: "#e0f0ff", subtitle: "#4a7da8", label: "#6a9ec8", value: "#c8e4ff",
+    sectionLabel: "#4a7da8", dot: "#2d6a9f", divider: "#152d4a", dashLine: "#152d4a",
+    bar: "#3b9eff", rankCircleBg: "#0d1f38", rankCircleTrack: "#1a3355",
+    rankCircleArc: "#3b9eff", rankText: "#c8e4ff", avatarStroke: "#1e3a5f",
+    legendText: "#8ec5ff", legendSub: "#4a7da8", donutCenter: "#c8e4ff",
+  },
+  // 🐱 v3 - Emerald
+  v3: {
+    bgGrad1: "#0a1a14", bgGrad2: "#071210", stroke: "#1a3d2e",
+    title: "#d0f5e0", subtitle: "#3d8a60", label: "#5aad7a", value: "#b8ecd0",
+    sectionLabel: "#3d8a60", dot: "#2d7a50", divider: "#143028", dashLine: "#143028",
+    bar: "#34d399", rankCircleBg: "#0d2018", rankCircleTrack: "#1a3d2e",
+    rankCircleArc: "#34d399", rankText: "#b8ecd0", avatarStroke: "#1a3d2e",
+    legendText: "#80d4a8", legendSub: "#3d8a60", donutCenter: "#b8ecd0",
+  },
+  // 🐱 v4 - Violet
+  v4: {
+    bgGrad1: "#150e24", bgGrad2: "#100a1e", stroke: "#2d1f4e",
+    title: "#e8d8ff", subtitle: "#7a5aad", label: "#9a7acc", value: "#d4c0f0",
+    sectionLabel: "#7a5aad", dot: "#5a3d8a", divider: "#221640", dashLine: "#221640",
+    bar: "#a78bfa", rankCircleBg: "#1a1030", rankCircleTrack: "#2d1f4e",
+    rankCircleArc: "#a78bfa", rankText: "#d4c0f0", avatarStroke: "#2d1f4e",
+    legendText: "#b8a0e0", legendSub: "#7a5aad", donutCenter: "#d4c0f0",
+  },
+  // 🐱 v5 - Sunset
+  v5: {
+    bgGrad1: "#1e1008", bgGrad2: "#180c06", stroke: "#4a2a10",
+    title: "#ffe8cc", subtitle: "#aa7040", label: "#cc9060", value: "#ffd8b0",
+    sectionLabel: "#aa7040", dot: "#8a5a30", divider: "#3a2010", dashLine: "#3a2010",
+    bar: "#fb923c", rankCircleBg: "#241408", rankCircleTrack: "#4a2a10",
+    rankCircleArc: "#fb923c", rankText: "#ffd8b0", avatarStroke: "#4a2a10",
+    legendText: "#e0a870", legendSub: "#aa7040", donutCenter: "#ffd8b0",
+  },
+  // 🐱 v6 - Rose
+  v6: {
+    bgGrad1: "#1e0a14", bgGrad2: "#180810", stroke: "#4a1a30",
+    title: "#ffe0ee", subtitle: "#aa4a70", label: "#cc6a90", value: "#ffc8dd",
+    sectionLabel: "#aa4a70", dot: "#8a3a5a", divider: "#3a1228", dashLine: "#3a1228",
+    bar: "#f472b6", rankCircleBg: "#240e18", rankCircleTrack: "#4a1a30",
+    rankCircleArc: "#f472b6", rankText: "#ffc8dd", avatarStroke: "#4a1a30",
+    legendText: "#e090b8", legendSub: "#aa4a70", donutCenter: "#ffc8dd",
+  },
+  // 🐱 v7 - Light
+  v7: {
+    bgGrad1: "#ffffff", bgGrad2: "#f8f8f8", stroke: "#e0e0e0",
+    title: "#111", subtitle: "#888", label: "#666", value: "#111",
+    sectionLabel: "#999", dot: "#bbb", divider: "#eee", dashLine: "#eee",
+    bar: "#333", rankCircleBg: "#f0f0f0", rankCircleTrack: "#ddd",
+    rankCircleArc: "#111", rankText: "#111", avatarStroke: "#ddd",
+    legendText: "#444", legendSub: "#999", donutCenter: "#111",
+  },
+  // 🐱 v8 - Nord
+  v8: {
+    bgGrad1: "#2e3440", bgGrad2: "#282e3a", stroke: "#3b4252",
+    title: "#eceff4", subtitle: "#7b88a0", label: "#8a95aa", value: "#d8dee9",
+    sectionLabel: "#6a7585", dot: "#5a6577", divider: "#3b4252", dashLine: "#3b4252",
+    bar: "#88c0d0", rankCircleBg: "#333a48", rankCircleTrack: "#434c5e",
+    rankCircleArc: "#88c0d0", rankText: "#d8dee9", avatarStroke: "#434c5e",
+    legendText: "#b0bcc8", legendSub: "#6a7585", donutCenter: "#d8dee9",
+  },
+};
+
+// 🐱 Fetch avatar as base64
 async function fetchAvatarBase64(url: string): Promise<string | null> {
   try {
     const res = await fetch(`${url}&s=80`);
@@ -17,62 +116,44 @@ async function fetchAvatarBase64(url: string): Promise<string | null> {
 }
 
 // 🐱 Fetch recent events for activity graph
-interface GitHubEvent {
-  type: string;
-  created_at: string;
-}
+interface GitHubEvent { type: string; created_at: string }
 
 async function fetchRecentActivity(username: string): Promise<number[]> {
   const h: Record<string, string> = { Accept: "application/vnd.github+json" };
   if (process.env.GITHUB_TOKEN) h.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-
   try {
     const res = await fetch(`https://api.github.com/users/${username}/events?per_page=100`, { headers: h });
     if (!res.ok) return [];
     const events: GitHubEvent[] = await res.json();
-
-    // 🐱 Group into 12 weekly buckets (last ~3 months)
     const now = Date.now();
     const buckets = new Array(12).fill(0);
     for (const ev of events) {
-      const age = now - new Date(ev.created_at).getTime();
-      const weekIdx = Math.floor(age / (7 * 24 * 60 * 60 * 1000));
+      const weekIdx = Math.floor((now - new Date(ev.created_at).getTime()) / (7 * 24 * 60 * 60 * 1000));
       if (weekIdx < 12) buckets[11 - weekIdx]++;
     }
     return buckets;
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
 
 // 🐱 Rank calculation
 function calcOverallRank(commits: number, prs: number, stars: number, followers: number): { rank: string; score: number } {
-  const score = Math.min(
-    Math.log10(commits + 1) * 10 +
-    Math.log10(prs + 1) * 8 +
-    Math.log10(stars + 1) * 6 +
-    Math.log10(followers + 1) * 4,
-    100
-  );
-  const ranks = [
+  const score = Math.min(Math.log10(commits+1)*10 + Math.log10(prs+1)*8 + Math.log10(stars+1)*6 + Math.log10(followers+1)*4, 100);
+  for (const t of [
     { min: 50, rank: "S" }, { min: 40, rank: "A+" }, { min: 30, rank: "A" },
     { min: 20, rank: "B+" }, { min: 10, rank: "B" }, { min: 0, rank: "C" },
-  ];
-  for (const t of ranks) {
-    if (score >= t.min) return { rank: t.rank, score: Math.round(score) };
-  }
+  ]) { if (score >= t.min) return { rank: t.rank, score: Math.round(score) }; }
   return { rank: "C", score: 0 };
 }
 
-function escapeXml(s: string): string {
+function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-const FONT = "system-ui, -apple-system, sans-serif";
-const MONO = "ui-monospace, SFMono-Regular, monospace";
+const F = "system-ui, -apple-system, sans-serif";
+const M = "ui-monospace, SFMono-Regular, monospace";
 
 function errorSvg(msg: string): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="60"><rect width="480" height="60" rx="8" fill="#111" stroke="#333"/><text x="240" y="35" text-anchor="middle" font-size="12" fill="#f87171" font-family="${FONT}">${escapeXml(msg)}</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="60"><rect width="480" height="60" rx="8" fill="#111" stroke="#333"/><text x="240" y="35" text-anchor="middle" font-size="12" fill="#f87171" font-family="${F}">${esc(msg)}</text></svg>`;
 }
 
 export async function GET(req: NextRequest) {
@@ -82,36 +163,27 @@ export async function GET(req: NextRequest) {
   if (!username) return new NextResponse(errorSvg("Missing ?username= parameter"), { status: 400, headers: { "Content-Type": "image/svg+xml" } });
   if (!isValidUsername(username)) return new NextResponse(errorSvg("Invalid GitHub username"), { status: 400, headers: { "Content-Type": "image/svg+xml" } });
 
+  const themeKey = sp.get("theme") || "v1";
+  const t = THEMES[themeKey] || THEMES.v1;
+
   try {
-    const [s, activity] = await Promise.all([
-      fetchGitHubStats(username),
-      fetchRecentActivity(username),
-    ]);
+    const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchRecentActivity(username)]);
     const avatar = await fetchAvatarBase64(s.user.avatar_url);
     const { rank, score } = calcOverallRank(s.commits, s.pullRequests, s.stars, s.followers);
 
-    // 🐱 Layout constants
-    const W = 480;
-    const pad = 28;
-    const contentW = W - pad * 2;
+    const W = 480, pad = 28, contentW = W - pad * 2;
 
-    // 🐱 Languages
     const langSorted = Object.entries(s.languages).sort((a, b) => b[1] - a[1]);
     const langTotal = langSorted.reduce((sum, [, c]) => sum + c, 0);
     const topLangs = langSorted.slice(0, 6);
 
-    // 🐱 Dynamic height calculation
-    const headerH = 64;
-    const divider1 = 20;
-    const statsH = 132;
-    const divider2 = 20;
-    const activityLabelH = 20;
-    const activityH = activity.length > 0 ? 60 : 0;
-    const divider3 = activity.length > 0 ? 20 : 0;
-    const langSectionH = topLangs.length > 0 ? 24 + 80 + 24 + Math.ceil(topLangs.length / 3) * 22 : 0;
-    const H = pad + headerH + divider1 + statsH + divider2 + activityLabelH + activityH + divider3 + langSectionH + pad;
+    // 🐱 Height
+    const headerH = 64, div = 20, statsH = 132;
+    const actLabelH = 20, actH = activity.length > 0 ? 60 : 0;
+    const actDiv = activity.length > 0 ? 20 : 0;
+    const langH = topLangs.length > 0 ? 24 + 80 + 24 + Math.ceil(topLangs.length / 3) * 22 : 0;
+    const H = pad + headerH + div + statsH + div + actLabelH + actH + actDiv + langH + pad;
 
-    // 🐱 Stats
     const statsItems = [
       { label: "Total Commits", value: s.commits.toLocaleString() },
       { label: "Pull Requests", value: s.pullRequests.toLocaleString() },
@@ -121,152 +193,109 @@ export async function GET(req: NextRequest) {
       { label: "Experience", value: `${s.experience} yr` },
     ];
 
-    let svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    let o = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
-    <stop offset="0%" stop-color="#111"/>
-    <stop offset="100%" stop-color="#0a0a0a"/>
-  </linearGradient>
-  <clipPath id="avatarClip"><circle cx="${pad + 24}" cy="${pad + 24}" r="24"/></clipPath>
+  <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient>
+  <clipPath id="ac"><circle cx="${pad + 24}" cy="${pad + 24}" r="24"/></clipPath>
 </defs>
-<rect width="${W}" height="${H}" rx="14" fill="url(#bg)" stroke="#2a2a2a" stroke-width="1"/>
+<rect width="${W}" height="${H}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
 `;
 
     let y = pad;
 
     // ==================== HEADER ====================
-    // 🐱 Avatar
     if (avatar) {
-      svg += `<image x="${pad}" y="${y}" width="48" height="48" href="${avatar}" clip-path="url(#avatarClip)" preserveAspectRatio="xMidYMid slice"/>`;
-      svg += `<circle cx="${pad + 24}" cy="${y + 24}" r="24" fill="none" stroke="#333" stroke-width="1.5"/>`;
+      o += `<image x="${pad}" y="${y}" width="48" height="48" href="${avatar}" clip-path="url(#ac)" preserveAspectRatio="xMidYMid slice"/>`;
+      o += `<circle cx="${pad + 24}" cy="${y + 24}" r="24" fill="none" stroke="${t.avatarStroke}" stroke-width="1.5"/>`;
     }
-
-    // 🐱 Name + handle
-    const textX = avatar ? pad + 60 : pad;
-    svg += `<text x="${textX}" y="${y + 20}" font-size="17" font-weight="700" fill="#fff" font-family="${FONT}">${escapeXml(s.user.name || s.user.login)}</text>`;
-    svg += `<text x="${textX}" y="${y + 38}" font-size="11" fill="#555" font-family="${FONT}">@${escapeXml(s.user.login)}</text>`;
+    const tx = avatar ? pad + 60 : pad;
+    o += `<text x="${tx}" y="${y + 20}" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(s.user.name || s.user.login)}</text>`;
+    o += `<text x="${tx}" y="${y + 38}" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(s.user.login)}</text>`;
     if (s.user.bio) {
       const bio = s.user.bio.length > 50 ? s.user.bio.slice(0, 47) + "..." : s.user.bio;
-      svg += `<text x="${textX}" y="${y + 54}" font-size="10" fill="#444" font-family="${FONT}">${escapeXml(bio)}</text>`;
+      o += `<text x="${tx}" y="${y + 54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
     }
 
     // 🐱 Rank circle
-    const cx = W - pad - 28;
-    const cy = y + 24;
-    const r = 24;
-    const circ = 2 * Math.PI * r;
-    const dashOff = circ - (score / 100) * circ;
-    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#151515" stroke="#222" stroke-width="2"/>`;
-    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dashOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})" opacity="0.9"/>`;
-    svg += `<text x="${cx}" y="${cy + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="#fff" font-family="${FONT}">${rank}</text>`;
-
+    const cx = W - pad - 28, cy2 = y + 24, cr = 24;
+    const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
+    o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
+    o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
+    o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
     y += headerH;
 
-    // 🐱 Divider
-    svg += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="#1e1e1e" stroke-width="1"/>`;
-    y += divider1;
+    o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
+    y += div;
 
     // ==================== STATS ====================
     statsItems.forEach((item, i) => {
       const iy = y + i * 22;
-      svg += `<circle cx="${pad + 4}" cy="${iy + 5}" r="2" fill="#444"/>`;
-      svg += `<text x="${pad + 14}" y="${iy + 9}" font-size="12" fill="#888" font-family="${FONT}">${item.label}</text>`;
-      svg += `<line x1="${pad + 130}" y1="${iy + 6}" x2="${W - pad - 70}" y2="${iy + 6}" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="2,4"/>`;
-      svg += `<text x="${W - pad}" y="${iy + 9}" text-anchor="end" font-size="13" font-weight="600" fill="#eee" font-family="${MONO}">${item.value}</text>`;
+      o += `<circle cx="${pad + 4}" cy="${iy + 5}" r="2" fill="${t.dot}"/>`;
+      o += `<text x="${pad + 14}" y="${iy + 9}" font-size="12" fill="${t.label}" font-family="${F}">${item.label}</text>`;
+      o += `<line x1="${pad + 130}" y1="${iy + 6}" x2="${W - pad - 70}" y2="${iy + 6}" stroke="${t.dashLine}" stroke-width="1" stroke-dasharray="2,4"/>`;
+      o += `<text x="${W - pad}" y="${iy + 9}" text-anchor="end" font-size="13" font-weight="600" fill="${t.value}" font-family="${M}">${item.value}</text>`;
     });
-
     y += statsH;
 
-    // 🐱 Divider
-    svg += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="#1e1e1e" stroke-width="1"/>`;
-    y += divider2;
+    o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
+    y += div;
 
-    // ==================== ACTIVITY GRAPH ====================
+    // ==================== ACTIVITY ====================
     if (activity.length > 0) {
-      svg += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="#555" font-family="${FONT}" letter-spacing="1">ACTIVITY (LAST 12 WEEKS)</text>`;
-      y += activityLabelH;
+      o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">ACTIVITY (LAST 12 WEEKS)</text>`;
+      y += actLabelH;
 
-      const barAreaW = contentW;
-      const barCount = activity.length;
-      const gap = 4;
-      const barW = (barAreaW - (barCount - 1) * gap) / barCount;
-      const maxVal = Math.max(...activity, 1);
-      const barMaxH = 44;
+      const barAreaW = contentW, gap = 4;
+      const barW = (barAreaW - 11 * gap) / 12;
+      const maxVal = Math.max(...activity, 1), barMaxH = 44;
 
       activity.forEach((val, i) => {
         const bx = pad + i * (barW + gap);
         const bh = Math.max((val / maxVal) * barMaxH, 2);
         const by = y + barMaxH - bh;
         const opacity = val === 0 ? 0.15 : 0.3 + (val / maxVal) * 0.7;
-        svg += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" rx="3" fill="#fff" opacity="${opacity.toFixed(2)}"/>`;
+        o += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" rx="3" fill="${t.bar}" opacity="${opacity.toFixed(2)}"/>`;
       });
+      y += actH;
 
-      y += activityH;
-
-      // 🐱 Divider
-      svg += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="#1e1e1e" stroke-width="1"/>`;
-      y += divider3;
+      o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
+      y += actDiv;
     }
 
     // ==================== LANGUAGES ====================
     if (topLangs.length > 0) {
-      svg += `<text x="${pad}" y="${y + 14}" font-size="10" font-weight="600" fill="#555" font-family="${FONT}" letter-spacing="1">MOST USED LANGUAGES</text>`;
+      o += `<text x="${pad}" y="${y + 14}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">MOST USED LANGUAGES</text>`;
       y += 24;
 
-      // 🐱 Donut chart
-      const donutCx = pad + 40;
-      const donutCy = y + 40;
-      const donutR = 32;
-      const donutInnerR = 20;
-
-      let startAngle = -90;
+      const dCx = pad + 40, dCy = y + 40, dR = 32, dIR = 20;
+      let sa = -90;
       topLangs.forEach(([lang, count]) => {
-        const pct = count / langTotal;
-        const angle = pct * 360;
-        const endAngle = startAngle + angle;
-
-        const startRad = (startAngle * Math.PI) / 180;
-        const endRad = (endAngle * Math.PI) / 180;
-
-        const x1 = donutCx + donutR * Math.cos(startRad);
-        const y1 = donutCy + donutR * Math.sin(startRad);
-        const x2 = donutCx + donutR * Math.cos(endRad);
-        const y2 = donutCy + donutR * Math.sin(endRad);
-        const ix1 = donutCx + donutInnerR * Math.cos(endRad);
-        const iy1 = donutCy + donutInnerR * Math.sin(endRad);
-        const ix2 = donutCx + donutInnerR * Math.cos(startRad);
-        const iy2 = donutCy + donutInnerR * Math.sin(startRad);
-
-        const largeArc = angle > 180 ? 1 : 0;
-
-        svg += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${donutR},${donutR} 0 ${largeArc},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${donutInnerR},${donutInnerR} 0 ${largeArc},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${LANG_COLORS[lang] || "#555"}"/>`;
-
-        startAngle = endAngle;
+        const pct = count / langTotal, angle = pct * 360, ea = sa + angle;
+        const sr = (sa * Math.PI) / 180, er = (ea * Math.PI) / 180;
+        const x1 = dCx + dR * Math.cos(sr), y1 = dCy + dR * Math.sin(sr);
+        const x2 = dCx + dR * Math.cos(er), y2 = dCy + dR * Math.sin(er);
+        const ix1 = dCx + dIR * Math.cos(er), iy1 = dCy + dIR * Math.sin(er);
+        const ix2 = dCx + dIR * Math.cos(sr), iy2 = dCy + dIR * Math.sin(sr);
+        const la = angle > 180 ? 1 : 0;
+        o += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${dR},${dR} 0 ${la},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${dIR},${dIR} 0 ${la},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${LANG_COLORS[lang] || "#555"}"/>`;
+        sa = ea;
       });
+      o += `<text x="${dCx}" y="${dCy + 1}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="${t.donutCenter}" font-family="${M}">${Object.keys(s.languages).length}</text>`;
 
-      // 🐱 Center count
-      svg += `<text x="${donutCx}" y="${donutCy + 1}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="#fff" font-family="${MONO}">${Object.keys(s.languages).length}</text>`;
-
-      // 🐱 Legend (right of donut)
-      const legX = pad + 100;
-      const legW = contentW - 100;
-      const cols = 2;
+      const legX = pad + 100, legW = contentW - 100;
       topLangs.forEach(([lang, count], i) => {
-        const col = i % cols;
-        const row = Math.floor(i / cols);
-        const lx = legX + col * (legW / cols);
-        const ly = y + 8 + row * 22;
+        const col = i % 2, row = Math.floor(i / 2);
+        const lx = legX + col * (legW / 2), ly = y + 8 + row * 22;
         const pct = ((count / langTotal) * 100).toFixed(1);
-
-        svg += `<circle cx="${lx + 5}" cy="${ly + 6}" r="4" fill="${LANG_COLORS[lang] || "#555"}"/>`;
-        svg += `<text x="${lx + 16}" y="${ly + 10}" font-size="11" fill="#bbb" font-family="${FONT}">${escapeXml(lang)}</text>`;
-        svg += `<text x="${lx + (legW / cols) - 4}" y="${ly + 10}" text-anchor="end" font-size="10" fill="#555" font-family="${MONO}">${pct}%</text>`;
+        o += `<circle cx="${lx + 5}" cy="${ly + 6}" r="4" fill="${LANG_COLORS[lang] || "#555"}"/>`;
+        o += `<text x="${lx + 16}" y="${ly + 10}" font-size="11" fill="${t.legendText}" font-family="${F}">${esc(lang)}</text>`;
+        o += `<text x="${lx + legW / 2 - 4}" y="${ly + 10}" text-anchor="end" font-size="10" fill="${t.legendSub}" font-family="${M}">${pct}%</text>`;
       });
     }
 
-    svg += `</svg>`;
+    o += `</svg>`;
 
-    return new NextResponse(svg, {
+    return new NextResponse(o, {
       headers: {
         "Content-Type": "image/svg+xml",
         "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
