@@ -40,7 +40,7 @@ export interface GitHubStats {
 
 // 🐱 Per-user in-memory cache
 const cache = new Map<string, { stats: GitHubStats; ts: number }>();
-const TTL = 60 * 60 * 1000; // 1 hour
+const TTL = 10 * 60 * 1000; // 10 minutes
 const MAX_ENTRIES = 500;
 
 export function isValidUsername(u: string): boolean {
