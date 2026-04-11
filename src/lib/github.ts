@@ -119,8 +119,8 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
   });
   await Promise.all(langFetches);
 
-  // 🐱 Total repo count — personal non-fork repos only (matches GitHub profile)
-  const repositories = personalRepos.filter(r => !r.fork).length;
+  // 🐱 Total repo count — from user profile (most accurate)
+  const repositories = user.public_repos;
 
   // 🐱 Commits (Search API already includes org commits)
   let commits = 0;
