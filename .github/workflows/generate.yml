@@ -1,0 +1,34 @@
+name: Generate Stats Card
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # 6時間ごとに更新
+  workflow_dispatch: # 手動実行も可能
+  push:
+    paths:
+      - "config.json"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - run: npm ci
+
+      - name: Generate SVG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: node scripts/generate.js
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stats.svg
+          git diff --cached --quiet || git commit -m "Update stats card"
+          git push
