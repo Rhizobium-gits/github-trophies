@@ -4,7 +4,7 @@ Dynamic GitHub stats card for your README. Devicon logos, activity graph, 20 the
 
 <p>
   <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir" alt="GitHub Stats"/>
-  <img src="https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif" width="40" height="40"/>
+  <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=vibe" width="60" height="60"/>
 </p>
 
 ## Features
@@ -13,18 +13,18 @@ Dynamic GitHub stats card for your README. Devicon logos, activity graph, 20 the
 - 12-week activity bar chart with counts and dates
 - Language donut chart with devicon logos and percentages
 - 20 color themes (15 dark, 5 light)
-- Party Cat GIF <img src="https://cultofthepartyparrot.com/guests/catparrot.gif" width="20" height="20"/>
+- Party Cat GIF that **runs faster the higher your rank** <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits" width="20" height="20"/>
 
 ## Usage
 
 `username=` を自分のGitHubユーザー名に変えて使ってください。
 
-Stats + Party Cat を横並びで表示:
+Stats + Party Cat (スコア連動) を横並びで表示:
 
 ```html
 <p>
-  <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir" alt="GitHub Stats"/>
-  <img src="https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif" width="40" height="40"/>
+  <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir"/>
+  <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=vibe" width="60" height="60"/>
 </p>
 ```
 
@@ -34,15 +34,22 @@ Stats のみ:
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 ```
 
-## Party Cat GIFs (free, from [cultofthepartyparrot.com](https://cultofthepartyparrot.com))
+## Party Cat <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits" width="20" height="20"/>
 
-好きなのを選んで Stats の横に置いてね:
+`/api/partycat` はGitHubのランクに応じて猫のアニメーション速度が変わるGIFを返す。
 
-| Cat | URL | Preview |
-|-----|-----|---------|
-| Cat Parrot | `https://cultofthepartyparrot.com/guests/catparrot.gif` | <img src="https://cultofthepartyparrot.com/guests/catparrot.gif" width="30"/> |
-| Party Blob Cat (HD) | `https://cultofthepartyparrot.com/guests/hd/partyblobcat.gif` | <img src="https://cultofthepartyparrot.com/guests/hd/partyblobcat.gif" width="30"/> |
-| Vibe Party Cat (HD) | `https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif` | <img src="https://cultofthepartyparrot.com/guests/hd/vibepartycat.gif" width="30"/> |
+| Param | Default | Description |
+|-------|---------|-------------|
+| `username` | (required) | GitHub username |
+| `cat` | `cat` | `cat`, `blob`, `vibe` |
+
+### Cat types
+
+| Type | Preview |
+|------|---------|
+| `cat` | <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=cat" width="40"/> |
+| `blob` | <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=blob" width="40"/> |
+| `vibe` | <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=vibe" width="40"/> |
 
 ## Themes — Copy & Paste
 
