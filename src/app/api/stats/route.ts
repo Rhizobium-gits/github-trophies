@@ -56,27 +56,69 @@ THEMES.v6 = THEMES.nord;
 THEMES.v7 = THEMES.light;
 THEMES.v8 = THEMES.catppuccin;
 
-// 🐱 Activity data with dates
-interface ActivityBucket { count: number; label: string }
+// 🐱 Recent activity: type breakdown + daily heatmap
+interface ActivityData {
+  breakdown: { label: string; count: number; color: string }[];
+  heatmap: { date: string; count: number }[]; // last 30 days
+  total: number;
+}
 
-async function fetchRecentActivity(username: string): Promise<ActivityBucket[]> {
+async function fetchRecentActivity(username: string): Promise<ActivityData | null> {
   const h: Record<string, string> = { Accept: "application/vnd.github+json" };
   if (process.env.GITHUB_TOKEN) h.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   try {
-    const res = await fetch(`https://api.github.com/users/${username}/events?per_page=100`, { headers: h });
-    if (!res.ok) return [];
-    const events: { type: string; created_at: string }[] = await res.json();
-    const now = Date.now();
-    const counts = new Array(12).fill(0);
-    for (const ev of events) {
-      const weekIdx = Math.floor((now - new Date(ev.created_at).getTime()) / (7 * 24 * 60 * 60 * 1000));
-      if (weekIdx < 12) counts[11 - weekIdx]++;
+    // 🐱 Fetch up to 300 events (3 pages)
+    const allEvents: { type: string; created_at: string }[] = [];
+    for (let p = 1; p <= 3; p++) {
+      const res = await fetch(`https://api.github.com/users/${username}/events?per_page=100&page=${p}`, { headers: h });
+      if (!res.ok) break;
+      const batch = await res.json();
+      if (!batch.length) break;
+      allEvents.push(...batch);
     }
-    return counts.map((count, i) => {
-      const d = new Date(now - (11 - i) * 7 * 24 * 60 * 60 * 1000);
-      return { count, label: `${d.getMonth() + 1}/${d.getDate()}` };
+    if (!allEvents.length) return null;
+
+    // 🐱 Type breakdown
+    const types: Record<string, number> = {};
+    for (const ev of allEvents) types[ev.type] = (types[ev.type] || 0) + 1;
+
+    // 🐱 Map to readable labels
+    const typeMap: Record<string, { label: string; color: string }> = {
+      PushEvent: { label: "Pushes", color: "#4CAF50" },
+      PullRequestEvent: { label: "Pull Requests", color: "#2196F3" },
+      IssuesEvent: { label: "Issues", color: "#FF9800" },
+      PullRequestReviewEvent: { label: "Reviews", color: "#9C27B0" },
+      CreateEvent: { label: "Branches/Tags", color: "#00BCD4" },
+      IssueCommentEvent: { label: "Comments", color: "#607D8B" },
+      WatchEvent: { label: "Stars Given", color: "#FFC107" },
+      ForkEvent: { label: "Forks", color: "#795548" },
+      DeleteEvent: { label: "Deletions", color: "#F44336" },
+      ReleaseEvent: { label: "Releases", color: "#E91E63" },
+    };
+
+    const breakdown = Object.entries(types)
+      .map(([type, count]) => ({
+        label: typeMap[type]?.label || type.replace("Event", ""),
+        count,
+        color: typeMap[type]?.color || "#888",
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    // 🐱 Daily heatmap (last 30 days)
+    const now = Date.now();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const dayCounts = new Array(30).fill(0);
+    for (const ev of allEvents) {
+      const daysAgo = Math.floor((now - new Date(ev.created_at).getTime()) / dayMs);
+      if (daysAgo < 30) dayCounts[29 - daysAgo]++;
+    }
+    const heatmap = dayCounts.map((count, i) => {
+      const d = new Date(now - (29 - i) * dayMs);
+      return { date: `${d.getMonth() + 1}/${d.getDate()}`, count };
     });
-  } catch { return []; }
+
+    return { breakdown, heatmap, total: allEvents.length };
+  } catch { return null; }
 }
 
 // 🐱 Rank — based on github-readme-stats percentile method
@@ -188,8 +230,12 @@ export async function GET(req: NextRequest) {
 
     // 🐱 Height
     const headerH = 64, div = 20, statsH = 132;
-    const hasAct = activity.length > 0;
-    const actLabelH = 20, actNumH = hasAct ? 14 : 0, actBarH = hasAct ? 44 : 0, actDateH = hasAct ? 16 : 0;
+    const hasAct = !!activity;
+    // Activity: breakdown bars + heatmap
+    const actBreakdownH = hasAct ? Math.min(activity.breakdown.length, 5) * 18 + 4 : 0;
+    const actHeatmapH = hasAct ? 42 : 0; // 30-day heatmap grid
+    const actLabelH = hasAct ? 20 : 0;
+    const actTotalH = actLabelH + actBreakdownH + 10 + actHeatmapH;
     const actDiv = hasAct ? 20 : 0;
     // 🐱 Languages: icon(18) + name + pct per row, 2 cols, 24px per row
     const langRows = Math.ceil(langSorted.length / 2);
@@ -197,7 +243,7 @@ export async function GET(req: NextRequest) {
     const langLegH = langRows * 24;
     const langSectionH = langSorted.length > 0 ? 24 + Math.max(donutH, langLegH) : 0;
 
-    const H = pad + headerH + div + statsH + div + actLabelH + actNumH + actBarH + actDateH + actDiv + langSectionH + pad;
+    const H = pad + headerH + div + statsH + div + actTotalH + actDiv + langSectionH + pad;
 
     const stats = [
       { label: "Total Commits", value: s.commits.toLocaleString() },
@@ -266,40 +312,68 @@ export async function GET(req: NextRequest) {
     y += div;
 
     // ==================== ACTIVITY ====================
-    if (hasAct) {
-      o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">ACTIVITY (LAST 12 WEEKS)</text>`;
+    if (hasAct && activity) {
+      o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">RECENT ACTIVITY</text>`;
+      o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.total} events</text>`;
       y += actLabelH;
 
-      const gap = 4, barW = (contentW - 11 * gap) / 12;
-      const maxVal = Math.max(...activity.map(a => a.count), 1);
+      // 🐱 Type breakdown — horizontal stacked bar + legend
+      const top5 = activity.breakdown.slice(0, 5);
+      const breakdownTotal = activity.breakdown.reduce((s, b) => s + b.count, 0);
 
-      // 🐱 Numbers
-      activity.forEach((b, i) => {
-        if (b.count > 0) {
-          const bx = pad + i * (barW + gap) + barW / 2;
-          o += `<text x="${bx.toFixed(1)}" y="${(y + actNumH - 2).toFixed(1)}" text-anchor="middle" font-size="8" font-weight="600" fill="${t.value}" font-family="${M}" opacity="0.7">${b.count}</text>`;
+      // Stacked bar
+      const barW = contentW;
+      let bx = pad;
+      o += `<clipPath id="abclip"><rect x="${pad}" y="${y}" width="${barW}" height="8" rx="4"/></clipPath><g clip-path="url(#abclip)">`;
+      for (const item of top5) {
+        const w = (item.count / breakdownTotal) * barW;
+        o += `<rect x="${bx.toFixed(1)}" y="${y}" width="${Math.max(w, 2).toFixed(1)}" height="8" fill="${item.color}"/>`;
+        bx += w;
+      }
+      o += `</g>`;
+      y += 14;
+
+      // Legend rows
+      top5.forEach((item, i) => {
+        const pct = ((item.count / breakdownTotal) * 100).toFixed(0);
+        const lx = pad + (i % 3) * Math.floor(contentW / 3);
+        const ly = y + Math.floor(i / 3) * 18;
+        o += `<circle cx="${lx + 4}" cy="${ly + 5}" r="3" fill="${item.color}"/>`;
+        o += `<text x="${lx + 12}" y="${ly + 9}" font-size="10" fill="${t.legendText}" font-family="${F}">${item.label}</text>`;
+        o += `<text x="${lx + 12}" y="${ly + 9}" font-size="10" fill="${t.legendSub}" font-family="${M}" dx="${item.label.length * 5.5 + 4}">${item.count} (${pct}%)</text>`;
+      });
+      y += actBreakdownH;
+
+      // 🐱 30-day contribution heatmap
+      o += `<text x="${pad}" y="${y + 10}" font-size="9" fill="${t.sectionLabel}" font-family="${F}">Last 30 days</text>`;
+      y += 14;
+
+      const cellSize = 12, cellGap = 2;
+      const cols = 15, rows = 2;
+      const maxDay = Math.max(...activity.heatmap.map(d => d.count), 1);
+
+      activity.heatmap.forEach((day, i) => {
+        const col = i % cols, row = Math.floor(i / cols);
+        const cx = pad + col * (cellSize + cellGap);
+        const cy = y + row * (cellSize + cellGap);
+        const intensity = day.count === 0 ? 0.08 : 0.2 + (day.count / maxDay) * 0.8;
+        o += `<rect x="${cx}" y="${cy}" width="${cellSize}" height="${cellSize}" rx="2" fill="${t.bar}" opacity="${intensity.toFixed(2)}"/>`;
+        // 🐱 Show count inside cell if > 0
+        if (day.count > 0) {
+          o += `<text x="${cx + cellSize / 2}" y="${cy + cellSize / 2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="7" fill="${t.value}" font-family="${M}" opacity="0.8">${day.count}</text>`;
         }
       });
-      y += actNumH;
 
-      // 🐱 Bars
-      activity.forEach((b, i) => {
-        const bx = pad + i * (barW + gap);
-        const bh = Math.max((b.count / maxVal) * actBarH, 2);
-        const by = y + actBarH - bh;
-        const op = b.count === 0 ? 0.15 : 0.3 + (b.count / maxVal) * 0.7;
-        o += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" rx="3" fill="${t.bar}" opacity="${op.toFixed(2)}"/>`;
-      });
-      y += actBarH;
-
-      // 🐱 Dates
-      activity.forEach((b, i) => {
-        if (i % 2 === 0 || i === 11) {
-          const bx = pad + i * (barW + gap) + barW / 2;
-          o += `<text x="${bx.toFixed(1)}" y="${(y + 12).toFixed(1)}" text-anchor="middle" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${b.label}</text>`;
+      // 🐱 Date markers (first, mid, last)
+      const dateMarkers = [0, 14, 29];
+      dateMarkers.forEach(i => {
+        if (i < activity.heatmap.length) {
+          const col = i % cols;
+          const cx = pad + col * (cellSize + cellGap) + cellSize / 2;
+          o += `<text x="${cx}" y="${y + rows * (cellSize + cellGap) + 10}" text-anchor="middle" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${activity.heatmap[i].date}</text>`;
         }
       });
-      y += actDateH;
+      y += actHeatmapH;
 
       o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
       y += actDiv;
