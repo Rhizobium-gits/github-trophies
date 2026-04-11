@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
 import { langIcon, getLangColor, prefetchIcons, getAllDefs } from "@/lib/lang-icons";
+import { renderPartyCat } from "@/lib/nyancat";
 
 // 🐱 Theme system - VSCode-style named themes
 interface Theme {
@@ -148,11 +149,16 @@ export async function GET(req: NextRequest) {
     // 🐱 Collect defs from devicon icons
     const iconDefs = getAllDefs();
 
+    // 🐱 Party Cat (CSS animation, inside the card)
+    const catW = 12 * 3; // 36px wide
+    const partyCat = renderPartyCat(W - pad - catW - 4, pad + 12, score);
+
     let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient>
   ${iconDefs}
 </defs>
+<style>${partyCat.style}</style>
 <rect width="${W}" height="${H}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
 `;
     let y = pad;
@@ -166,12 +172,15 @@ export async function GET(req: NextRequest) {
       o += `<text x="${tx}" y="${y + 54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
     }
 
-    // 🐱 Rank circle
-    const cx = W - pad - 28, cy2 = y + 24, cr = 24;
+    // 🐱 Rank circle (shifted left to make room for cat)
+    const cx = W - pad - catW - 16 - 28, cy2 = y + 24, cr = 24;
     const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
     o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
+
+    // 🐱 Party Cat (right of rank circle)
+    o += partyCat.body;
 
     y += headerH;
 
