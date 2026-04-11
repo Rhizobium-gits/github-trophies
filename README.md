@@ -1,8 +1,8 @@
 # GitHub Trophies
 
-Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution graph, 32 themes.
+Dynamic GitHub stats card for your README.
 
-![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=noir)
+![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=4&theme=noir)
 
 ## Usage
 
@@ -57,10 +57,10 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `username` | (required) | GitHub username |
-| `theme` | `noir` | See theme list above |
+| `theme` | `noir` | See above |
 
-## Deploy your own
+## Deploy
 
 1. Fork this repo
-2. Deploy to [Vercel](https://vercel.com)
-3. Set `GITHUB_TOKEN` env var (required for contribution graph and higher API rate limits)
+2. Deploy to Vercel
+3. Set `GITHUB_TOKEN` env var
