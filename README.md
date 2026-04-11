@@ -1,6 +1,16 @@
 # GitHub Trophies
 
-Dynamic GitHub stats card for your README. Enter any username, pick a theme.
+Dynamic GitHub stats card for your README. Devicon logos, activity graph, animated Nyan Cat, 20 themes.
+
+![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
+
+## Features
+
+- Commits / PRs / Issues / Stars / Repos / Experience
+- 12-week activity bar chart with counts and dates
+- Language donut chart with devicon logos and percentages
+- Animated Nyan Cat that runs faster the higher your rank
+- 20 color themes (15 dark, 5 light)
 
 ## Usage
 

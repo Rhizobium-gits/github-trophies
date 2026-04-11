@@ -115,7 +115,7 @@ export async function GET(req: NextRequest) {
     const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchRecentActivity(username)]);
     const { rank, score } = calcRank(s.commits, s.pullRequests, s.stars, s.followers);
 
-    const W = 480, pad = 28, contentW = W - pad * 2;
+    const W = 500, pad = 28, contentW = W - pad * 2;
 
     // 🐱 ALL languages
     const langSorted = Object.entries(s.languages).sort((a, b) => b[1] - a[1]);
@@ -163,15 +163,17 @@ export async function GET(req: NextRequest) {
       o += `<text x="${tx}" y="${y + 54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
     }
 
-    const cx = W - pad - 28, cy2 = y + 24, cr = 24;
+    // 🐱 Rank circle
+    const nyanW = 70; // space reserved for nyan cat
+    const cx = W - pad - nyanW - 36, cy2 = y + 24, cr = 24;
     const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
     o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
 
-    // 🐱 Nyan Cat! Speed based on score
+    // 🐱 Nyan Cat right of rank circle! Speed based on score
     const isLight = ["light", "github-light", "solarized-light", "gruvbox-light", "catppuccin-latte", "v7"].includes(themeKey);
-    o += renderNyanCat(W - pad - 120, y + 2, score, isLight ? "light" : "dark");
+    o += renderNyanCat(W - pad - nyanW, y + 10, score, isLight ? "light" : "dark");
 
     y += headerH;
 
