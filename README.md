@@ -2,7 +2,7 @@
 
 Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution graph, 32 themes.
 
-![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
+![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=noir)
 
 ## Usage
 
@@ -18,7 +18,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### noir
 
-![noir](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
+![noir](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=noir)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
@@ -28,7 +28,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### dracula
 
-![dracula](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula)
+![dracula](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=dracula)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula)
@@ -38,7 +38,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### one-dark
 
-![one-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark)
+![one-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=one-dark)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark)
@@ -48,7 +48,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### monokai
 
-![monokai](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai)
+![monokai](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=monokai)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai)
@@ -58,7 +58,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### tokyo-night
 
-![tokyo-night](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night)
+![tokyo-night](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=tokyo-night)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night)
@@ -68,7 +68,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### nord
 
-![nord](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord)
+![nord](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=nord)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord)
@@ -78,7 +78,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### github-dark
 
-![github-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark)
+![github-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=github-dark)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark)
@@ -88,7 +88,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### catppuccin
 
-![catppuccin](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin)
+![catppuccin](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=catppuccin)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin)
@@ -98,7 +98,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### gruvbox-dark
 
-![gruvbox-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark)
+![gruvbox-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=gruvbox-dark)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark)
@@ -108,7 +108,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### solarized-dark
 
-![solarized-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark)
+![solarized-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=solarized-dark)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark)
@@ -118,7 +118,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### synthwave
 
-![synthwave](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave)
+![synthwave](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=synthwave)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave)
@@ -128,7 +128,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### cobalt
 
-![cobalt](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt)
+![cobalt](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=cobalt)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt)
@@ -138,7 +138,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### ayu
 
-![ayu](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu)
+![ayu](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=ayu)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu)
@@ -148,7 +148,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### material-ocean
 
-![material-ocean](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean)
+![material-ocean](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=material-ocean)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean)
@@ -158,7 +158,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### rose
 
-![rose](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose)
+![rose](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=rose)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose)
@@ -168,7 +168,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### night-owl
 
-![night-owl](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=night-owl)
+![night-owl](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=night-owl)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=night-owl)
@@ -178,7 +178,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### palenight
 
-![palenight](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=palenight)
+![palenight](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=palenight)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=palenight)
@@ -188,7 +188,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### shades-of-purple
 
-![shades-of-purple](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=shades-of-purple)
+![shades-of-purple](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=shades-of-purple)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=shades-of-purple)
@@ -198,7 +198,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### panda
 
-![panda](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=panda)
+![panda](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=panda)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=panda)
@@ -208,7 +208,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### horizon
 
-![horizon](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=horizon)
+![horizon](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=horizon)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=horizon)
@@ -218,7 +218,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### vitesse
 
-![vitesse](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse)
+![vitesse](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=vitesse)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse)
@@ -228,7 +228,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### everforest
 
-![everforest](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest)
+![everforest](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=everforest)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest)
@@ -238,7 +238,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### kanagawa
 
-![kanagawa](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=kanagawa)
+![kanagawa](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=kanagawa)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=kanagawa)
@@ -248,7 +248,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### fleet
 
-![fleet](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=fleet)
+![fleet](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=fleet)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=fleet)
@@ -260,7 +260,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### light
 
-![light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light)
+![light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=light)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light)
@@ -270,7 +270,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### github-light
 
-![github-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light)
+![github-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=github-light)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light)
@@ -280,7 +280,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### solarized-light
 
-![solarized-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light)
+![solarized-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=solarized-light)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light)
@@ -290,7 +290,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### gruvbox-light
 
-![gruvbox-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light)
+![gruvbox-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=gruvbox-light)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light)
@@ -300,7 +300,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### catppuccin-latte
 
-![catppuccin-latte](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte)
+![catppuccin-latte](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=catppuccin-latte)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte)
@@ -310,7 +310,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### light-owl
 
-![light-owl](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light-owl)
+![light-owl](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=light-owl)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light-owl)
@@ -320,7 +320,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### everforest-light
 
-![everforest-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest-light)
+![everforest-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=everforest-light)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest-light)
@@ -330,7 +330,7 @@ Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution gr
 
 #### vitesse-light
 
-![vitesse-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse-light)
+![vitesse-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=3&theme=vitesse-light)
 
 ```
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse-light)
