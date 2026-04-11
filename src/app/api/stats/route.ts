@@ -222,7 +222,14 @@ export async function GET(req: NextRequest) {
     const langLegH = langRows * 24;
     const langSectionH = langSorted.length > 0 ? 24 + Math.max(donutH, langLegH) : 0;
 
-    const H = pad + headerH + div + statsH + div + actTotalH + actDiv + langSectionH + pad;
+    // 🐱 Tech Stack section
+    const hasTech = s.techStack.length > 0;
+    const techBadgesPerRow = 4;
+    const techRows = hasTech ? Math.ceil(s.techStack.length / techBadgesPerRow) : 0;
+    const techSectionH = hasTech ? 24 + techRows * 24 : 0;
+    const techDiv = hasTech ? 20 : 0;
+
+    const H = pad + headerH + div + statsH + div + actTotalH + actDiv + langSectionH + (langSorted.length > 0 ? 20 : 0) + techSectionH + techDiv + pad;
 
     const stats = [
       { label: "Total Commits", value: s.commits.toLocaleString() },
@@ -365,6 +372,29 @@ export async function GET(req: NextRequest) {
         // 🐱 Percentage
         o += `<text x="${lx + legW / 2 - 4}" y="${ly + 13}" text-anchor="end" font-size="10" font-weight="600" fill="${t.legendSub}" font-family="${M}">${pct}%</text>`;
       });
+    }
+
+    // ==================== TECH STACK ====================
+    if (hasTech) {
+      if (langSorted.length > 0) {
+        o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
+        y += 20;
+      }
+
+      o += `<text x="${pad}" y="${y + 14}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">TECH STACK</text>`;
+      y += 24;
+
+      const badgeW = Math.floor(contentW / techBadgesPerRow) - 4;
+      s.techStack.forEach((tech, i) => {
+        const col = i % techBadgesPerRow;
+        const row = Math.floor(i / techBadgesPerRow);
+        const bx = pad + col * (badgeW + 4);
+        const by = y + row * 24;
+
+        o += `<rect x="${bx}" y="${by}" width="${badgeW}" height="20" rx="4" fill="${t.divider}"/>`;
+        o += `<text x="${bx + badgeW / 2}" y="${by + 13}" text-anchor="middle" font-size="9" fill="${t.legendText}" font-family="${F}">${esc(tech)}</text>`;
+      });
+      y += techRows * 24;
     }
 
     o += `</svg>`;
