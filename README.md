@@ -1,72 +1,94 @@
 # GitHub Trophies
 
-Dynamic GitHub stats card for your README.
+GitHub の統計情報をカード形式で README に表示するツール。
 
-- User avatar, name, bio, rank (CDF percentile)
+![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=18&theme=noir)
+
+- ユーザーアバター・名前・bio・ランク (CDF パーセンタイル)
 - Commits / PRs / Issues / Stars / Repos / Experience
-- 1-year contribution graph (via GraphQL API)
-- Language donut chart with devicon + Simple Icons logos
-- 32 color themes
+- 1年間の Contribution グラフ (GitHub GraphQL API)
+- 言語ドーナツチャート + devicon / Simple Icons ロゴ
+- 32 カラーテーマ
 
-![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=8&theme=noir)
+---
 
-## Usage
+## セットアップ
 
-`username=` を自分のGitHubユーザー名に変えて使ってください。
+### 1. このリポジトリをフォーク
 
-## Themes
+このリポジトリ右上の **Fork** ボタンを押してください。
+
+### 2. Vercel にデプロイ
+
+1. [vercel.com](https://vercel.com) にGitHubアカウントでログイン
+2. **Add New Project** をクリック
+3. フォークした `github-trophies` リポジトリを Import
+4. そのまま **Deploy** を押す（設定変更不要）
+
+デプロイが完了すると `https://github-trophies-xxxxx.vercel.app` のようなURLが発行されます。
+
+### 3. GITHUB_TOKEN を設定
+
+Contribution グラフの表示と API レート制限の緩和に必要です。
+
+1. [GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens) にアクセス
+2. **Generate new token (classic)** をクリック
+3. `read:user` スコープにチェックを入れて生成
+4. Vercel のプロジェクト > **Settings** > **Environment Variables** で以下を追加:
+   - Name: `GITHUB_TOKEN`
+   - Value: 生成したトークン
+5. **Deployments** タブから **Redeploy** を実行
+
+---
+
+## 使い方
+
+デプロイ後の URL を使って README に以下を追加:
+
+```markdown
+![GitHub Stats](https://あなたのプロジェクト名.vercel.app/api/stats?username=あなたのGitHubユーザー名&theme=テーマ名)
+```
+
+**例:**
+
+```markdown
+![GitHub Stats](https://github-trophies-xxxxx.vercel.app/api/stats?username=octocat&theme=dracula)
+```
+
+### パラメータ
+
+| パラメータ | デフォルト | 説明 |
+|-----------|----------|------|
+| `username` | (必須) | GitHub ユーザー名 |
+| `theme` | `noir` | カラーテーマ（下記参照） |
+
+---
+
+## テーマ一覧
+
+`theme=` に以下のテーマ名を指定できます。
 
 ### Dark (24)
 
-| Theme | Copy |
-|-------|------|
-| `noir` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)` |
-| `dracula` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula)` |
-| `one-dark` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark)` |
-| `monokai` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai)` |
-| `tokyo-night` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night)` |
-| `nord` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord)` |
-| `github-dark` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark)` |
-| `catppuccin` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin)` |
-| `gruvbox-dark` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark)` |
-| `solarized-dark` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark)` |
-| `synthwave` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave)` |
-| `cobalt` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt)` |
-| `ayu` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu)` |
-| `material-ocean` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean)` |
-| `rose` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose)` |
-| `night-owl` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=night-owl)` |
-| `palenight` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=palenight)` |
-| `shades-of-purple` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=shades-of-purple)` |
-| `panda` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=panda)` |
-| `horizon` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=horizon)` |
-| `vitesse` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse)` |
-| `everforest` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest)` |
-| `kanagawa` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=kanagawa)` |
-| `fleet` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=fleet)` |
+`noir` · `dracula` · `one-dark` · `monokai` · `tokyo-night` · `nord` · `github-dark` · `catppuccin` · `gruvbox-dark` · `solarized-dark` · `synthwave` · `cobalt` · `ayu` · `material-ocean` · `rose` · `night-owl` · `palenight` · `shades-of-purple` · `panda` · `horizon` · `vitesse` · `everforest` · `kanagawa` · `fleet`
 
 ### Light (8)
 
-| Theme | Copy |
-|-------|------|
-| `light` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light)` |
-| `github-light` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light)` |
-| `solarized-light` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light)` |
-| `gruvbox-light` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light)` |
-| `catppuccin-latte` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte)` |
-| `light-owl` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light-owl)` |
-| `everforest-light` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest-light)` |
-| `vitesse-light` | `![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse-light)` |
+`light` · `github-light` · `solarized-light` · `gruvbox-light` · `catppuccin-latte` · `light-owl` · `everforest-light` · `vitesse-light`
 
-## Parameters
+---
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `username` | (required) | GitHub username |
-| `theme` | `noir` | See above |
+## 仕組み
 
-## Deploy
+- `/api/stats` エンドポイントが SVG 画像を動的に生成
+- GitHub REST API + GraphQL API からユーザーデータを取得
+- 言語ロゴは [devicons](https://github.com/devicons/devicon) と [Simple Icons](https://github.com/simple-icons/simple-icons) から取得
+- ランクは [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) と同様の CDF パーセンタイル方式
+- サーバー側で 10 分間キャッシュ + CDN で 1 時間キャッシュ
+- フォークして各自の Vercel にデプロイすることで、API レート制限を分散
 
-1. Fork this repo
-2. Deploy to [Vercel](https://vercel.com)
-3. Set `GITHUB_TOKEN` env var (required for contribution graph and higher rate limits)
+---
+
+## ライセンス
+
+MIT
