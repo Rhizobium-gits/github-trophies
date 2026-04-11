@@ -80,27 +80,65 @@ async function fetchRecentActivity(username: string): Promise<ActivityBucket[]> 
   } catch { return []; }
 }
 
-// 🐱 Rank — weighted score from commits, PRs, stars, followers
-// Roughly: S requires mass contribution (top devs), A+ is very active, A/A- is solid, etc.
-function calcRank(commits: number, prs: number, stars: number, followers: number): { rank: string; score: number } {
-  const score = Math.min(
-    Math.log10(commits + 1) * 8 +
-    Math.log10(prs + 1) * 6 +
-    Math.log10(stars + 1) * 10 +
-    Math.log10(followers + 1) * 6,
-    100
-  );
+// 🐱 Rank — based on github-readme-stats percentile method
+// Uses exponential/log-normal CDF to normalize stats, then weighted average
+
+// Exponential CDF: P(X <= x) = 1 - e^(-lambda * x)
+function expCdf(x: number, median: number): number {
+  const lambda = Math.LN2 / median;
+  return 1 - Math.exp(-lambda * x);
+}
+
+// Log-normal CDF approximation
+function logNormCdf(x: number, median: number): number {
+  if (x <= 0) return 0;
+  const sigma = 1.0;
+  const z = (Math.log(x) - Math.log(median)) / sigma;
+  // Approximation of standard normal CDF
+  const t = 1 / (1 + 0.3275911 * Math.abs(z));
+  const a = [0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429];
+  const poly = t * (a[0] + t * (a[1] + t * (a[2] + t * (a[3] + t * a[4]))));
+  const cdf = 1 - poly * Math.exp(-z * z / 2);
+  return z >= 0 ? cdf : 1 - cdf;
+}
+
+function calcRank(
+  commits: number, prs: number, issues: number, stars: number, followers: number
+): { rank: string; score: number } {
+  // 🐱 Weights and medians (adjusted from github-readme-stats)
+  // Contribution-focused: commits/PRs/issues weighted higher, stars/followers lower
+  const WEIGHTS = { commits: 3, prs: 3, issues: 2, stars: 1, followers: 1 };
+  const MEDIANS = { commits: 250, prs: 40, issues: 20, stars: 50, followers: 10 };
+  const TOTAL_WEIGHT = WEIGHTS.commits + WEIGHTS.prs + WEIGHTS.issues + WEIGHTS.stars + WEIGHTS.followers;
+
+  // 🐱 Normalize each stat via CDF
+  const commitsCdf = expCdf(commits, MEDIANS.commits);
+  const prsCdf = expCdf(prs, MEDIANS.prs);
+  const issuesCdf = expCdf(issues, MEDIANS.issues);
+  const starsCdf = logNormCdf(stars, MEDIANS.stars);
+  const followersCdf = logNormCdf(followers, MEDIANS.followers);
+
+  // 🐱 Weighted average → percentile (lower = better)
+  const percentile = (1 - (
+    commitsCdf * WEIGHTS.commits +
+    prsCdf * WEIGHTS.prs +
+    issuesCdf * WEIGHTS.issues +
+    starsCdf * WEIGHTS.stars +
+    followersCdf * WEIGHTS.followers
+  ) / TOTAL_WEIGHT) * 100;
+
+  // 🐱 Percentile → rank tier
   for (const t of [
-    { min: 70, rank: "S" },
-    { min: 60, rank: "A+" },
-    { min: 50, rank: "A" },
-    { min: 42, rank: "A-" },
-    { min: 35, rank: "B+" },
-    { min: 28, rank: "B" },
-    { min: 20, rank: "B-" },
-    { min: 12, rank: "C+" },
-    { min: 0,  rank: "C" },
-  ]) { if (score >= t.min) return { rank: t.rank, score: Math.round(score) }; }
+    { max: 1,    rank: "S" },
+    { max: 12.5, rank: "A+" },
+    { max: 25,   rank: "A" },
+    { max: 37.5, rank: "A-" },
+    { max: 50,   rank: "B+" },
+    { max: 62.5, rank: "B" },
+    { max: 75,   rank: "B-" },
+    { max: 87.5, rank: "C+" },
+    { max: 100,  rank: "C" },
+  ]) { if (percentile <= t.max) return { rank: t.rank, score: Math.round(100 - percentile) }; }
   return { rank: "C", score: 0 };
 }
 
@@ -127,7 +165,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchRecentActivity(username)]);
-    const { rank, score } = calcRank(s.commits, s.pullRequests, s.stars, s.followers);
+    const { rank, score } = calcRank(s.commits, s.pullRequests, s.issues, s.stars, s.followers);
 
     const W = 480, pad = 28, contentW = W - pad * 2;
 

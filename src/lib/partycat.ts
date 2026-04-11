@@ -36,10 +36,17 @@ function adjustGifSpeed(buffer: Buffer, delayHundredths: number): Buffer {
 }
 
 // 🐱 Get speed-adjusted GIF as raw buffer
+// score=100 (S rank) → original GIF speed (no modification)
+// score=0 (C rank) → very slow (20 hundredths = 200ms per frame)
 export async function getPartyCatBuffer(catType: string, score: number): Promise<Buffer> {
   const url = CATS[catType] || CATS.cat;
   const original = await fetchGif(url);
-  const delay = Math.round(Math.max(1, 12 - (score / 100) * 11));
+
+  // 🐱 S rank: return original unmodified
+  if (score >= 95) return original;
+
+  // 🐱 Others: slower the lower the score. Range: 3 (fast) to 20 (slow)
+  const delay = Math.round(Math.max(3, 20 - (score / 100) * 17));
   return adjustGifSpeed(original, delay);
 }
 
