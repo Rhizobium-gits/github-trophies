@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
       const y = pad + Math.floor(i / cols) * (ch + gap);
       const val = cat.key === "languages" ? Object.keys(stats.languages).length : (stats[cat.key as keyof typeof stats] as number);
       const rank = getRank(val, cat.th);
-      cards += trophyCard(x, y, cat.title, cat.icon, val, rank, getProgress(val, cat.th), rs);
+      cards += trophyCard(x, y, cat.key, cat.title, val, rank, getProgress(val, cat.th), rs);
     });
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">

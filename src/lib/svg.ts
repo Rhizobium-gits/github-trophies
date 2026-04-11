@@ -36,16 +36,37 @@ export function rankStyles(theme: string): Record<string, RankStyle> {
   return theme === "dark" ? D : L;
 }
 
+// 🐱 SVG path icons (no emoji - works everywhere)
+// Each returns an SVG group centered at (0,0), sized ~18x18
+const ICONS: Record<string, string> = {
+  // Lightning bolt - Commits
+  commits: `<path d="M11 1L5 10h4l-1 8 6-9h-4z" fill="currentColor"/>`,
+  // Git pull request - PRs
+  pullRequests: `<path d="M5 3a2 2 0 100 4 2 2 0 000-4zm0 10a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4zM5 7v6m8-6v6M5 7c3 0 8 0 8 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+  // Circle dot - Issues
+  issues: `<circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="2" fill="currentColor"/>`,
+  // Repo icon - Repositories
+  repositories: `<path d="M3 2.5A1.5 1.5 0 014.5 1h9A1.5 1.5 0 0115 2.5v13a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 013 15.5V13h2v2h9V3H5v2H3z" fill="currentColor"/><path d="M3 7h6M6 4.5L3 7l3 2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`,
+  // Star - Stars
+  stars: `<path d="M9 1l2.47 5.01L17 6.64l-4 3.9.94 5.5L9 13.77l-4.94 2.27.94-5.5-4-3.9 5.53-.63z" fill="currentColor"/>`,
+  // People - Followers
+  followers: `<circle cx="6" cy="5" r="2.5" fill="currentColor"/><path d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="currentColor"/><circle cx="13" cy="5" r="2" fill="currentColor" opacity="0.6"/><path d="M13 9c2.21 0 4 1.79 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>`,
+  // Globe - Multilingual
+  languages: `<circle cx="9" cy="9" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><ellipse cx="9" cy="9" rx="3.5" ry="7.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line x1="1.5" y1="9" x2="16.5" y2="9" stroke="currentColor" stroke-width="1.2"/><path d="M2.5 5h13M2.5 13h13" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>`,
+  // Clock - Experience
+  experience: `<circle cx="9" cy="9" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 4.5V9l3.5 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`,
+};
+
 // 🐱 Trophy categories
 export const CATEGORIES = [
-  { key: "commits",      title: "Commits",      icon: "⚡", th: [5000, 2000, 1000, 500, 200, 100, 50, 10] },
-  { key: "pullRequests", title: "Pull Request",  icon: "🔀", th: [500, 200, 100, 50, 20, 10, 5, 1] },
-  { key: "issues",       title: "Issues",        icon: "📋", th: [500, 200, 100, 50, 20, 10, 5, 1] },
-  { key: "repositories", title: "Repositories",  icon: "📦", th: [200, 100, 50, 30, 20, 10, 5, 1] },
-  { key: "stars",        title: "Stars",         icon: "⭐", th: [2000, 500, 200, 100, 50, 20, 10, 1] },
-  { key: "followers",    title: "Followers",     icon: "👥", th: [1000, 500, 200, 100, 50, 20, 10, 1] },
-  { key: "languages",    title: "Multilingual",  icon: "🌐", th: [20, 15, 12, 10, 8, 5, 3, 1] },
-  { key: "experience",   title: "Experience",    icon: "🏛️", th: [15, 12, 10, 8, 6, 4, 2, 1] },
+  { key: "commits",      title: "Commits",      th: [5000, 2000, 1000, 500, 200, 100, 50, 10] },
+  { key: "pullRequests", title: "Pull Request",  th: [500, 200, 100, 50, 20, 10, 5, 1] },
+  { key: "issues",       title: "Issues",        th: [500, 200, 100, 50, 20, 10, 5, 1] },
+  { key: "repositories", title: "Repositories",  th: [200, 100, 50, 30, 20, 10, 5, 1] },
+  { key: "stars",        title: "Stars",         th: [2000, 500, 200, 100, 50, 20, 10, 1] },
+  { key: "followers",    title: "Followers",     th: [1000, 500, 200, 100, 50, 20, 10, 1] },
+  { key: "languages",    title: "Multilingual",  th: [20, 15, 12, 10, 8, 5, 3, 1] },
+  { key: "experience",   title: "Experience",    th: [15, 12, 10, 8, 6, 4, 2, 1] },
 ];
 
 const RANK_KEYS = ["SSS", "SS", "S", "AAA", "AA", "A", "B", "C"];
@@ -67,15 +88,16 @@ export function getProgress(value: number, th: number[]): number {
 
 const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
 
-export function trophyCard(x: number, y: number, title: string, icon: string, value: number, rank: string, progress: number, rs: Record<string, RankStyle>): string {
+export function trophyCard(x: number, y: number, key: string, title: string, value: number, rank: string, progress: number, rs: Record<string, RankStyle>): string {
   const r = rs[rank];
   const w = 120, h = 120, bw = 80;
   const fw = (progress / 100) * bw;
+  const iconSvg = ICONS[key] || ICONS.commits;
 
   return `<g transform="translate(${x},${y})">
 <rect width="${w}" height="${h}" rx="8" fill="${r.bg}" stroke="${r.border}" stroke-width="1.5"/>
 <g transform="translate(${w - 8},-4)"><rect x="-16" width="24" height="16" rx="8" fill="${r.badgeBg}"/><text x="-4" y="12" text-anchor="middle" font-size="8" font-weight="bold" fill="${r.badgeText}" font-family="${FONT}">${rank}</text></g>
-<text x="${w / 2}" y="32" text-anchor="middle" font-size="20">${icon}</text>
+<g transform="translate(${w / 2 - 9},14)" color="${r.text}">${iconSvg}</g>
 <text x="${w / 2}" y="52" text-anchor="middle" font-size="9" fill="${r.text}" font-weight="600" font-family="${FONT}" letter-spacing="0.5">${title.toUpperCase()}</text>
 <text x="${w / 2}" y="74" text-anchor="middle" font-size="18" font-weight="bold" fill="${r.text}" font-family="${FONT}">${value.toLocaleString()}</text>
 <rect x="${(w - bw) / 2}" y="88" width="${bw}" height="4" rx="2" fill="${r.border}" opacity="0.3"/>
