@@ -1,6 +1,7 @@
-// 🐱 Language icons from devicons (fetched and cached as base64)
+// 🐱 Language icons - fetch devicon SVGs and embed as inline SVG (no <image> tag)
+// GitHub README strips <image> and base64 data URIs from SVGs for security.
+// Instead we fetch the SVG source, extract its content, and inline it directly.
 
-// 🐱 Devicon URLs for each language
 const DEVICON_URLS: Record<string, string> = {
   Python: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
   JavaScript: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
@@ -31,7 +32,6 @@ const DEVICON_URLS: Record<string, string> = {
   OCaml: "https://raw.githubusercontent.com/devicons/devicon/master/icons/ocaml/ocaml-original.svg",
   Julia: "https://raw.githubusercontent.com/devicons/devicon/master/icons/julia/julia-original.svg",
   Dockerfile: "https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg",
-  Makefile: "https://raw.githubusercontent.com/devicons/devicon/master/icons/cmake/cmake-original.svg",
   TeX: "https://raw.githubusercontent.com/devicons/devicon/master/icons/latex/latex-original.svg",
   Svelte: "https://raw.githubusercontent.com/devicons/devicon/master/icons/svelte/svelte-original.svg",
   Zig: "https://raw.githubusercontent.com/devicons/devicon/master/icons/zig/zig-original.svg",
@@ -45,7 +45,6 @@ const DEVICON_URLS: Record<string, string> = {
   Nix: "https://raw.githubusercontent.com/devicons/devicon/master/icons/nixos/nixos-original.svg",
 };
 
-// 🐱 Language brand colors
 const LANG_COLORS: Record<string, string> = {
   Python: "#3572A5", JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
   CSS: "#1572B6", Shell: "#89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
@@ -61,46 +60,53 @@ const LANG_COLORS: Record<string, string> = {
   Assembly: "#6E4C13", MATLAB: "#e16737",
 };
 
-// 🐱 In-memory icon cache (base64 data URIs)
-const iconCache = new Map<string, string | null>();
+// 🐱 Cache: stores the inner SVG content (everything between <svg> and </svg>)
+const svgCache = new Map<string, string | null>();
 
-async function fetchIconBase64(lang: string): Promise<string | null> {
-  if (iconCache.has(lang)) return iconCache.get(lang) || null;
+async function fetchSvgContent(lang: string): Promise<string | null> {
+  if (svgCache.has(lang)) return svgCache.get(lang) || null;
 
   const url = DEVICON_URLS[lang];
-  if (!url) {
-    iconCache.set(lang, null);
-    return null;
-  }
+  if (!url) { svgCache.set(lang, null); return null; }
 
   try {
     const res = await fetch(url);
-    if (!res.ok) {
-      iconCache.set(lang, null);
-      return null;
-    }
+    if (!res.ok) { svgCache.set(lang, null); return null; }
     const text = await res.text();
-    const b64 = Buffer.from(text).toString("base64");
-    const dataUri = `data:image/svg+xml;base64,${b64}`;
-    iconCache.set(lang, dataUri);
-    return dataUri;
+
+    // 🐱 Extract viewBox and inner content
+    const viewBoxMatch = text.match(/viewBox="([^"]*)"/);
+    const viewBox = viewBoxMatch ? viewBoxMatch[1] : "0 0 128 128";
+
+    // 🐱 Extract everything between <svg...> and </svg>
+    const innerMatch = text.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
+    const inner = innerMatch ? innerMatch[1] : "";
+
+    // 🐱 Remove any nested <svg>, <script>, <style> tags for safety
+    const cleaned = inner
+      .replace(/<script[\s\S]*?<\/script>/gi, "")
+      .replace(/<style[\s\S]*?<\/style>/gi, "");
+
+    const result = `viewBox="${viewBox}">${cleaned}`;
+    svgCache.set(lang, result);
+    return result;
   } catch {
-    iconCache.set(lang, null);
+    svgCache.set(lang, null);
     return null;
   }
 }
 
-// 🐱 Prefetch all icons for a list of languages
 export async function prefetchIcons(langs: string[]): Promise<void> {
-  await Promise.all(langs.map(l => fetchIconBase64(l)));
+  await Promise.all(langs.map(l => fetchSvgContent(l)));
 }
 
-// 🐱 Render language icon at (x, y) — uses cached base64 devicon
+// 🐱 Render: uses nested <svg> with the devicon paths directly inlined
 export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
-  const cached = iconCache.get(lang);
+  const cached = svgCache.get(lang);
 
   if (cached) {
-    return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${cached}"/>`;
+    // 🐱 Inline SVG - no <image> tag, GitHub-safe
+    return `<svg x="${x}" y="${y}" width="${size}" height="${size}" ${cached}</svg>`;
   }
 
   // 🐱 Fallback: colored circle

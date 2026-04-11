@@ -56,18 +56,6 @@ THEMES.v6 = THEMES.nord;
 THEMES.v7 = THEMES.light;
 THEMES.v8 = THEMES.catppuccin;
 
-// 🐱 Fetch avatar as base64
-async function fetchAvatarBase64(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(`${url}&s=80`);
-    if (!res.ok) return null;
-    const buf = await res.arrayBuffer();
-    const b64 = Buffer.from(buf).toString("base64");
-    const ct = res.headers.get("content-type") || "image/png";
-    return `data:${ct};base64,${b64}`;
-  } catch { return null; }
-}
-
 // 🐱 Activity data with dates
 interface ActivityBucket { count: number; label: string }
 
@@ -124,7 +112,6 @@ export async function GET(req: NextRequest) {
 
   try {
     const [s, activity] = await Promise.all([fetchGitHubStats(username), fetchRecentActivity(username)]);
-    const avatar = await fetchAvatarBase64(s.user.avatar_url);
     const { rank, score } = calcRank(s.commits, s.pullRequests, s.stars, s.followers);
 
     const W = 480, pad = 28, contentW = W - pad * 2;
@@ -158,21 +145,16 @@ export async function GET(req: NextRequest) {
       { label: "Experience", value: `${s.experience} yr` },
     ];
 
-    let o = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient>
-  <clipPath id="ac"><circle cx="${pad + 24}" cy="${pad + 24}" r="24"/></clipPath>
 </defs>
 <rect width="${W}" height="${H}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
 `;
     let y = pad;
 
-    // ==================== HEADER ====================
-    if (avatar) {
-      o += `<image x="${pad}" y="${y}" width="48" height="48" href="${avatar}" clip-path="url(#ac)" preserveAspectRatio="xMidYMid slice"/>`;
-      o += `<circle cx="${pad + 24}" cy="${y + 24}" r="24" fill="none" stroke="${t.avatarStroke}" stroke-width="1.5"/>`;
-    }
-    const tx = avatar ? pad + 60 : pad;
+    // ==================== HEADER (no avatar - GitHub strips <image> from SVGs) ====================
+    const tx = pad;
     o += `<text x="${tx}" y="${y + 20}" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(s.user.name || s.user.login)}</text>`;
     o += `<text x="${tx}" y="${y + 38}" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(s.user.login)}</text>`;
     if (s.user.bio) {
