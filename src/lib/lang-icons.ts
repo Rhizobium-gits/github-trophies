@@ -1,52 +1,57 @@
-// 🐱 Language icons from devicons
-// Fetched SVGs have their IDs uniquified to avoid conflicts when inlined
+// 🐱 Language icons from devicons — comprehensive mapping
+// GitHub language name → devicon icon name
 
-const DEVICON_URLS: Record<string, string> = {
-  Python: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
-  JavaScript: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
-  TypeScript: "https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg",
-  HTML: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
-  CSS: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
-  Shell: "https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-original.svg",
-  R: "https://raw.githubusercontent.com/devicons/devicon/master/icons/r/r-original.svg",
-  "Jupyter Notebook": "https://raw.githubusercontent.com/devicons/devicon/master/icons/jupyter/jupyter-original.svg",
-  Go: "https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original.svg",
-  Rust: "https://raw.githubusercontent.com/devicons/devicon/master/icons/rust/rust-original.svg",
-  Java: "https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg",
-  C: "https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg",
-  "C++": "https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg",
-  "C#": "https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg",
-  Ruby: "https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-original.svg",
-  PHP: "https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg",
-  Swift: "https://raw.githubusercontent.com/devicons/devicon/master/icons/swift/swift-original.svg",
-  Kotlin: "https://raw.githubusercontent.com/devicons/devicon/master/icons/kotlin/kotlin-original.svg",
-  Dart: "https://raw.githubusercontent.com/devicons/devicon/master/icons/dart/dart-original.svg",
-  Lua: "https://raw.githubusercontent.com/devicons/devicon/master/icons/lua/lua-original.svg",
-  Vue: "https://raw.githubusercontent.com/devicons/devicon/master/icons/vuejs/vuejs-original.svg",
-  Scala: "https://raw.githubusercontent.com/devicons/devicon/master/icons/scala/scala-original.svg",
-  Haskell: "https://raw.githubusercontent.com/devicons/devicon/master/icons/haskell/haskell-original.svg",
-  Perl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/perl/perl-original.svg",
-  Elixir: "https://raw.githubusercontent.com/devicons/devicon/master/icons/elixir/elixir-original.svg",
-  Clojure: "https://raw.githubusercontent.com/devicons/devicon/master/icons/clojure/clojure-original.svg",
-  OCaml: "https://raw.githubusercontent.com/devicons/devicon/master/icons/ocaml/ocaml-original.svg",
-  Julia: "https://raw.githubusercontent.com/devicons/devicon/master/icons/julia/julia-original.svg",
-  Dockerfile: "https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg",
-  TeX: "https://raw.githubusercontent.com/devicons/devicon/master/icons/latex/latex-original.svg",
-  Svelte: "https://raw.githubusercontent.com/devicons/devicon/master/icons/svelte/svelte-original.svg",
-  Zig: "https://raw.githubusercontent.com/devicons/devicon/master/icons/zig/zig-original.svg",
-  "Emacs Lisp": "https://raw.githubusercontent.com/devicons/devicon/master/icons/emacs/emacs-original.svg",
-  Vim: "https://raw.githubusercontent.com/devicons/devicon/master/icons/vim/vim-original.svg",
-  "Vim Script": "https://raw.githubusercontent.com/devicons/devicon/master/icons/vim/vim-original.svg",
-  SCSS: "https://raw.githubusercontent.com/devicons/devicon/master/icons/sass/sass-original.svg",
-  PowerShell: "https://raw.githubusercontent.com/devicons/devicon/master/icons/powershell/powershell-original.svg",
-  Groovy: "https://raw.githubusercontent.com/devicons/devicon/master/icons/groovy/groovy-original.svg",
-  Erlang: "https://raw.githubusercontent.com/devicons/devicon/master/icons/erlang/erlang-original.svg",
-  Nix: "https://raw.githubusercontent.com/devicons/devicon/master/icons/nixos/nixos-original.svg",
+const LANG_TO_DEVICON: Record<string, string> = {
+  // 🐱 Major languages
+  Python: "python", JavaScript: "javascript", TypeScript: "typescript",
+  HTML: "html5", CSS: "css3", Shell: "bash", R: "r",
+  "Jupyter Notebook": "jupyter", Go: "go", Rust: "rust",
+  Java: "java", C: "c", "C++": "cplusplus", "C#": "csharp",
+  Ruby: "ruby", PHP: "php", Swift: "swift", Kotlin: "kotlin",
+  Dart: "dart", Lua: "lua", Vue: "vuejs", Scala: "scala",
+  Haskell: "haskell", Perl: "perl", Elixir: "elixir",
+  Clojure: "clojure", OCaml: "ocaml", Julia: "julia",
+  Dockerfile: "docker", TeX: "latex", Svelte: "svelte",
+  Zig: "zig", "Emacs Lisp": "emacs", Vim: "vim",
+  "Vim Script": "vim", SCSS: "sass", PowerShell: "powershell",
+  Groovy: "groovy", Erlang: "erlang", Nix: "nixos",
+  // 🐱 Extended languages
+  "Objective-C": "objectivec", "Objective-C++": "objectivec",
+  Fortran: "fortran", MATLAB: "matlab", Assembly: "embeddedc",
+  COBOL: "cobol", Crystal: "crystal", Elm: "elm",
+  "F#": "fsharp", CoffeeScript: "coffeescript", Solidity: "solidity",
+  Apex: "salesforce", Prolog: "prolog", PureScript: "purescript",
+  Nim: "nim", Racket: "racket", VHDL: "labview",
+  SystemVerilog: "labview", Vala: "vala",
+  // 🐱 Markup & data
+  Markdown: "markdown", JSON: "json", XML: "xml", YAML: "yaml",
+  TOML: "tomcat", HCL: "terraform", Makefile: "cmake",
+  // 🐱 Frameworks/tools (sometimes detected as language)
+  Astro: "astro", Nunjucks: "nodejs", EJS: "nodejs",
+  Handlebars: "handlebars", Pug: "pug", Less: "less",
+  Stylus: "stylus", PostCSS: "postcss",
+  // 🐱 Shell variants
+  Bash: "bash", Zsh: "bash", Fish: "bash",
+  "Shell Script": "bash", ShellSession: "bash",
+  Batchfile: "windows11",
+  // 🐱 More languages
+  Hack: "facebook", D: "denojs", Ada: "c",
+  Pascal: "delphi", Scheme: "clojure", "Common Lisp": "lisp",
+  Tcl: "linux", AWK: "awk", Raku: "perl",
+  GDScript: "godot", Processing: "processing",
+  Arduino: "arduino", GLSL: "opengl",
+  Cuda: "nvidia", Wasm: "wasm", WebAssembly: "wasm",
+  Starlark: "python", Cython: "python", Meson: "linux",
+  CMake: "cmake", Gradle: "gradle", Bazel: "bazel",
+  Jsonnet: "json", Dhall: "haskell",
+  ReScript: "react", Reason: "reason",
+  ClojureScript: "clojurescript",
 };
 
+// 🐱 Language brand colors (GitHub linguist)
 const LANG_COLORS: Record<string, string> = {
   Python: "#3572A5", JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
-  CSS: "#1572B6", Shell: "#89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
+  CSS: "#1572B6", Shell: "##89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
   Go: "#00ADD8", Rust: "#dea584", Java: "#ED8B00", C: "#A8B9CC", "C++": "#00599C",
   "C#": "#178600", Ruby: "#CC342D", PHP: "#777BB4", Swift: "#F05138",
   Kotlin: "#7F52FF", Dart: "#0175C2", Lua: "#2C2D72", Vue: "#4FC08D",
@@ -55,28 +60,35 @@ const LANG_COLORS: Record<string, string> = {
   Makefile: "#427819", TeX: "#3D6117", Svelte: "#ff3e00", Zig: "#ec915c",
   "Emacs Lisp": "#7F5AB6", Vim: "#199f4b", "Vim Script": "#199f4b",
   SCSS: "#CD6799", PowerShell: "#012456", Groovy: "#4298b8", Erlang: "#B83998",
-  Nix: "#7EBAE4", "Common Lisp": "#3fb68b", "F#": "#b845fc",
+  Nix: "#7EBAE4", "Common Lisp": "#3fb68b", "F#": "#b845fc", Fortran: "#4d41b1",
+  Assembly: "#6E4C13", MATLAB: "#e16737", "Objective-C": "#438eff",
+  CoffeeScript: "#244776", Elm: "#60B5CC", Crystal: "#000100", Nim: "#FFE953",
+  Racket: "#3c5caa", Solidity: "#AA6746", YAML: "#cb171e", Markdown: "#083fa1",
+  JSON: "#292929", XML: "#0060ac", Less: "#1d365d", Stylus: "#ff6347",
+  Astro: "#ff5a03", GDScript: "#355570", Arduino: "#00979D", Processing: "#0096D8",
+  Cuda: "#3A4E3A", Wasm: "#654FF0", Starlark: "#76d275", Cython: "#fedf5b",
+  CMake: "#DA3434", Reason: "#ff5847", ReScript: "#E6484F", ClojureScript: "#db5855",
+  D: "#BA595E", Ada: "#02f88c", Pascal: "#E3F171", Scheme: "#1e4aec",
+  Tcl: "#e4cc98", Raku: "#0000fb", PureScript: "#1D222D", Hack: "#878787",
+  Apex: "#1797c0", Prolog: "#74283c", COBOL: "#234", HCL: "#844FBA",
 };
 
-// 🐱 Cache: stores processed SVG content with uniquified IDs
-interface SvgData {
-  defs: string;   // <defs> content to put in parent SVG
-  body: string;   // paths/shapes to render
-  viewBox: string;
+// 🐱 Build devicon URL
+function deviconUrl(iconName: string): string {
+  return `https://raw.githubusercontent.com/devicons/devicon/master/icons/${iconName}/${iconName}-original.svg`;
 }
 
+// 🐱 Cache for fetched SVG data
+interface SvgData { defs: string; body: string; viewBox: string }
 const svgCache = new Map<string, SvgData | null>();
 let idCounter = 0;
 
-function uniquifyIds(svgText: string, prefix: string): string {
-  // 🐱 Replace all id="..." and url(#...) and href="#..." references with unique prefixed versions
+function uniquifyIds(text: string, prefix: string): string {
   const ids = new Set<string>();
-  const idPattern = /id="([^"]*)"/g;
-  let match;
-  while ((match = idPattern.exec(svgText)) !== null) {
-    ids.add(match[1]);
-  }
-  let result = svgText;
+  let m;
+  const re = /id="([^"]*)"/g;
+  while ((m = re.exec(text)) !== null) ids.add(m[1]);
+  let result = text;
   ids.forEach(id => {
     const uid = `${prefix}_${id}`;
     result = result.replace(new RegExp(`id="${id}"`, 'g'), `id="${uid}"`);
@@ -90,34 +102,28 @@ function uniquifyIds(svgText: string, prefix: string): string {
 async function fetchAndProcess(lang: string): Promise<SvgData | null> {
   if (svgCache.has(lang)) return svgCache.get(lang) || null;
 
-  const url = DEVICON_URLS[lang];
-  if (!url) { svgCache.set(lang, null); return null; }
+  const iconName = LANG_TO_DEVICON[lang];
+  if (!iconName) { svgCache.set(lang, null); return null; }
 
+  const url = deviconUrl(iconName);
   try {
     const res = await fetch(url);
     if (!res.ok) { svgCache.set(lang, null); return null; }
     let text = await res.text();
 
-    // 🐱 Uniquify IDs
     const prefix = `li${idCounter++}`;
     text = uniquifyIds(text, prefix);
 
-    // 🐱 Extract viewBox
     const vbMatch = text.match(/viewBox="([^"]*)"/);
     const viewBox = vbMatch ? vbMatch[1] : "0 0 128 128";
 
-    // 🐱 Extract inner content
     const innerMatch = text.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
     let inner = innerMatch ? innerMatch[1] : "";
-
-    // 🐱 Remove <style> and <script>
     inner = inner.replace(/<script[\s\S]*?<\/script>/gi, "");
     inner = inner.replace(/<style[\s\S]*?<\/style>/gi, "");
 
-    // 🐱 Separate <defs>...</defs> (gradients etc) from body
     let defs = "";
     inner = inner.replace(/<defs>([\s\S]*?)<\/defs>/gi, (_, d) => { defs += d; return ""; });
-    // 🐱 Also extract standalone gradient/clipPath elements outside <defs>
     inner = inner.replace(/(<(?:linearGradient|radialGradient|clipPath)[^>]*>[\s\S]*?<\/(?:linearGradient|radialGradient|clipPath)>)/gi, (m) => { defs += m; return ""; });
 
     const data: SvgData = { defs, body: inner.trim(), viewBox };
@@ -133,27 +139,19 @@ export async function prefetchIcons(langs: string[]): Promise<void> {
   await Promise.all(langs.map(l => fetchAndProcess(l)));
 }
 
-// 🐱 Get defs for all prefetched icons (to be placed in parent <defs>)
 export function getAllDefs(): string {
   let defs = "";
   svgCache.forEach(data => { if (data) defs += data.defs; });
   return defs;
 }
 
-// 🐱 Render icon using <g transform> (no nested <svg>, no <image>)
 export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
   const data = svgCache.get(lang);
-
   if (data && data.body) {
-    // 🐱 Calculate scale from viewBox to target size
-    const vbParts = data.viewBox.split(/\s+/).map(Number);
-    const vbW = vbParts[2] || 128;
-    const vbH = vbParts[3] || 128;
-    const scale = size / Math.max(vbW, vbH);
+    const vb = data.viewBox.split(/\s+/).map(Number);
+    const scale = size / Math.max(vb[2] || 128, vb[3] || 128);
     return `<g transform="translate(${x},${y}) scale(${scale.toFixed(4)})">${data.body}</g>`;
   }
-
-  // 🐱 Fallback: colored circle
   const color = LANG_COLORS[lang] || "#555";
   return `<circle cx="${x + size / 2}" cy="${y + size / 2}" r="${size / 2}" fill="${color}"/>`;
 }

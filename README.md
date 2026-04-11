@@ -1,61 +1,20 @@
-# GitHub Trophies <img src="https://cultofthepartyparrot.com/guests/catparrot.gif" width="30" height="30"/>
+# GitHub Trophies
 
-Dynamic GitHub stats card for your README. Devicon logos, activity graph, 20 themes.
+Dynamic GitHub stats card for your README. Devicon logos, 1-year contribution graph, 32 themes.
 
-<p>
-  <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir" alt="GitHub Stats"/>
-  <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=vibe" width="60" height="60"/>
-</p>
-
-## Features
-
-- Commits / PRs / Issues / Stars / Repos / Experience
-- 12-week activity bar chart with counts and dates
-- Language donut chart with devicon logos and percentages
-- 20 color themes (15 dark, 5 light)
-- Party Cat GIF that **runs faster the higher your rank** <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits" width="20" height="20"/>
+![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 
 ## Usage
 
 `username=` を自分のGitHubユーザー名に変えて使ってください。
 
-Stats + Party Cat (スコア連動) を横並びで表示:
-
-```html
-<p>
-  <img src="https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir"/>
-  <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=vibe" width="60" height="60"/>
-</p>
-```
-
-Stats のみ:
-
 ```markdown
 ![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 ```
 
-## Party Cat <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits" width="20" height="20"/>
-
-`/api/partycat` はGitHubのランクに応じて猫のアニメーション速度が変わるGIFを返す。
-
-| Param | Default | Description |
-|-------|---------|-------------|
-| `username` | (required) | GitHub username |
-| `cat` | `cat` | `cat`, `blob`, `vibe` |
-
-### Cat types
-
-| Type | Preview |
-|------|---------|
-| `cat` | <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=cat" width="40"/> |
-| `blob` | <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=blob" width="40"/> |
-| `vibe` | <img src="https://github-trophies-rho.vercel.app/api/partycat?username=Rhizobium-gits&cat=vibe" width="40"/> |
-
 ## Themes — Copy & Paste
 
-### Dark
-
----
+### Dark (24 themes)
 
 #### noir
 
@@ -207,9 +166,97 @@ Stats のみ:
 
 ---
 
-### Light
+#### night-owl
+
+![night-owl](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=night-owl)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=night-owl)
+```
 
 ---
+
+#### palenight
+
+![palenight](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=palenight)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=palenight)
+```
+
+---
+
+#### shades-of-purple
+
+![shades-of-purple](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=shades-of-purple)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=shades-of-purple)
+```
+
+---
+
+#### panda
+
+![panda](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=panda)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=panda)
+```
+
+---
+
+#### horizon
+
+![horizon](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=horizon)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=horizon)
+```
+
+---
+
+#### vitesse
+
+![vitesse](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse)
+```
+
+---
+
+#### everforest
+
+![everforest](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest)
+```
+
+---
+
+#### kanagawa
+
+![kanagawa](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=kanagawa)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=kanagawa)
+```
+
+---
+
+#### fleet
+
+![fleet](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=fleet)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=fleet)
+```
+
+---
+
+### Light (8 themes)
 
 #### light
 
@@ -261,6 +308,36 @@ Stats のみ:
 
 ---
 
+#### light-owl
+
+![light-owl](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light-owl)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light-owl)
+```
+
+---
+
+#### everforest-light
+
+![everforest-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest-light)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=everforest-light)
+```
+
+---
+
+#### vitesse-light
+
+![vitesse-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse-light)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=vitesse-light)
+```
+
+---
+
 ## Parameters
 
 | Parameter | Default | Description |
@@ -272,4 +349,4 @@ Stats のみ:
 
 1. Fork this repo
 2. Deploy to [Vercel](https://vercel.com)
-3. (Optional) Set `GITHUB_TOKEN` env var for higher API rate limits
+3. Set `GITHUB_TOKEN` env var (required for contribution graph and higher API rate limits)
