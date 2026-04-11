@@ -80,12 +80,26 @@ async function fetchRecentActivity(username: string): Promise<ActivityBucket[]> 
   } catch { return []; }
 }
 
-// 🐱 Rank
+// 🐱 Rank — weighted score from commits, PRs, stars, followers
+// Roughly: S requires mass contribution (top devs), A+ is very active, A/A- is solid, etc.
 function calcRank(commits: number, prs: number, stars: number, followers: number): { rank: string; score: number } {
-  const score = Math.min(Math.log10(commits+1)*10 + Math.log10(prs+1)*8 + Math.log10(stars+1)*6 + Math.log10(followers+1)*4, 100);
+  const score = Math.min(
+    Math.log10(commits + 1) * 8 +
+    Math.log10(prs + 1) * 6 +
+    Math.log10(stars + 1) * 10 +
+    Math.log10(followers + 1) * 6,
+    100
+  );
   for (const t of [
-    { min: 50, rank: "S" }, { min: 40, rank: "A+" }, { min: 30, rank: "A" },
-    { min: 20, rank: "B+" }, { min: 10, rank: "B" }, { min: 0, rank: "C" },
+    { min: 70, rank: "S" },
+    { min: 60, rank: "A+" },
+    { min: 50, rank: "A" },
+    { min: 42, rank: "A-" },
+    { min: 35, rank: "B+" },
+    { min: 28, rank: "B" },
+    { min: 20, rank: "B-" },
+    { min: 12, rank: "C+" },
+    { min: 0,  rank: "C" },
   ]) { if (score >= t.min) return { rank: t.rank, score: Math.round(score) }; }
   return { rank: "C", score: 0 };
 }
