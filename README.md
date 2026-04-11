@@ -4,41 +4,223 @@ Dynamic GitHub stats card for your README. Enter any username, pick a theme.
 
 ## Usage
 
+Replace `YOUR_USERNAME` with your GitHub username:
+
 ```markdown
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=THEME_NAME)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=noir)
 ```
 
-## Themes
+## Themes — Copy & Paste
+
+> Replace `YOUR_USERNAME` with your GitHub username.
 
 ### Dark
 
-| Theme | Preview |
-|-------|---------|
-| `noir` | ![noir](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir) |
-| `dracula` | ![dracula](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula) |
-| `one-dark` | ![one-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark) |
-| `monokai` | ![monokai](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai) |
-| `tokyo-night` | ![tokyo-night](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night) |
-| `nord` | ![nord](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord) |
-| `github-dark` | ![github-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark) |
-| `catppuccin` | ![catppuccin](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin) |
-| `gruvbox-dark` | ![gruvbox-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark) |
-| `solarized-dark` | ![solarized-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark) |
-| `synthwave` | ![synthwave](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave) |
-| `cobalt` | ![cobalt](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt) |
-| `ayu` | ![ayu](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu) |
-| `material-ocean` | ![material-ocean](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean) |
-| `rose` | ![rose](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose) |
+---
+
+#### noir
+
+![noir](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=noir)
+```
+
+---
+
+#### dracula
+
+![dracula](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=dracula)
+```
+
+---
+
+#### one-dark
+
+![one-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=one-dark)
+```
+
+---
+
+#### monokai
+
+![monokai](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=monokai)
+```
+
+---
+
+#### tokyo-night
+
+![tokyo-night](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=tokyo-night)
+```
+
+---
+
+#### nord
+
+![nord](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=nord)
+```
+
+---
+
+#### github-dark
+
+![github-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=github-dark)
+```
+
+---
+
+#### catppuccin
+
+![catppuccin](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=catppuccin)
+```
+
+---
+
+#### gruvbox-dark
+
+![gruvbox-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=gruvbox-dark)
+```
+
+---
+
+#### solarized-dark
+
+![solarized-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=solarized-dark)
+```
+
+---
+
+#### synthwave
+
+![synthwave](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=synthwave)
+```
+
+---
+
+#### cobalt
+
+![cobalt](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=cobalt)
+```
+
+---
+
+#### ayu
+
+![ayu](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=ayu)
+```
+
+---
+
+#### material-ocean
+
+![material-ocean](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=material-ocean)
+```
+
+---
+
+#### rose
+
+![rose](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=rose)
+```
+
+---
 
 ### Light
 
-| Theme | Preview |
-|-------|---------|
-| `light` | ![light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light) |
-| `github-light` | ![github-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light) |
-| `solarized-light` | ![solarized-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light) |
-| `gruvbox-light` | ![gruvbox-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light) |
-| `catppuccin-latte` | ![catppuccin-latte](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte) |
+---
+
+#### light
+
+![light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=light)
+```
+
+---
+
+#### github-light
+
+![github-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=github-light)
+```
+
+---
+
+#### solarized-light
+
+![solarized-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=solarized-light)
+```
+
+---
+
+#### gruvbox-light
+
+![gruvbox-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=gruvbox-light)
+```
+
+---
+
+#### catppuccin-latte
+
+![catppuccin-latte](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte)
+
+```
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=catppuccin-latte)
+```
+
+---
 
 ## Parameters
 
