@@ -2,7 +2,13 @@
 
 Dynamic GitHub stats card for your README.
 
-![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=4&theme=noir)
+- User avatar, name, bio, rank (CDF percentile)
+- Commits / PRs / Issues / Stars / Repos / Experience
+- 1-year contribution graph (via GraphQL API)
+- Language donut chart with devicon + Simple Icons logos
+- 32 color themes
+
+![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=8&theme=noir)
 
 ## Usage
 
@@ -62,5 +68,5 @@ Dynamic GitHub stats card for your README.
 ## Deploy
 
 1. Fork this repo
-2. Deploy to Vercel
-3. Set `GITHUB_TOKEN` env var
+2. Deploy to [Vercel](https://vercel.com)
+3. Set `GITHUB_TOKEN` env var (required for contribution graph and higher rate limits)
