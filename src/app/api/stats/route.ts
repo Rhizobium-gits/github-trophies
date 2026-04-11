@@ -142,6 +142,17 @@ function calcRank(
   return { rank: "C", score: 0 };
 }
 
+// 🐱 Fetch avatar as base64 for embedding
+async function fetchAvatarBase64(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${url}&s=96`);
+    if (!res.ok) return null;
+    const buf = Buffer.from(await res.arrayBuffer());
+    const ct = res.headers.get("content-type") || "image/png";
+    return `data:${ct};base64,${buf.toString("base64")}`;
+  } catch { return null; }
+}
+
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
@@ -204,7 +215,10 @@ export async function GET(req: NextRequest) {
     // 🐱 Party Cat GIF as base64 (speed adjusted by score)
     const catType = sp.get("cat") || "vibe";
     const catSize = 40;
-    const catGifB64 = await getPartyCatBase64(catType, score);
+    const [catGifB64, avatarB64] = await Promise.all([
+      getPartyCatBase64(catType, score),
+      fetchAvatarBase64(s.user.avatar_url),
+    ]);
 
     let o = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
 <defs>
@@ -216,11 +230,19 @@ export async function GET(req: NextRequest) {
     let y = pad;
 
     // ==================== HEADER ====================
-    const tx = pad;
+    // 🐱 Avatar (base64 embedded)
+    const avatarSize = 48;
+    if (avatarB64) {
+      o += `<clipPath id="avclip"><circle cx="${pad + avatarSize / 2}" cy="${y + avatarSize / 2}" r="${avatarSize / 2}"/></clipPath>`;
+      o += `<image x="${pad}" y="${y}" width="${avatarSize}" height="${avatarSize}" href="${avatarB64}" clip-path="url(#avclip)"/>`;
+      o += `<circle cx="${pad + avatarSize / 2}" cy="${y + avatarSize / 2}" r="${avatarSize / 2}" fill="none" stroke="${t.avatarStroke}" stroke-width="1.5"/>`;
+    }
+
+    const tx = avatarB64 ? pad + avatarSize + 12 : pad;
     o += `<text x="${tx}" y="${y + 20}" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(s.user.name || s.user.login)}</text>`;
     o += `<text x="${tx}" y="${y + 38}" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(s.user.login)}</text>`;
     if (s.user.bio) {
-      const bio = s.user.bio.length > 50 ? s.user.bio.slice(0, 47) + "..." : s.user.bio;
+      const bio = s.user.bio.length > 44 ? s.user.bio.slice(0, 41) + "..." : s.user.bio;
       o += `<text x="${tx}" y="${y + 54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
     }
 
