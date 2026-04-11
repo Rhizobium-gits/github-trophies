@@ -80,9 +80,9 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
     orgs = await fetchAllPages<GitHubOrg>(`https://api.github.com/users/${username}/orgs`, h);
   } catch {}
 
-  // 🐱 Fetch personal repos (all types: owner, collaborator, member)
+  // 🐱 Fetch personal repos (owner only)
   const personalRepos = await fetchAllPages<GitHubRepo>(
-    `https://api.github.com/users/${username}/repos?type=all`,
+    `https://api.github.com/users/${username}/repos?type=owner`,
     h
   );
 
