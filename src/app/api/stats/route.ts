@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
-import { langIcon, getLangInfo } from "@/lib/lang-icons";
+import { langIcon, getLangColor } from "@/lib/lang-icons";
 
 // 🐱 Theme system - VSCode-style named themes
 interface Theme {
@@ -249,7 +249,7 @@ export async function GET(req: NextRequest) {
       const dCx = pad + 40, dCy = y + 40, dR = 32, dIR = 20;
       let sa = -90;
       langSorted.forEach(([lang, count]) => {
-        const info = getLangInfo(lang);
+        const lc = getLangColor(lang);
         const pct = count / langTotal, angle = pct * 360, ea = sa + angle;
         const sr = (sa * Math.PI) / 180, er = (ea * Math.PI) / 180;
         const x1 = dCx + dR * Math.cos(sr), y1 = dCy + dR * Math.sin(sr);
@@ -257,7 +257,7 @@ export async function GET(req: NextRequest) {
         const ix1 = dCx + dIR * Math.cos(er), iy1 = dCy + dIR * Math.sin(er);
         const ix2 = dCx + dIR * Math.cos(sr), iy2 = dCy + dIR * Math.sin(sr);
         const la = angle > 180 ? 1 : 0;
-        o += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${dR},${dR} 0 ${la},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${dIR},${dIR} 0 ${la},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${info.color}"/>`;
+        o += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${dR},${dR} 0 ${la},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${dIR},${dIR} 0 ${la},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${lc}"/>`;
         sa = ea;
       });
       o += `<text x="${dCx}" y="${dCy + 1}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="${t.donutCenter}" font-family="${M}">${langSorted.length}</text>`;
