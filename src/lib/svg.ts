@@ -86,7 +86,7 @@ export function getProgress(value: number, th: number[]): number {
   return Math.min((value / th[th.length - 1]) * 100, 100);
 }
 
-const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+const FONT = "system-ui, -apple-system, sans-serif";
 
 export function trophyCard(x: number, y: number, key: string, title: string, value: number, rank: string, progress: number, rs: Record<string, RankStyle>): string {
   const r = rs[rank];

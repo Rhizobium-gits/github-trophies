@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     const txt = theme === "dark" ? "#C9D1D9" : "#333";
     const sub = theme === "dark" ? "#8B949E" : "#888";
     const bdr = theme === "dark" ? "#30363D" : "#E5E7EB";
-    const font = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+    const font = "system-ui, -apple-system, sans-serif";
 
     const pad = 20, barY = 44, barH = 10, barW = 360;
     const legY = barY + barH + 20, legCW = 180, legRH = 20;
