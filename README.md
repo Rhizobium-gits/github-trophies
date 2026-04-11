@@ -4,15 +4,13 @@ Dynamic GitHub stats card for your README. Enter any username, pick a theme.
 
 ## Usage
 
-Replace `YOUR_USERNAME` with your GitHub username:
+`username=` を自分のGitHubユーザー名に変えて使ってください。
 
 ```markdown
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=noir)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 ```
 
 ## Themes — Copy & Paste
-
-> Replace `YOUR_USERNAME` with your GitHub username.
 
 ### Dark
 
@@ -23,7 +21,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![noir](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=noir)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=noir)
 ```
 
 ---
@@ -33,7 +31,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![dracula](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=dracula)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=dracula)
 ```
 
 ---
@@ -43,7 +41,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![one-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=one-dark)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=one-dark)
 ```
 
 ---
@@ -53,7 +51,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![monokai](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=monokai)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=monokai)
 ```
 
 ---
@@ -63,7 +61,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![tokyo-night](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=tokyo-night)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=tokyo-night)
 ```
 
 ---
@@ -73,7 +71,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![nord](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=nord)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=nord)
 ```
 
 ---
@@ -83,7 +81,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![github-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=github-dark)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-dark)
 ```
 
 ---
@@ -93,7 +91,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![catppuccin](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=catppuccin)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin)
 ```
 
 ---
@@ -103,7 +101,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![gruvbox-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=gruvbox-dark)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-dark)
 ```
 
 ---
@@ -113,7 +111,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![solarized-dark](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=solarized-dark)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-dark)
 ```
 
 ---
@@ -123,7 +121,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![synthwave](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=synthwave)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=synthwave)
 ```
 
 ---
@@ -133,7 +131,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![cobalt](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=cobalt)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=cobalt)
 ```
 
 ---
@@ -143,7 +141,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![ayu](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=ayu)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=ayu)
 ```
 
 ---
@@ -153,7 +151,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![material-ocean](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=material-ocean)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=material-ocean)
 ```
 
 ---
@@ -163,7 +161,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![rose](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=rose)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=rose)
 ```
 
 ---
@@ -177,7 +175,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=light)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=light)
 ```
 
 ---
@@ -187,7 +185,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![github-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=github-light)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=github-light)
 ```
 
 ---
@@ -197,7 +195,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![solarized-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=solarized-light)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=solarized-light)
 ```
 
 ---
@@ -207,7 +205,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![gruvbox-light](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=gruvbox-light)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=gruvbox-light)
 ```
 
 ---
@@ -217,7 +215,7 @@ Replace `YOUR_USERNAME` with your GitHub username:
 ![catppuccin-latte](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte)
 
 ```
-![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=YOUR_USERNAME&theme=catppuccin-latte)
+![GitHub Stats](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&theme=catppuccin-latte)
 ```
 
 ---
