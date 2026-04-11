@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
 import { langIcon, getLangColor, prefetchIcons } from "@/lib/lang-icons";
+import { renderNyanCat } from "@/lib/nyancat";
 
 // 🐱 Theme system - VSCode-style named themes
 interface Theme {
@@ -167,6 +168,11 @@ export async function GET(req: NextRequest) {
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
     o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
     o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
+
+    // 🐱 Nyan Cat! Speed based on score
+    const isLight = ["light", "github-light", "solarized-light", "gruvbox-light", "catppuccin-latte", "v7"].includes(themeKey);
+    o += renderNyanCat(W - pad - 120, y + 2, score, isLight ? "light" : "dark");
+
     y += headerH;
 
     o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
