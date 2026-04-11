@@ -2,7 +2,7 @@
 
 GitHub の統計情報をカード形式で README に表示するツール。
 
-![Demo](https://github-trophies-rho.vercel.app/api/stats?username=Rhizobium-gits&v=18&theme=noir)
+![Demo](https://x.gd/fk3by)
 
 - ユーザーアバター・名前・bio・ランク (CDF パーセンタイル)
 - Commits / PRs / Issues / Stars / Repos / Experience
