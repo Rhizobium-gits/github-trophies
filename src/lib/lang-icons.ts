@@ -1,166 +1,113 @@
-// 🐱 Language logos as SVG paths (from Simple Icons, CC0 license)
-// Each path is in a 24x24 viewBox
+// 🐱 Language icons from devicons (fetched and cached as base64)
 
-export interface LangInfo {
-  color: string;
-  path: string;  // SVG path data in 24x24 viewBox
-}
-
-const LOGOS: Record<string, LangInfo> = {
-  Python: {
-    color: "#3572A5",
-    path: "M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2V8.27l-.04.39-.11.35-.2.28-.3.21-.41.14-.54.05h-7.25l-.43.07-.35.12-.27.18-.2.24-.13.31-.07.36v3.51H3.85S0 5.87 0 12.13s3.36 6.05 3.36 6.05h2V15.2s-.1-3.36 3.3-3.36h5.69s3.2.05 3.2-3.1V3.16S17.95 0 12 0c-3.74 0-6.27 2.7-6.27 2.7v2.8h6.4v.84H3.85zm-5.4 1.69a1.05 1.05 0 110 2.1 1.05 1.05 0 010-2.1zM9.75 23.82l-.9-.2-.73-.26-.59-.3-.45-.32-.34-.34-.25-.34-.16-.33-.1-.3-.04-.26-.02-.2V15.73l.04-.39.11-.35.2-.28.3-.21.41-.14.54-.05h7.25l.43-.07.35-.12.27-.18.2-.24.13-.31.07-.36v-3.51h2.28S24 18.13 24 11.87s-3.36-6.05-3.36-6.05h-2V8.8s.1 3.36-3.3 3.36H9.65s-3.2-.05-3.2 3.1v5.58S6.05 24 12 24c3.74 0 6.27-2.7 6.27-2.7v-2.8h-6.4v-.84h8.28zm5.4-1.69a1.05 1.05 0 110-2.1 1.05 1.05 0 010 2.1z",
-  },
-  JavaScript: {
-    color: "#F7DF1E",
-    path: "M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.405-.6-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179z",
-  },
-  TypeScript: {
-    color: "#3178C6",
-    path: "M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 011.306.34v2.458a3.95 3.95 0 00-.643-.361 5.093 5.093 0 00-.717-.26 5.453 5.453 0 00-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 00-.623.242c-.17.104-.3.229-.393.374a.888.888 0 00-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.42.276.69.394l.927.376c.507.202.936.416 1.279.64.344.224.622.47.832.738.21.27.36.56.45.874.09.313.135.654.135 1.024 0 .578-.116 1.069-.347 1.474a2.89 2.89 0 01-.94.998c-.395.258-.855.443-1.378.555-.524.112-1.082.168-1.678.168-.55 0-1.083-.054-1.6-.162a5.66 5.66 0 01-1.397-.482v-2.642a3.57 3.57 0 00.748.465 5.58 5.58 0 001.787.486c.328.046.564.053.768.018.203-.035.37-.105.5-.212a.773.773 0 00.264-.354.932.932 0 00.074-.381c0-.18-.057-.35-.173-.51-.116-.16-.284-.313-.5-.458a7.14 7.14 0 00-.813-.43l-.888-.37a5.86 5.86 0 01-1.222-.655 3.24 3.24 0 01-.785-.803 2.86 2.86 0 01-.396-.933 4.23 4.23 0 01-.109-.996c0-.547.111-1.03.333-1.448.222-.419.528-.77.919-1.054.39-.285.845-.498 1.367-.64a6.59 6.59 0 011.69-.216zM6.232 11.375h7.536V13.5H15v-2.125h2.399v-2.25H6.232v2.25z",
-  },
-  HTML: {
-    color: "#E34F26",
-    path: "M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.071-.757.541-6.028H5.879l1.41 15.97 5.693 1.562 5.754-1.598.785-8.784h-8.06l.2 2.35h5.483l-.36 4.06-3.062.85-3.071-.853-.205-2.257H6.14l.391 4.393 5.437 1.55 5.462-1.53 1.018-11.39H8.563z",
-  },
-  CSS: {
-    color: "#1572B6",
-    path: "M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.002l5.355-1.12.564-6.468h-3.04l-.142-.548L18.59 4.414v-.001z",
-  },
-  Shell: {
-    color: "#89E051",
-    path: "M4.8 3.2L1.2 8l3.6 4.8 1.6-1.2L3.6 8l2.8-3.6zm14.4 0l-1.6 1.2L20.4 8l-2.8 3.6 1.6 1.2L22.8 8zM12 2L8 22h2l4-20z",
-  },
-  R: {
-    color: "#276DC3",
-    path: "M12 0C5.37 0 0 4.03 0 9s5.37 9 12 9c2.77 0 5.33-.77 7.37-2.08L15.26 9H12V7h6v2h-1.53l3.85 6.52C22.65 13.6 24 11.41 24 9c0-4.97-5.37-9-12-9zM6 7.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7z",
-  },
-  "Jupyter Notebook": {
-    color: "#F37626",
-    path: "M7.157 22.201A1.784 1.784 0 019.143 22a1.784 1.784 0 01-1.986.201zM15.206 1.6a1.4 1.4 0 11-2.8 0 1.4 1.4 0 012.8 0zM4.2 4.6a.9.9 0 11-1.8 0 .9.9 0 011.8 0zM12 5.5c-5.29 0-9.6 2.88-9.6 6.44 0 2.17 1.63 4.09 4.13 5.28a15.5 15.5 0 005.47 1.16c1.92 0 3.75-.4 5.36-1.12 2.56-1.18 4.24-3.13 4.24-5.32 0-3.56-4.31-6.44-9.6-6.44z",
-  },
-  Go: {
-    color: "#00ADD8",
-    path: "M1.811 10.231c-.047 0-.058-.023-.035-.059l.246-.315c.023-.035.081-.058.128-.058h4.172c.046 0 .058.035.035.07l-.199.303c-.023.036-.082.07-.117.07zM.047 11.306c-.047 0-.059-.023-.035-.058l.245-.316c.023-.035.082-.058.129-.058h5.328c.047 0 .07.035.058.07l-.093.28c-.012.047-.058.07-.105.07zm2.828 1.075c-.047 0-.059-.035-.035-.07l.163-.292c.023-.035.07-.07.117-.07h2.337c.047 0 .07.035.07.082l-.023.28c0 .047-.047.082-.082.082zm12.129-2.36c-.748.187-1.26.315-1.998.502-.176.046-.187.058-.34-.117-.174-.199-.303-.327-.548-.444-.737-.362-1.449-.257-2.115.175-.793.514-1.204 1.274-1.192 2.22.011.934.654 1.706 1.577 1.835.795.105 1.46-.152 1.998-.744.105-.13.199-.27.315-.434H10.87c-.245 0-.304-.152-.222-.35.152-.362.432-.97.596-1.274a.315.315 0 01.292-.187h4.253c-.023.316-.023.631-.07.947a5.07 5.07 0 01-1.053 2.453c-.96 1.18-2.174 1.87-3.66 2.057-1.215.152-2.35-.07-3.356-.784a4.159 4.159 0 01-1.613-2.7c-.21-1.32.058-2.558.772-3.672.83-1.298 1.998-2.115 3.473-2.406 1.215-.245 2.383-.117 3.437.607.654.445 1.11 1.04 1.427 1.752.07.105.023.164-.117.199z",
-  },
-  Rust: {
-    color: "#DEA584",
-    path: "M23.835 11.703l-1.008-.622a13.337 13.337 0 00-.088-.905l.874-.776a.297.297 0 00-.057-.476l-.936-.549a10.3 10.3 0 00-.263-.861l.72-.909a.297.297 0 00-.132-.454l-1.005-.39a9.796 9.796 0 00-.428-.79l.543-1.012a.296.296 0 00-.2-.418l-1.05-.218a9.19 9.19 0 00-.577-.688l.35-1.082a.296.296 0 00-.261-.373L19.2 2.04a9.212 9.212 0 00-.704-.56l.143-1.114A.296.296 0 0018.32 0l-1.074.144a10.2 10.2 0 00-.807-.406L16.327 0h7.346A.327.327 0 0124 .327v11.05a.326.326 0 01-.165.326zM12 16.403a4.403 4.403 0 110-8.806 4.403 4.403 0 010 8.806z",
-  },
-  Java: {
-    color: "#ED8B00",
-    path: "M8.851 18.56s-.917.534.653.714c.575.085 1.239.134 1.897.134 1.958 0 3.637-.363 5.159-1.016 0 0 .496.322 1.19.602-4.268 1.829-9.644-.106-8.9-1.434zm-.76-3.256s-1.028.762.542.924c2.032.209 4.08.223 6.022-.19 0 0 .346.346.89.536-5.146 1.508-10.88.119-7.454-1.27zm4.155-5.516c1.043 1.201-.274 2.282-.274 2.282s2.648-1.367 1.431-3.08c-1.137-1.6-2.008-2.395 2.71-5.138 0 0-7.405 1.849-3.867 5.936zM16.853 20.3s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033-.856-.373.749-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.82zM9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892zm7.826 4.377c4.5-2.339 2.421-4.589.968-4.286-.356.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0 0 .07-.062.09-.117zM14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.889 4.832 0 6.836-2.274-2.053-3.943-3.858-2.824-5.54 1.644-2.468 6.197-3.665 5.189-7.626z",
-  },
-  "C++": {
-    color: "#00599C",
-    path: "M22.394 6c-.167-.29-.398-.543-.652-.69L12.926.22c-.509-.294-1.34-.294-1.848 0L2.26 5.31c-.508.293-.923 1.013-.923 1.6v10.18c0 .294.104.62.271.91.167.29.398.543.652.689l8.816 5.091c.508.293 1.34.293 1.848 0l8.816-5.091c.254-.146.485-.399.652-.689s.271-.616.271-.91V6.91c.002-.294-.102-.62-.269-.91zM12 19.11c-3.92 0-7.109-3.19-7.109-7.11 0-3.92 3.19-7.11 7.11-7.11a7.133 7.133 0 016.156 3.553l-3.076 1.78a3.567 3.567 0 00-3.08-1.78A3.56 3.56 0 008.444 12 3.56 3.56 0 0012 15.555a3.57 3.57 0 003.08-1.778l3.078 1.78A7.135 7.135 0 0112 19.11zm7.11-6.715h-.79v.79h-.79v-.79h-.79v-.79h.79v-.79h.79v.79h.79zm2.962 0h-.79v.79h-.79v-.79h-.79v-.79h.79v-.79h.79v.79h.79z",
-  },
-  C: {
-    color: "#A8B9CC",
-    path: "M16.5 2.34A12 12 0 007.5 2.34 12 12 0 002.34 7.5a12 12 0 000 9 12 12 0 005.16 5.16 12 12 0 009 0A12 12 0 0021.66 16.5a12 12 0 000-9A12 12 0 0016.5 2.34zM16 17.25A7.5 7.5 0 018 17.25 7.5 7.5 0 014.75 12 7.5 7.5 0 018 6.75 7.5 7.5 0 0116 6.75l-2.12 2.12A4.36 4.36 0 0012 7.64 4.36 4.36 0 007.64 12 4.36 4.36 0 0012 16.36a4.36 4.36 0 001.88-1.23z",
-  },
-  Ruby: {
-    color: "#CC342D",
-    path: "M20.156.083c3.033.525 3.893 2.598 3.829 4.77L24 4.822 22.635 22.71 4.89 23.926h.016C3.433 23.864.15 22.518 0 19.031l1.271-14.58C1.69 1.477 3.83-.164 6.457.024l13.7.059z",
-  },
-  PHP: {
-    color: "#777BB4",
-    path: "M7.01 10.207h-.944l-.515 2.648h.838c.556 0 .97-.105 1.242-.314.272-.21.455-.559.55-1.049.092-.47.05-.802-.124-.995-.175-.193-.523-.29-1.047-.29zM12 5.688C5.373 5.688 0 8.514 0 12s5.373 6.313 12 6.313S24 15.486 24 12c0-3.486-5.373-6.312-12-6.312zm-3.26 7.451c-.261.25-.575.438-.917.551-.336.108-.765.164-1.286.164H5.467l-.362 1.859H3.653l1.36-6.99h2.674c.696 0 1.222.17 1.57.506.347.337.455.82.323 1.45a2.639 2.639 0 01-.46 1.083c-.195.267-.434.49-.38.377zm5.498-.413c-.179.923-.611 1.593-1.277 2.097-.665.503-1.453.756-2.357.756-.578 0-1.028-.152-1.336-.455-.31-.303-.415-.736-.31-1.304l.56-2.879h1.455l-.533 2.735c-.042.217-.018.38.073.49.092.112.253.167.484.167.327 0 .613-.1.847-.298.236-.199.393-.488.47-.87l.534-2.724h1.453l-.563 2.885zm6.392-1.655c-.261.25-.575.438-.917.551-.336.108-.765.164-1.286.164h-1.07l-.362 1.859h-1.453l1.36-6.99h2.674c.696 0 1.222.17 1.57.506.347.337.455.82.323 1.45a2.639 2.639 0 01-.46 1.083c-.195.267-.434.49-.38.377zm-.992-1.332c.092-.47.05-.802-.124-.995-.175-.193-.523-.29-1.047-.29h-.944l-.515 2.648h.838c.556 0 .97-.105 1.242-.314.272-.21.455-.559.55-1.049z",
-  },
-  Swift: {
-    color: "#F05138",
-    path: "M23.76 14.832c.024-.072.048-.12.072-.192.072-.192.12-.384.168-.576 1.104-3.6-.48-8.064-3.768-11.04A12.622 12.622 0 0014.616.432c.336.672.624 1.392.816 2.16.024.072.048.144.048.216 .024.072.048.12.048.192.336 1.368.384 2.832.072 4.32a8.49 8.49 0 01-.456 1.464c.024.024.024.048.048.048.024.024.024.048.048.048-.024-.024-.024-.048-.048-.048-.024-.024-.024-.048-.048-.048-.024-.024-.072-.048-.096-.096l-.048-.048c-1.536-1.368-3.408-2.976-5.448-4.608 1.776 2.064 3.264 4.176 4.344 5.952-1.488-.792-4.344-3.024-6.792-5.28 1.008 1.392 2.016 2.664 2.952 3.792-1.56-.96-4.392-3.576-5.712-5.04-.024-.024-.048-.072-.048-.072.264.552.6 1.128.984 1.704-1.944-1.368-3.384-3.408-3.384-3.408s1.776 2.664 3.672 5.088c-1.08-.576-2.784-2.16-3.84-3.288.576.912 1.344 1.992 2.232 3.072C4.608 12.168 1.032 9.552.408 8.52a15.315 15.315 0 003.96 5.28c-.576-.12-2.04-.84-2.856-1.344.72.792 2.52 2.112 3.36 2.592-1.2.24-2.76.072-3.72-.192 1.08.984 2.76 1.752 4.608 2.016-2.16 1.776-5.184 2.712-8.28 2.16a13.87 13.87 0 006.144 2.04c6.6.6 12.528-3.168 14.064-8.472 0 .024.024.024.024.048.024-.072.048-.168.048-.216z",
-  },
-  Kotlin: {
-    color: "#7F52FF",
-    path: "M24 24H0V0h24L12 12z",
-  },
-  Dart: {
-    color: "#0175C2",
-    path: "M4.105 4.105S9.158 1.58 11.684.316a3.079 3.079 0 011.481-.315c.766.047 1.677.788 1.677.788L24 9.948v9.474L16.578 24H7.104L0 19.422V9.474z",
-  },
-  Lua: {
-    color: "#2C2D72",
-    path: "M.38 10.377l5.616 9.423H.38zm7.056 0l5.616 9.423H7.436zm-1.44 3.773a3.386 3.386 0 110-6.773 3.386 3.386 0 010 6.773zM17.614 4.2a3.386 3.386 0 110 6.773 3.386 3.386 0 010-6.773z",
-  },
-  Vue: {
-    color: "#4FC08D",
-    path: "M24 1.61h-9.94L12 5.16 9.94 1.61H0l12 20.78zM12 14.08L5.16 2.23h4.43L12 6.41l2.41-4.18h4.43z",
-  },
-  Dockerfile: {
-    color: "#2496ED",
-    path: "M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.186.186 0 00-.187.186v1.887c0 .103.084.185.187.185zm-2.954-5.43h2.118a.186.186 0 00.187-.185V3.574a.186.186 0 00-.187-.186h-2.118a.186.186 0 00-.187.186v1.89c0 .102.084.185.187.185zm0 2.716h2.118a.187.187 0 00.187-.186V6.29a.187.187 0 00-.187-.186h-2.118a.186.186 0 00-.187.186v1.887c0 .103.084.186.187.186zm-2.93 0h2.12a.186.186 0 00.186-.186V6.29a.186.186 0 00-.186-.186H8.1a.186.186 0 00-.185.186v1.887c0 .103.083.186.185.186zm-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.186.186 0 00-.185-.186H5.136a.186.186 0 00-.186.186v1.887c0 .103.084.186.186.186zm5.893 2.715h2.118a.186.186 0 00.187-.185V9.006a.186.186 0 00-.187-.186h-2.118a.186.186 0 00-.187.186v1.887c0 .103.084.185.187.185zm-2.93 0h2.12a.185.185 0 00.185-.185V9.006a.185.185 0 00-.185-.186h-2.12a.185.185 0 00-.184.186v1.887c0 .103.083.185.185.185zm-2.964 0h2.119a.186.186 0 00.185-.185V9.006a.186.186 0 00-.185-.186H5.136a.186.186 0 00-.186.186v1.887c0 .103.084.185.186.185zm-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.186v1.887c0 .103.082.185.185.185zM23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.722 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z",
-  },
-  Makefile: {
-    color: "#427819",
-    path: "M12 0L1 6v12l11 6 11-6V6zm0 2.31L20.67 7 12 11.69 3.33 7z",
-  },
-  TeX: {
-    color: "#3D6117",
-    path: "M2.43 6.48h5.14v1.37H5.57v8.3H4.43v-8.3H2.43zm5.14 0h1.37L12 11.22l3.06-4.74h1.37v9.67h-1.14v-7.8L12 13.09l-3.29-4.74v7.8H7.57z",
-  },
-  Nix: {
-    color: "#7EBAE4",
-    path: "M7.352 1.592l-1.364.002L5.32 2.744l1.357-.002L9.38 7.83l1.322.003-3.35-6.24zm3.493 0l-1.318.003 6.27 11.39 1.36-.002-3.14-5.737-1.318-.003 1.772 3.232-3.625-6.883zm5.12 3.078L14.63 7.17l-.004 6.89 1.327-.001 1.32-2.5.004-6.89zm-.005 7.89l.667 1.22 1.398-.003.03-.264-.02-1.218-1.325.002-.75 1.263zm-8.46 1.26l.665 1.218 3.127-.003-1.996-3.726-1.33-.003.005 1.468 1.33.003-.36.655-3.14.006 1.699 3.18 1.325-.002-.003-1.481-1.324.003-1.698-3.318zm.255 2.512l.663-1.217-3.372-6.24-1.358.002 1.785 3.26-2.649.004 1.336 2.476 1.361-.003-.858-1.467 1.402-.002.68 1.27 1.343-.002-.333-.081z",
-  },
-  "Emacs Lisp": {
-    color: "#7F5AB6",
-    path: "M12 .297C5.37.297 0 5.667 0 12.297S5.37 24.297 12 24.297s12-5.37 12-12S18.63.297 12 .297zm0 1.5a10.5 10.5 0 0110.5 10.5A10.5 10.5 0 0112 22.797a10.5 10.5 0 01-10.5-10.5A10.5 10.5 0 0112 1.797zM8.648 6.797L6.297 12.297l2.351 5.5h6.704l2.351-5.5-2.351-5.5z",
-  },
-  "Common Lisp": {
-    color: "#3FB68B",
-    path: "M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm0 2a10 10 0 0110 10 10 10 0 01-10 10A10 10 0 012 12 10 10 0 0112 2zm-1 4v4H7v2h4v4h2v-4h4v-2h-4V6z",
-  },
-  SCSS: {
-    color: "#CD6799",
-    path: "M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0zM9.615 15.998c.175.645.156 1.248-.024 1.792l-.065.18a3.59 3.59 0 01-.281.543 3.03 3.03 0 01-1.5 1.238c-.61.27-1.252.3-1.78.11-.59-.212-.954-.646-1.076-1.163-.193-.81.16-1.674.82-2.313.72-.696 1.738-1.14 2.278-1.404l.152-.073c-.105-.32-.216-.643-.217-.95a2.78 2.78 0 01.224-1.175c-.4.073-.8.11-1.19.11-1.165 0-2.025-.393-2.283-.727a.606.606 0 01-.093-.357c.037-.293.322-.453.602-.453.18 0 .333.06.45.147-.08-.11-.135-.26-.135-.42 0-.33.274-.6.61-.6a.613.613 0 01.547.33c.263-.42.757-.59 1.177-.59.543 0 1.063.248 1.396.74a7.28 7.28 0 01-.28-.994l.032.066z",
-  },
+// 🐱 Devicon URLs for each language
+const DEVICON_URLS: Record<string, string> = {
+  Python: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
+  JavaScript: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
+  TypeScript: "https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg",
+  HTML: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
+  CSS: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
+  Shell: "https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-original.svg",
+  R: "https://raw.githubusercontent.com/devicons/devicon/master/icons/r/r-original.svg",
+  "Jupyter Notebook": "https://raw.githubusercontent.com/devicons/devicon/master/icons/jupyter/jupyter-original.svg",
+  Go: "https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original.svg",
+  Rust: "https://raw.githubusercontent.com/devicons/devicon/master/icons/rust/rust-original.svg",
+  Java: "https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg",
+  C: "https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg",
+  "C++": "https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg",
+  "C#": "https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg",
+  Ruby: "https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-original.svg",
+  PHP: "https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg",
+  Swift: "https://raw.githubusercontent.com/devicons/devicon/master/icons/swift/swift-original.svg",
+  Kotlin: "https://raw.githubusercontent.com/devicons/devicon/master/icons/kotlin/kotlin-original.svg",
+  Dart: "https://raw.githubusercontent.com/devicons/devicon/master/icons/dart/dart-original.svg",
+  Lua: "https://raw.githubusercontent.com/devicons/devicon/master/icons/lua/lua-original.svg",
+  Vue: "https://raw.githubusercontent.com/devicons/devicon/master/icons/vuejs/vuejs-original.svg",
+  Scala: "https://raw.githubusercontent.com/devicons/devicon/master/icons/scala/scala-original.svg",
+  Haskell: "https://raw.githubusercontent.com/devicons/devicon/master/icons/haskell/haskell-original.svg",
+  Perl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/perl/perl-original.svg",
+  Elixir: "https://raw.githubusercontent.com/devicons/devicon/master/icons/elixir/elixir-original.svg",
+  Clojure: "https://raw.githubusercontent.com/devicons/devicon/master/icons/clojure/clojure-original.svg",
+  OCaml: "https://raw.githubusercontent.com/devicons/devicon/master/icons/ocaml/ocaml-original.svg",
+  Julia: "https://raw.githubusercontent.com/devicons/devicon/master/icons/julia/julia-original.svg",
+  Dockerfile: "https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg",
+  Makefile: "https://raw.githubusercontent.com/devicons/devicon/master/icons/cmake/cmake-original.svg",
+  TeX: "https://raw.githubusercontent.com/devicons/devicon/master/icons/latex/latex-original.svg",
+  Svelte: "https://raw.githubusercontent.com/devicons/devicon/master/icons/svelte/svelte-original.svg",
+  Zig: "https://raw.githubusercontent.com/devicons/devicon/master/icons/zig/zig-original.svg",
+  "Emacs Lisp": "https://raw.githubusercontent.com/devicons/devicon/master/icons/emacs/emacs-original.svg",
+  Vim: "https://raw.githubusercontent.com/devicons/devicon/master/icons/vim/vim-original.svg",
+  "Vim Script": "https://raw.githubusercontent.com/devicons/devicon/master/icons/vim/vim-original.svg",
+  SCSS: "https://raw.githubusercontent.com/devicons/devicon/master/icons/sass/sass-original.svg",
+  PowerShell: "https://raw.githubusercontent.com/devicons/devicon/master/icons/powershell/powershell-original.svg",
+  Groovy: "https://raw.githubusercontent.com/devicons/devicon/master/icons/groovy/groovy-original.svg",
+  Erlang: "https://raw.githubusercontent.com/devicons/devicon/master/icons/erlang/erlang-original.svg",
+  Nix: "https://raw.githubusercontent.com/devicons/devicon/master/icons/nixos/nixos-original.svg",
 };
 
-// 🐱 Fallback: colored rect with abbreviation
-const FALLBACK_SHORTS: Record<string, string> = {
-  Vim: "Vi", "Vim Script": "Vi", Scala: "Sc", Haskell: "Hs", Perl: "Pl",
-  Svelte: "Sv", Elixir: "Ex", Clojure: "Cj", Zig: "Zg", OCaml: "ML",
-  Julia: "Jl", "Objective-C": "OC", HCL: "HC", Groovy: "Gr",
-  PowerShell: "Ps", "F#": "F#", Erlang: "Er", Fortran: "Fn",
-  Assembly: "As", MATLAB: "Mt", Solidity: "So", YAML: "Ym",
-  TOML: "Tm", Markdown: "Md", JSON: "Js", "C#": "C#",
+// 🐱 Language brand colors
+const LANG_COLORS: Record<string, string> = {
+  Python: "#3572A5", JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
+  CSS: "#1572B6", Shell: "#89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
+  Go: "#00ADD8", Rust: "#dea584", Java: "#ED8B00", C: "#A8B9CC", "C++": "#00599C",
+  "C#": "#178600", Ruby: "#CC342D", PHP: "#777BB4", Swift: "#F05138",
+  Kotlin: "#7F52FF", Dart: "#0175C2", Lua: "#2C2D72", Vue: "#4FC08D",
+  Scala: "#c22d40", Haskell: "#5e5086", Perl: "#0298c3", Elixir: "#6e4a7e",
+  Clojure: "#db5855", OCaml: "#3be133", Julia: "#a270ba", Dockerfile: "#2496ED",
+  Makefile: "#427819", TeX: "#3D6117", Svelte: "#ff3e00", Zig: "#ec915c",
+  "Emacs Lisp": "#7F5AB6", Vim: "#199f4b", "Vim Script": "#199f4b",
+  SCSS: "#CD6799", PowerShell: "#012456", Groovy: "#4298b8", Erlang: "#B83998",
+  Nix: "#7EBAE4", "Common Lisp": "#3fb68b", "F#": "#b845fc", Fortran: "#4d41b1",
+  Assembly: "#6E4C13", MATLAB: "#e16737",
 };
 
-const FALLBACK_COLORS: Record<string, string> = {
-  Vim: "#199f4b", "Vim Script": "#199f4b", Scala: "#c22d40", Haskell: "#5e5086",
-  Perl: "#0298c3", Svelte: "#ff3e00", Elixir: "#6e4a7e", Clojure: "#db5855",
-  Zig: "#ec915c", OCaml: "#3be133", Julia: "#a270ba", "Objective-C": "#438eff",
-  HCL: "#844FBA", Groovy: "#4298b8", PowerShell: "#012456", "F#": "#b845fc",
-  Erlang: "#B83998", Fortran: "#4d41b1", Assembly: "#6E4C13", MATLAB: "#e16737",
-  Solidity: "#AA6746", YAML: "#cb171e", TOML: "#9c4221", Markdown: "#083fa1",
-  JSON: "#292929", "C#": "#178600",
-};
+// 🐱 In-memory icon cache (base64 data URIs)
+const iconCache = new Map<string, string | null>();
 
-function isLight(hex: string): boolean {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return (r * 299 + g * 587 + b * 114) / 1000 > 160;
-}
+async function fetchIconBase64(lang: string): Promise<string | null> {
+  if (iconCache.has(lang)) return iconCache.get(lang) || null;
 
-// 🐱 Render language icon at (x, y) with given size
-export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
-  const logo = LOGOS[lang];
-
-  if (logo) {
-    // 🐱 Real SVG logo
-    return `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${logo.path}" fill="${logo.color}"/></svg>`;
+  const url = DEVICON_URLS[lang];
+  if (!url) {
+    iconCache.set(lang, null);
+    return null;
   }
 
-  // 🐱 Fallback: colored rounded rect with abbreviation
-  const color = FALLBACK_COLORS[lang] || "#555";
-  const short = FALLBACK_SHORTS[lang] || lang.slice(0, 2);
-  const textColor = isLight(color) ? "#000" : "#fff";
-  const fontSize = short.length > 2 ? 7 : 8;
-  return `<rect x="${x}" y="${y}" width="${size}" height="${size}" rx="4" fill="${color}"/><text x="${x + size / 2}" y="${y + size / 2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize}" font-weight="700" fill="${textColor}" font-family="ui-monospace, SFMono-Regular, monospace">${short}</text>`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      iconCache.set(lang, null);
+      return null;
+    }
+    const text = await res.text();
+    const b64 = Buffer.from(text).toString("base64");
+    const dataUri = `data:image/svg+xml;base64,${b64}`;
+    iconCache.set(lang, dataUri);
+    return dataUri;
+  } catch {
+    iconCache.set(lang, null);
+    return null;
+  }
+}
+
+// 🐱 Prefetch all icons for a list of languages
+export async function prefetchIcons(langs: string[]): Promise<void> {
+  await Promise.all(langs.map(l => fetchIconBase64(l)));
+}
+
+// 🐱 Render language icon at (x, y) — uses cached base64 devicon
+export function langIcon(x: number, y: number, lang: string, size: number = 18): string {
+  const cached = iconCache.get(lang);
+
+  if (cached) {
+    return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${cached}"/>`;
+  }
+
+  // 🐱 Fallback: colored circle
+  const color = LANG_COLORS[lang] || "#555";
+  return `<circle cx="${x + size / 2}" cy="${y + size / 2}" r="${size / 2}" fill="${color}"/>`;
 }
 
 export function getLangColor(lang: string): string {
-  return LOGOS[lang]?.color || FALLBACK_COLORS[lang] || "#555";
+  return LANG_COLORS[lang] || "#555";
 }

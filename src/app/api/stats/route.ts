@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchGitHubStats, isValidUsername } from "@/lib/github";
-import { langIcon, getLangColor } from "@/lib/lang-icons";
+import { langIcon, getLangColor, prefetchIcons } from "@/lib/lang-icons";
 
 // 🐱 Theme system - VSCode-style named themes
 interface Theme {
@@ -132,6 +132,9 @@ export async function GET(req: NextRequest) {
     // 🐱 ALL languages
     const langSorted = Object.entries(s.languages).sort((a, b) => b[1] - a[1]);
     const langTotal = langSorted.reduce((sum, [, c]) => sum + c, 0);
+
+    // 🐱 Prefetch devicon SVGs as base64
+    await prefetchIcons(langSorted.map(([l]) => l));
 
     // 🐱 Height
     const headerH = 64, div = 20, statsH = 132;
