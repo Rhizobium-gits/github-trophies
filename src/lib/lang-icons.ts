@@ -15,42 +15,30 @@ const LANG_TO_DEVICON: Record<string, string> = {
   Zig: "zig", "Emacs Lisp": "emacs", Vim: "vim",
   "Vim Script": "vim", SCSS: "sass", PowerShell: "powershell",
   Groovy: "groovy", Erlang: "erlang", Nix: "nixos",
-  // 🐱 Extended languages
+  // 🐱 Extended — only exact devicon matches (no mismatched logos)
   "Objective-C": "objectivec", "Objective-C++": "objectivec",
-  Fortran: "fortran", MATLAB: "matlab", Assembly: "embeddedc",
+  Fortran: "fortran", MATLAB: "matlab",
   COBOL: "cobol", Crystal: "crystal", Elm: "elm",
   "F#": "fsharp", CoffeeScript: "coffeescript", Solidity: "solidity",
-  Apex: "salesforce", Prolog: "prolog", PureScript: "purescript",
-  Nim: "nim", Racket: "racket", VHDL: "labview",
-  SystemVerilog: "labview", Vala: "vala",
-  // 🐱 Lisp family
-  "Common Lisp": "clojure", Scheme: "clojure",
+  Prolog: "prolog", PureScript: "purescript",
+  Nim: "nim", Racket: "racket", Vala: "vala",
   ClojureScript: "clojurescript",
-  // 🐱 Markup & data
+  // 🐱 Markup & data — only exact matches
   Markdown: "markdown", JSON: "json", XML: "xml", YAML: "yaml",
-  TOML: "tomcat", HCL: "terraform", Makefile: "cmake",
-  // 🐱 Web/template languages
-  Astro: "astro", Nunjucks: "nodejs", EJS: "nodejs",
-  Handlebars: "handlebars", Pug: "pug", Less: "less",
-  Stylus: "stylus", PostCSS: "postcss",
+  CMake: "cmake",
+  // 🐱 Web/template
+  Astro: "astro", Handlebars: "handlebars", Pug: "pug",
+  Less: "less", Stylus: "stylus", PostCSS: "postcss",
   // 🐱 Shell variants
   Bash: "bash", Zsh: "bash", Fish: "bash",
   "Shell Script": "bash", ShellSession: "bash",
-  Batchfile: "windows11",
-  // 🐱 More languages
-  Hack: "facebook", Pascal: "delphi",
-  AWK: "awk", Raku: "perl", Tcl: "linux",
-  GDScript: "godot", Processing: "processing",
-  Arduino: "arduino", GLSL: "opengl",
-  Wasm: "wasm", WebAssembly: "wasm",
-  Starlark: "python", Cython: "python", Meson: "linux",
-  CMake: "cmake", Gradle: "gradle", Bazel: "bazel",
-  Jsonnet: "json", Dhall: "haskell",
-  ReScript: "react",
-  // 🐱 Other known devicon mappings
+  // 🐱 Exact devicon matches only
+  Pascal: "delphi", GDScript: "godot", Processing: "processing",
+  Arduino: "arduino", AWK: "awk",
+  Gradle: "gradle", Bazel: "bazel",
   Ceylon: "ceylon", Rexx: "rexx", APL: "apl",
   Delphi: "delphi", "Visual Basic": "visualbasic",
-  ABAP: "java", Ballerina: "ballerina",
+  Ballerina: "ballerina",
 };
 
 // 🐱 Language brand colors (GitHub linguist)
