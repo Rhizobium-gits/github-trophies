@@ -23,10 +23,13 @@ const LANG_TO_DEVICON: Record<string, string> = {
   Apex: "salesforce", Prolog: "prolog", PureScript: "purescript",
   Nim: "nim", Racket: "racket", VHDL: "labview",
   SystemVerilog: "labview", Vala: "vala",
+  // 🐱 Lisp family
+  "Common Lisp": "clojure", Scheme: "clojure",
+  ClojureScript: "clojurescript",
   // 🐱 Markup & data
   Markdown: "markdown", JSON: "json", XML: "xml", YAML: "yaml",
   TOML: "tomcat", HCL: "terraform", Makefile: "cmake",
-  // 🐱 Frameworks/tools (sometimes detected as language)
+  // 🐱 Web/template languages
   Astro: "astro", Nunjucks: "nodejs", EJS: "nodejs",
   Handlebars: "handlebars", Pug: "pug", Less: "less",
   Stylus: "stylus", PostCSS: "postcss",
@@ -35,23 +38,25 @@ const LANG_TO_DEVICON: Record<string, string> = {
   "Shell Script": "bash", ShellSession: "bash",
   Batchfile: "windows11",
   // 🐱 More languages
-  Hack: "facebook", D: "denojs", Ada: "c",
-  Pascal: "delphi", Scheme: "clojure", "Common Lisp": "lisp",
-  Tcl: "linux", AWK: "awk", Raku: "perl",
+  Hack: "facebook", Pascal: "delphi",
+  AWK: "awk", Raku: "perl", Tcl: "linux",
   GDScript: "godot", Processing: "processing",
   Arduino: "arduino", GLSL: "opengl",
-  Cuda: "nvidia", Wasm: "wasm", WebAssembly: "wasm",
+  Wasm: "wasm", WebAssembly: "wasm",
   Starlark: "python", Cython: "python", Meson: "linux",
   CMake: "cmake", Gradle: "gradle", Bazel: "bazel",
   Jsonnet: "json", Dhall: "haskell",
-  ReScript: "react", Reason: "reason",
-  ClojureScript: "clojurescript",
+  ReScript: "react",
+  // 🐱 Other known devicon mappings
+  Ceylon: "ceylon", Rexx: "rexx", APL: "apl",
+  Delphi: "delphi", "Visual Basic": "visualbasic",
+  ABAP: "java", Ballerina: "ballerina",
 };
 
 // 🐱 Language brand colors (GitHub linguist)
 const LANG_COLORS: Record<string, string> = {
   Python: "#3572A5", JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
-  CSS: "#1572B6", Shell: "##89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
+  CSS: "#1572B6", Shell: "#89e051", R: "#276DC3", "Jupyter Notebook": "#F37626",
   Go: "#00ADD8", Rust: "#dea584", Java: "#ED8B00", C: "#A8B9CC", "C++": "#00599C",
   "C#": "#178600", Ruby: "#CC342D", PHP: "#777BB4", Swift: "#F05138",
   Kotlin: "#7F52FF", Dart: "#0175C2", Lua: "#2C2D72", Vue: "#4FC08D",
@@ -72,11 +77,6 @@ const LANG_COLORS: Record<string, string> = {
   Tcl: "#e4cc98", Raku: "#0000fb", PureScript: "#1D222D", Hack: "#878787",
   Apex: "#1797c0", Prolog: "#74283c", COBOL: "#234", HCL: "#844FBA",
 };
-
-// 🐱 Build devicon URL
-function deviconUrl(iconName: string): string {
-  return `https://raw.githubusercontent.com/devicons/devicon/master/icons/${iconName}/${iconName}-original.svg`;
-}
 
 // 🐱 Cache for fetched SVG data
 interface SvgData { defs: string; body: string; viewBox: string }
@@ -105,11 +105,21 @@ async function fetchAndProcess(lang: string): Promise<SvgData | null> {
   const iconName = LANG_TO_DEVICON[lang];
   if (!iconName) { svgCache.set(lang, null); return null; }
 
-  const url = deviconUrl(iconName);
+  // 🐱 Try -original.svg first, then -plain.svg as fallback
+  const urls = [
+    `https://raw.githubusercontent.com/devicons/devicon/master/icons/${iconName}/${iconName}-original.svg`,
+    `https://raw.githubusercontent.com/devicons/devicon/master/icons/${iconName}/${iconName}-plain.svg`,
+  ];
+  let text: string | null = null;
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) { text = await res.text(); break; }
+    } catch {}
+  }
+  if (!text) { svgCache.set(lang, null); return null; }
+
   try {
-    const res = await fetch(url);
-    if (!res.ok) { svgCache.set(lang, null); return null; }
-    let text = await res.text();
 
     const prefix = `li${idCounter++}`;
     text = uniquifyIds(text, prefix);
