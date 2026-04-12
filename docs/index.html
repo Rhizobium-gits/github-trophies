@@ -114,7 +114,7 @@
     function openModal(u, t) {
       document.getElementById("modal-title").textContent = t;
       document.getElementById("modal-img").src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
-      document.getElementById("modal-md").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats-${t}.svg)`;
+      document.getElementById("modal-md").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/svg/stats-${t}.svg)`;
       document.getElementById("modal-config").firstChild.textContent = JSON.stringify({ username: u }, null, 2);
       document.getElementById("overlay").classList.add("show");
     }

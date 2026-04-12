@@ -297,7 +297,8 @@ async function main() {
 
   // 🐱 Generate ALL themes
   const allThemeNames = Object.keys(THEMES);
-  const outDir = path.join(__dirname, "..");
+  const outDir = path.join(__dirname, "..", "svg");
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
 
   for (const theme of allThemeNames) {
   const t = THEMES[theme];
