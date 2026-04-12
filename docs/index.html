@@ -95,8 +95,8 @@
       document.getElementById("result").style.display = "flex";
       document.getElementById("codes").style.display = "block";
 
-      // Markdown code
-      document.getElementById("md-code").firstChild.textContent = `![GitHub Stats](./stats.svg)`;
+      // Markdown code — full URL so it works in any repo's README
+      document.getElementById("md-code").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats.svg)`;
 
       // Config code
       document.getElementById("config-code").firstChild.textContent = JSON.stringify({ username: u, theme: t }, null, 2);
