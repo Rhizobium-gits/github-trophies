@@ -4,6 +4,114 @@
 const fs = require("fs");
 const path = require("path");
 
+// 🐱 Language icon mappings (devicon name, simple-icons slug)
+const LANG_ICON_MAP = {
+  Python:["python","python"],JavaScript:["javascript","javascript"],TypeScript:["typescript","typescript"],
+  HTML:["html5","html5"],CSS:["css3","css3"],Shell:["bash","gnubash"],R:["r","r"],
+  "Jupyter Notebook":["jupyter","jupyter"],Go:["go","go"],Rust:["rust","rust"],
+  Java:["java","openjdk"],C:["c","c"],"C++":["cplusplus","cplusplus"],"C#":["csharp","csharp"],
+  Ruby:["ruby","ruby"],PHP:["php","php"],Swift:["swift","swift"],Kotlin:["kotlin","kotlin"],
+  Dart:["dart","dart"],Lua:["lua","lua"],Vue:["vuejs","vuedotjs"],Scala:["scala","scala"],
+  Haskell:["haskell","haskell"],Perl:["perl","perl"],Elixir:["elixir","elixir"],
+  Clojure:["clojure","clojure"],OCaml:["ocaml","ocaml"],Julia:["julia","julia"],
+  Dockerfile:["docker","docker"],TeX:["latex","latex"],Svelte:["svelte","svelte"],
+  Zig:["zig","zig"],"Emacs Lisp":["emacs","gnuemacs"],Vim:["vim","vim"],
+  SCSS:["sass","sass"],PowerShell:["powershell",null],Groovy:["groovy","apachegroovy"],
+  Erlang:["erlang","erlang"],Nix:["nixos","nixos"],Fortran:["fortran","fortran"],
+  MATLAB:["matlab",null],Elm:["elm",null],"F#":["fsharp",null],
+  CoffeeScript:["coffeescript","coffeescript"],Nim:["nim","nim"],Racket:["racket","racket"],
+  "Common Lisp":[null,"commonlisp"],TOML:[null,"toml"],HCL:[null,"hcl"],
+  Ada:[null,"ada"],D:[null,"d"],WebAssembly:[null,"webassembly"],
+  Markdown:["markdown","markdown"],JSON:["json","json"],XML:["xml","xml"],YAML:["yaml","yaml"],
+};
+
+// 🐱 Language icon cache and fetch
+const iconCache = new Map();
+let iconIdCounter = 0;
+
+function uniquifyIds(text, prefix) {
+  const ids = new Set();
+  let m;
+  const re = /id="([^"]*)"/g;
+  while ((m = re.exec(text)) !== null) ids.add(m[1]);
+  let result = text;
+  ids.forEach(id => {
+    const uid = `${prefix}_${id}`;
+    result = result.replace(new RegExp(`id="${id}"`, 'g'), `id="${uid}"`);
+    result = result.replace(new RegExp(`url\\(#${id}\\)`, 'g'), `url(#${uid})`);
+    result = result.replace(new RegExp(`href="#${id}"`, 'g'), `href="#${uid}"`);
+    result = result.replace(new RegExp(`xlink:href="#${id}"`, 'g'), `xlink:href="#${uid}"`);
+  });
+  return result;
+}
+
+function processSvg(text) {
+  const prefix = `li${iconIdCounter++}`;
+  text = uniquifyIds(text, prefix);
+  const vbMatch = text.match(/viewBox="([^"]*)"/);
+  const viewBox = vbMatch ? vbMatch[1] : "0 0 24 24";
+  const innerMatch = text.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
+  let inner = innerMatch ? innerMatch[1] : "";
+  inner = inner.replace(/<script[\s\S]*?<\/script>/gi, "");
+  inner = inner.replace(/<style[\s\S]*?<\/style>/gi, "");
+  let defs = "";
+  inner = inner.replace(/<defs>([\s\S]*?)<\/defs>/gi, (_, d) => { defs += d; return ""; });
+  inner = inner.replace(/(<(?:linearGradient|radialGradient|clipPath)[^>]*>[\s\S]*?<\/(?:linearGradient|radialGradient|clipPath)>)/gi, (m2) => { defs += m2; return ""; });
+  return { defs, body: inner.trim(), viewBox };
+}
+
+async function fetchLangIcon(lang) {
+  if (iconCache.has(lang)) return iconCache.get(lang);
+  const mapping = LANG_ICON_MAP[lang];
+  if (!mapping) { iconCache.set(lang, null); return null; }
+  const [devicon, simple] = mapping;
+  // Try devicon
+  if (devicon) {
+    for (const variant of ["-original.svg", "-plain.svg"]) {
+      try {
+        const res = await fetch(`https://raw.githubusercontent.com/devicons/devicon/master/icons/${devicon}/${devicon}${variant}`);
+        if (res.ok) { const data = processSvg(await res.text()); if (data.body) { iconCache.set(lang, data); return data; } }
+      } catch {}
+    }
+  }
+  // Try Simple Icons
+  if (simple) {
+    try {
+      const res = await fetch(`https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/${simple}.svg`);
+      if (res.ok) {
+        let text = await res.text();
+        const color = LANG_COLORS[lang] || "#888";
+        text = text.replace(/<svg/, `<svg fill="${color}"`);
+        const data = processSvg(text);
+        if (data.body) { iconCache.set(lang, data); return data; }
+      }
+    } catch {}
+  }
+  iconCache.set(lang, null);
+  return null;
+}
+
+async function prefetchAllIcons(langs) {
+  await Promise.all(langs.map(l => fetchLangIcon(l)));
+}
+
+function getAllIconDefs() {
+  let defs = "";
+  iconCache.forEach(data => { if (data) defs += data.defs; });
+  return defs;
+}
+
+function renderLangIcon(x, y, lang, size) {
+  const data = iconCache.get(lang);
+  if (data && data.body) {
+    const vb = data.viewBox.split(/\s+/).map(Number);
+    const scale = size / Math.max(vb[2] || 128, vb[3] || 128);
+    return `<g transform="translate(${x},${y}) scale(${scale.toFixed(4)})">${data.body}</g>`;
+  }
+  // Fallback: colored circle
+  return `<circle cx="${x + size / 2}" cy="${y + size / 2}" r="${size / 2}" fill="${LANG_COLORS[lang] || "#555"}"/>`;
+}
+
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json"), "utf8"));
 const username = config.username;
 const theme = config.theme || "noir";
@@ -190,6 +298,9 @@ async function main() {
   const langTotal = langAll.reduce((s, [, c]) => s + c, 0);
   const langSorted = langAll.filter(([, c]) => langTotal > 0 && (c / langTotal) >= 0.001);
 
+  // 🐱 Prefetch language icons
+  await prefetchAllIcons(langSorted.map(([l]) => l));
+
   const t = THEMES[theme] || THEMES.noir;
   const W = 480, pad = 28, contentW = W - pad * 2;
 
@@ -292,8 +403,8 @@ async function main() {
         const col = i % 2, row = Math.floor(i / 2);
         const lx = col * (w / 2), ly = row * 24;
         const pct2 = ((count2 / langTotal) * 100).toFixed(1);
-        s += `<circle cx="${lx + 5}" cy="${ly + 9}" r="5" fill="${LANG_COLORS[lang2] || "#555"}"/>`;
-        s += `<text x="${lx + 16}" y="${ly + 13}" font-size="11" fill="${t.legendText}" font-family="${F}">${esc(lang2)}</text>`;
+        s += renderLangIcon(lx, ly + 1, lang2, 18);
+        s += `<text x="${lx + 24}" y="${ly + 13}" font-size="11" fill="${t.legendText}" font-family="${F}">${esc(lang2)}</text>`;
         s += `<text x="${lx + w / 2 - 4}" y="${ly + 13}" text-anchor="end" font-size="10" font-weight="600" fill="${t.legendSub}" font-family="${M2}">${pct2}%</text>`;
       });
       return { svg: s, height: Math.ceil(langSorted.length / 2) * 24 };
@@ -361,7 +472,7 @@ async function main() {
 
   // Pass 2: render
   let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${totalH}" viewBox="0 0 ${W} ${totalH}">
-<defs><linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient></defs>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient>${getAllIconDefs()}</defs>
 <rect width="${W}" height="${totalH}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
 `;
   let y = pad;
