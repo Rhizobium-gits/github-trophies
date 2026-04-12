@@ -2,179 +2,155 @@
 
 ![Demo](./svg/stats-noir.svg)
 
-[English](#english) | [日本語](#japanese) | [中文](#chinese) | [Preview & Copy](https://rhizobium-gits.github.io/github-trophies/)
+[English](#english) | [日本語](#japanese) | [中文](#chinese)
 
 ---
 
 ## English
 
-GitHub stats card for your README. Fork, set username, pick a theme. All 32 themes are generated automatically.
+### 3 Steps to Get Your Card
 
-**[Preview all themes and copy code here](https://rhizobium-gits.github.io/github-trophies/)**
+**Step 1.** Click **Fork** (top right of this page)
 
-### Theme Examples
+**Step 2.** Open `config.json` in your fork and change the username:
+```json
+{
+  "username": "USERNAME"
+}
+```
 
-| noir | dracula | tokyo-night |
-|------|---------|-------------|
+**Step 3.** Add your GitHub token:
+- Go to [github.com/settings/tokens](https://github.com/settings/tokens) → **Generate new token (classic)** → check `read:user` → copy token
+- Go to your fork's **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+- Name: `GH_TOKEN` / Value: paste your token
+
+**Done!** Go to **Actions** tab → **Generate Stats Card** → **Run workflow**. All 32 themes will be generated in the `svg/` folder.
+
+### Add to Your README
+
+Pick a theme from the [preview page](https://rhizobium-gits.github.io/github-trophies/) and paste:
+
+```
+![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-noir.svg)
+```
+
+Replace `USERNAME` with your GitHub username. Replace `noir` with any theme name below.
+
+### Themes
+
+| | | |
+|---|---|---|
 | ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
-
-| github-dark | nord | light |
-|-------------|------|-------|
+| `noir` | `dracula` | `tokyo-night` |
 | ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| `github-dark` | `nord` | `light` |
 
-### Setup
+**All 32 themes:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-1. **Fork** this repository
-2. Edit `config.json` — set your username only:
-   ```json
-   {
-     "username": "your-github-username"
-   }
-   ```
-3. Go to **Settings > Secrets and variables > Actions** > **New repository secret**
-   - Name: `GH_TOKEN`
-   - Value: [Personal Access Token](https://github.com/settings/tokens) with `read:user` scope
-4. Go to **Actions** tab > **Generate Stats Card** > **Run workflow**
-5. All 32 theme SVGs are generated. Pick one and add to your README:
-   ```markdown
-   ![GitHub Stats](https://raw.githubusercontent.com/YOUR_USERNAME/github-trophies/main/svg/stats-noir.svg)
-   ```
-   Replace `YOUR_USERNAME` and `noir` with your username and preferred theme.
-
-Cards update automatically every 6 hours.
-
-### Themes (32)
-
-**Dark:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet`
-
-**Light:** `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
-
-### What's shown
-
-- Avatar, name, bio, rank circle (S / A+ / A / A- / B+ / B / B- / C+ / C)
-- Total Commits / Pull Requests / Code Reviews / Issues / Stars / Repositories / Contributed To / Followers / Following / Experience
-- 1-year contribution line graph (3-day intervals)
-- Language donut chart with percentages (byte-count based)
-- Language logos from [devicons](https://github.com/devicons/devicon) and [Simple Icons](https://github.com/simple-icons/simple-icons)
+**[Preview all themes here](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
 ## Japanese
 
-GitHub の統計情報をカード形式で README に表示。フォークしてユーザー名を設定するだけ。全32テーマが自動生成されます。
+### 3ステップでカードを作成
 
-**[テーマのプレビューとコードのコピーはこちら](https://rhizobium-gits.github.io/github-trophies/)**
+**ステップ 1.** このページ右上の **Fork** をクリック
 
-### テーマ例
+**ステップ 2.** フォークした `config.json` を開いてユーザー名を変更:
+```json
+{
+  "username": "USERNAME"
+}
+```
 
-| noir | dracula | tokyo-night |
-|------|---------|-------------|
+**ステップ 3.** GitHub トークンを追加:
+- [github.com/settings/tokens](https://github.com/settings/tokens) → **Generate new token (classic)** → `read:user` にチェック → トークンをコピー
+- フォークの **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+- Name: `GH_TOKEN` / Value: コピーしたトークンを貼る
+
+**完了!** Actions タブ → **Generate Stats Card** → **Run workflow** を実行。全32テーマが `svg/` フォルダに生成されます。
+
+### README に追加
+
+[プレビューページ](https://rhizobium-gits.github.io/github-trophies/)でテーマを選んで貼り付け:
+
+```
+![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-noir.svg)
+```
+
+`USERNAME` を自分のユーザー名に、`noir` を好きなテーマ名に変えてください。
+
+### テーマ
+
+| | | |
+|---|---|---|
 | ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
-
-| github-dark | nord | light |
-|-------------|------|-------|
+| `noir` | `dracula` | `tokyo-night` |
 | ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| `github-dark` | `nord` | `light` |
 
-### セットアップ
+**全32テーマ:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-1. このリポジトリを **Fork**
-2. `config.json` を編集 — ユーザー名のみ設定:
-   ```json
-   {
-     "username": "あなたのGitHubユーザー名"
-   }
-   ```
-3. **Settings > Secrets and variables > Actions** で **New repository secret**
-   - Name: `GH_TOKEN`
-   - Value: [Personal Access Token](https://github.com/settings/tokens)（`read:user` スコープ）
-4. **Actions** タブ > **Generate Stats Card** > **Run workflow**
-5. 全32テーマのSVGが生成されます。好きなテーマを選んでREADMEに追加:
-   ```markdown
-   ![GitHub Stats](https://raw.githubusercontent.com/あなたのユーザー名/github-trophies/main/svg/stats-noir.svg)
-   ```
-   `noir` の部分を好きなテーマ名に変更してください。
-
-6時間ごとに自動更新されます。
-
-### テーマ (32種)
-
-**ダーク:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet`
-
-**ライト:** `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
-
-### 表示内容
-
-- アバター、名前、bio、ランクサークル (S ~ C)
-- Commits / PRs / Code Reviews / Issues / Stars / Repos / Contributed To / Followers / Following / Experience
-- 1年間の Contribution 線グラフ（3日間隔）
-- 言語ドーナツチャート（バイト数ベース）
-- [devicons](https://github.com/devicons/devicon) と [Simple Icons](https://github.com/simple-icons/simple-icons) の言語ロゴ
+**[全テーマをプレビュー](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
 ## Chinese
 
-GitHub 统计卡片，显示在你的 README 中。Fork 后设置用户名即可。全部 32 个主题自动生成。
+### 3步获取你的卡片
 
-**[预览主题和复制代码](https://rhizobium-gits.github.io/github-trophies/)**
+**第1步.** 点击本页右上角的 **Fork**
 
-### 主题示例
+**第2步.** 打开你 fork 的 `config.json`，修改用户名:
+```json
+{
+  "username": "USERNAME"
+}
+```
 
-| noir | dracula | tokyo-night |
-|------|---------|-------------|
+**第3步.** 添加 GitHub 令牌:
+- 打开 [github.com/settings/tokens](https://github.com/settings/tokens) → **Generate new token (classic)** → 勾选 `read:user` → 复制令牌
+- 打开你 fork 的 **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+- Name: `GH_TOKEN` / Value: 粘贴令牌
+
+**完成!** 打开 **Actions** 标签 → **Generate Stats Card** → **Run workflow**。全部32个主题将生成在 `svg/` 文件夹中。
+
+### 添加到 README
+
+在[预览页面](https://rhizobium-gits.github.io/github-trophies/)选择主题并粘贴:
+
+```
+![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-noir.svg)
+```
+
+将 `USERNAME` 替换为你的用户名，`noir` 替换为你喜欢的主题名。
+
+### 主题
+
+| | | |
+|---|---|---|
 | ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
-
-| github-dark | nord | light |
-|-------------|------|-------|
+| `noir` | `dracula` | `tokyo-night` |
 | ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| `github-dark` | `nord` | `light` |
 
-### 设置步骤
+**全部32个主题:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-1. **Fork** 本仓库
-2. 编辑 `config.json` — 只需设置用户名：
-   ```json
-   {
-     "username": "你的GitHub用户名"
-   }
-   ```
-3. 进入 **Settings > Secrets and variables > Actions** > **New repository secret**
-   - Name: `GH_TOKEN`
-   - Value: [Personal Access Token](https://github.com/settings/tokens)（`read:user` 权限）
-4. 进入 **Actions** > **Generate Stats Card** > **Run workflow**
-5. 全部 32 个主题的 SVG 会自动生成。选择一个主题添加到 README：
-   ```markdown
-   ![GitHub Stats](https://raw.githubusercontent.com/你的用户名/github-trophies/main/svg/stats-noir.svg)
-   ```
-   将 `noir` 替换为你喜欢的主题名。
-
-每6小时自动更新。
-
-### 主题 (32种)
-
-**深色:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet`
-
-**浅色:** `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
-
-### 展示内容
-
-- 头像、用户名、简介、等级圆圈 (S ~ C)
-- 提交数 / PR 数 / 代码审查数 / Issue 数 / Star 数 / 仓库数 / 贡献仓库数 / 粉丝数 / 关注数 / 经验年数
-- 一年贡献折线图（3天间隔）
-- 语言甜甜圈图（按代码字节数计算）
-- 来自 [devicons](https://github.com/devicons/devicon) 和 [Simple Icons](https://github.com/simple-icons/simple-icons) 的语言图标
+**[预览全部主题](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|-----------|
+| | |
+|---|---|
 | Card Generation | Node.js, SVG |
 | CI/CD | GitHub Actions |
-| Preview Site | GitHub Pages (static HTML) |
-| Data Source | GitHub REST API, GitHub GraphQL API |
-| Language Icons | [devicons](https://github.com/devicons/devicon), [Simple Icons](https://github.com/simple-icons/simple-icons) |
-| Rank Algorithm | CDF Percentile ([github-readme-stats](https://github.com/anuraghazra/github-readme-stats)) |
+| Preview | [GitHub Pages](https://rhizobium-gits.github.io/github-trophies/) |
+| Data | GitHub REST API, GraphQL API |
+| Icons | [devicons](https://github.com/devicons/devicon), [Simple Icons](https://github.com/simple-icons/simple-icons) |
+| Rank | CDF Percentile |
 
 ## License
 
