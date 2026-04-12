@@ -68,9 +68,9 @@ THEMES.v6 = THEMES.nord;
 THEMES.v7 = THEMES.light;
 THEMES.v8 = THEMES.catppuccin;
 
-// 🐱 Contribution calendar (1 year) via GitHub GraphQL API
+// 🐱 Contribution calendar (1 year, daily) via GitHub GraphQL API
 interface ActivityData {
-  weeks: { total: number; month: string }[];  // 53 weeks, each with total contributions
+  days: { count: number; date: string }[];  // 365 days
   totalContributions: number;
 }
 
@@ -90,14 +90,14 @@ async function fetchContributions(username: string): Promise<ActivityData | null
     const cal = json?.data?.user?.contributionsCollection?.contributionCalendar;
     if (!cal) return null;
 
-    const weeks = cal.weeks.map((w: { contributionDays: { contributionCount: number; date: string }[] }) => {
-      const total = w.contributionDays.reduce((s: number, d: { contributionCount: number }) => s + d.contributionCount, 0);
-      const firstDay = w.contributionDays[0]?.date || "";
-      const m = firstDay ? new Date(firstDay).getMonth() + 1 : 0;
-      return { total, month: `${m}` };
-    });
+    const days = cal.weeks.flatMap((w: { contributionDays: { contributionCount: number; date: string }[] }) =>
+      w.contributionDays.map((d: { contributionCount: number; date: string }) => ({
+        count: d.contributionCount,
+        date: d.date,
+      }))
+    );
 
-    return { weeks, totalContributions: cal.totalContributions };
+    return { days, totalContributions: cal.totalContributions };
   } catch { return null; }
 }
 
@@ -215,7 +215,7 @@ export async function GET(req: NextRequest) {
     const hasAct = !!activity;
     // Activity: 1-year contribution graph (53 weeks)
     const actLabelH = hasAct ? 20 : 0;
-    const actGraphH = hasAct ? 46 : 0; // line graph 32px + month labels 14px
+    const actGraphH = hasAct ? 54 : 0; // line graph 40px + month labels 14px
     const actTotalH = actLabelH + actGraphH;
     const actDiv = hasAct ? 20 : 0;
     // 🐱 Languages: icon(18) + name + pct per row, 2 cols, 24px per row
@@ -295,46 +295,47 @@ export async function GET(req: NextRequest) {
     o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
     y += div;
 
-    // ==================== CONTRIBUTIONS (1 YEAR) — LINE GRAPH ====================
+    // ==================== CONTRIBUTIONS (365 DAYS) — LINE GRAPH ====================
     if (hasAct && activity) {
       o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
       o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
       y += actLabelH;
 
-      // 🐱 Line graph
-      const wks = activity.weeks;
-      const graphH = 32;
-      const maxWk = Math.max(...wks.map(w => w.total), 1);
-      const stepX = contentW / (wks.length - 1);
+      // 🐱 365-day line graph
+      const days = activity.days;
+      const graphH = 40;
+      const maxDay = Math.max(...days.map(d => d.count), 1);
+      const stepX = contentW / (days.length - 1);
 
-      // 🐱 Build polyline points
-      const points = wks.map((wk, i) => {
+      // 🐱 Build polyline points (365 data points)
+      const points = days.map((d, i) => {
         const px = pad + i * stepX;
-        const py = y + graphH - (wk.total / maxWk) * graphH;
+        const py = y + graphH - (d.count / maxDay) * graphH;
         return `${px.toFixed(1)},${py.toFixed(1)}`;
       });
 
-      // 🐱 Area fill (gradient under the line)
+      // 🐱 Area fill
       const areaPoints = [
         `${pad},${y + graphH}`,
         ...points,
-        `${pad + contentW},${y + graphH}`,
+        `${(pad + contentW).toFixed(1)},${y + graphH}`,
       ].join(" ");
-      o += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.08"/>`;
+      o += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.06"/>`;
 
       // 🐱 Line
-      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.6"/>`;
+      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
 
       y += graphH + 2;
 
       // 🐱 Month labels
       let lastMonth = "";
-      wks.forEach((wk, i) => {
-        if (wk.month !== lastMonth && wk.month !== "0") {
-          const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      days.forEach((d, i) => {
+        const m = new Date(d.date).getMonth();
+        const mStr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m];
+        if (mStr !== lastMonth) {
           const mx = pad + i * stepX;
-          o += `<text x="${mx.toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${months[parseInt(wk.month)] || ""}</text>`;
-          lastMonth = wk.month;
+          o += `<text x="${mx.toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${mStr}</text>`;
+          lastMonth = mStr;
         }
       });
       y += 12;
