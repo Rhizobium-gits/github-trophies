@@ -260,6 +260,14 @@ This tool only uses **public data**. Your private repositories are never accesse
 | Icons | [devicons](https://github.com/devicons/devicon), [Simple Icons](https://github.com/simple-icons/simple-icons) |
 | Rank | CDF Percentile |
 
+## Feedback / フィードバック / 反馈
+
+バグや改善のアイデアがあれば、お気軽に [Issue](https://github.com/Rhizobium-gits/github-trophies/issues) で教えてください!
+
+Found a bug or have an idea? Feel free to open an [Issue](https://github.com/Rhizobium-gits/github-trophies/issues)!
+
+发现问题或有改进建议？欢迎提交 [Issue](https://github.com/Rhizobium-gits/github-trophies/issues)！
+
 ## License
 
 MIT
