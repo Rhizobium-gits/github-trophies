@@ -76,6 +76,15 @@
 
 **[全テーマのプレビューとコードを取得](https://rhizobium-gits.github.io/github-trophies/)**
 
+### プライバシー
+
+このツールは**公開データのみ**を使用します。プライベートリポジトリのコードや内容にはアクセスしません。
+
+- コミット数 / PR数 / Issue数: 公開リポジトリのみ（GitHub Search API）
+- 言語 / スター / リポ数: 公開リポジトリのみ（REST API, `type=owner`）
+- Contributionグラフ: GitHubプロフィール設定で「Private contributions」を有効にしている場合、プライベートリポへの貢献数が含まれることがあります
+- `read:user` トークンは読み取り専用で、データの変更はできません
+
 ---
 
 ## English
@@ -147,6 +156,15 @@ Your card will update automatically every 6 hours.
 **All 32 themes:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
 **[Get all theme previews and code](https://rhizobium-gits.github.io/github-trophies/)**
+
+### Privacy
+
+This tool only uses **public data**. Your private repositories are never accessed.
+
+- Commits / PRs / Issues: public repositories only (via GitHub Search API)
+- Languages / Stars / Repos: public repositories only (via REST API, `type=owner`)
+- Contribution graph: may include private contribution counts if you have enabled "Private contributions" in your GitHub profile settings
+- The `read:user` token scope is read-only and cannot modify any data
 
 ---
 
@@ -220,6 +238,15 @@ Your card will update automatically every 6 hours.
 
 **[获取全部主题预览和代码](https://rhizobium-gits.github.io/github-trophies/)**
 
+### 隐私说明
+
+本工具仅使用**公开数据**。不会访问你的私有仓库代码或内容。
+
+- 提交数 / PR数 / Issue数: 仅公开仓库（GitHub Search API）
+- 语言 / Star / 仓库数: 仅公开仓库（REST API, `type=owner`）
+- 贡献图表: 如果你在 GitHub 个人资料设置中启用了「Private contributions」，可能会包含私有仓库的贡献数量
+- `read:user` 令牌为只读权限，无法修改任何数据
+
 ---
 
 ## Tech Stack
@@ -232,33 +259,6 @@ Your card will update automatically every 6 hours.
 | Data | GitHub REST API, GraphQL API |
 | Icons | [devicons](https://github.com/devicons/devicon), [Simple Icons](https://github.com/simple-icons/simple-icons) |
 | Rank | CDF Percentile |
-
-## Privacy / プライバシー / 隐私说明
-
-This tool only uses **public data**. Your private repositories are never accessed.
-
-- Commits / PRs / Issues: public repositories only (via GitHub Search API)
-- Languages / Stars / Repos: public repositories only (via REST API, `type=owner`)
-- Contribution graph: may include private contribution counts if you have enabled "Private contributions" in your GitHub profile settings
-- The `read:user` token scope is read-only and cannot modify any data
-
----
-
-このツールは**公開データのみ**を使用します。プライベートリポジトリのコードや内容にはアクセスしません。
-
-- コミット数 / PR数 / Issue数: 公開リポジトリのみ（GitHub Search API）
-- 言語 / スター / リポ数: 公開リポジトリのみ（REST API, `type=owner`）
-- Contributionグラフ: GitHubプロフィール設定で「Private contributions」を有効にしている場合、プライベートリポへの貢献数が含まれることがあります
-- `read:user` トークンは読み取り専用で、データの変更はできません
-
----
-
-本工具仅使用**公开数据**。不会访问你的私有仓库代码或内容。
-
-- 提交数 / PR数 / Issue数: 仅公开仓库（GitHub Search API）
-- 语言 / Star / 仓库数: 仅公开仓库（REST API, `type=owner`）
-- 贡献图表: 如果你在 GitHub 个人资料设置中启用了「Private contributions」，可能会包含私有仓库的贡献数量
-- `read:user` 令牌为只读权限，无法修改任何数据
 
 ## License
 
