@@ -46,6 +46,8 @@
 
 ### README に貼り付ける
 
+**全32テーマのプレビューとコピペ用コードは [こちらのページ](https://rhizobium-gits.github.io/github-trophies/) ですべて取得できます。**
+
 以下のコードをコピーして、好きな README に貼り付けてください:
 
 ```
@@ -114,6 +116,8 @@ You need a GitHub token so the tool can read your stats.
 
 ### Put it in your README
 
+**All 32 theme previews and copy-paste code are available on [this page](https://rhizobium-gits.github.io/github-trophies/).**
+
 Copy this line and paste it into any README file:
 
 ```
@@ -181,6 +185,8 @@ Your card will update automatically every 6 hours.
 **完成了！** 打开 **Actions** 标签，点击 **Generate Stats Card** → **Run workflow**。等待大约1分钟，`svg/` 文件夹中会生成全部32个主题的卡片。
 
 ### 添加到你的 README
+
+**全部32个主题的预览和复制粘贴代码都可以在 [这个页面](https://rhizobium-gits.github.io/github-trophies/) 获取。**
 
 复制下面这行代码，粘贴到任意 README 文件中：
 
