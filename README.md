@@ -2,13 +2,13 @@
 
 ![Demo](./stats.svg)
 
-[English](#english) | [日本語](#japanese) | [中文](#chinese)
+[English](#english) | [日本語](#japanese) | [中文](#chinese) | [Preview & Config Generator](https://rhizobium-gits.github.io/github-trophies/)
 
 ---
 
 ## English
 
-A GitHub stats card generator for your README. Runs entirely on GitHub Actions — no external services needed.
+A GitHub stats card generator for your README. [Preview & Config Generator](https://rhizobium-gits.github.io/github-trophies/) Runs entirely on GitHub Actions — no external services needed.
 
 ### Setup
 
@@ -49,7 +49,7 @@ The card updates automatically every 6 hours.
 
 ## Japanese
 
-GitHub の統計情報をカード形式で README に表示するツール。GitHub Actions だけで動作し、外部サービスは不要です。
+GitHub の統計情報をカード形式で README に表示するツール。[プレビュー & 設定生成](https://rhizobium-gits.github.io/github-trophies/)GitHub Actions だけで動作し、外部サービスは不要です。
 
 ### セットアップ
 
@@ -90,7 +90,7 @@ GitHub の統計情報をカード形式で README に表示するツール。Gi
 
 ## Chinese
 
-GitHub 统计卡片生成工具，用于在 README 中展示你的 GitHub 数据。完全基于 GitHub Actions 运行，无需外部服务。
+GitHub 统计卡片生成工具。[预览 & 配置生成器](https://rhizobium-gits.github.io/github-trophies/)完全基于 GitHub Actions 运行，无需外部服务。
 
 ### 设置步骤
 
