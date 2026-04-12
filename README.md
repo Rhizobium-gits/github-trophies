@@ -2,6 +2,8 @@
 
 ![Demo](./stats.svg)
 
+[English](#english) | [日本語](#japanese) | [中文](#chinese)
+
 ---
 
 ## English
