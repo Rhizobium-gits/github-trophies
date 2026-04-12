@@ -57,11 +57,11 @@
     <div class="modal" onclick="event.stopPropagation()">
       <h2 id="modal-title"></h2>
       <img id="modal-img" src="" alt="">
-      <div class="modal-label">Step 1: Paste this into your fork's config.json</div>
-      <div class="modal-code" id="modal-config" onclick="copy('modal-config')"><span class="cp" id="modal-config-cp">Copied!</span></div>
-      <div class="modal-label" style="margin-top:18px">Step 2: Run the Action, then paste this into any README</div>
+      <div class="modal-label">Paste this into any README</div>
       <div class="modal-code" id="modal-md" onclick="copy('modal-md')"><span class="cp" id="modal-md-cp">Copied!</span></div>
-      <p style="margin-top:14px;font-size:11px;color:#999;line-height:1.6">config.json を更新して Action を実行すると、選択したテーマで stats.svg が生成されます。<br>Update config.json and run the Action to generate stats.svg with this theme.</p>
+      <div class="modal-label" style="margin-top:14px">config.json (username only)</div>
+      <div class="modal-code" id="modal-config" onclick="copy('modal-config')"><span class="cp" id="modal-config-cp">Copied!</span></div>
+      <p style="margin-top:14px;font-size:11px;color:#999;line-height:1.6">All 32 themes are pre-generated. Just pick and paste.<br>全32テーマが自動生成済み。選んで貼るだけ。</p>
       <button class="modal-close" onclick="closeModal()">Close</button>
     </div>
   </div>
@@ -114,8 +114,8 @@
     function openModal(u, t) {
       document.getElementById("modal-title").textContent = t;
       document.getElementById("modal-img").src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
-      document.getElementById("modal-md").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats.svg)`;
-      document.getElementById("modal-config").firstChild.textContent = JSON.stringify({ username: u, theme: t }, null, 2);
+      document.getElementById("modal-md").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats-${t}.svg)`;
+      document.getElementById("modal-config").firstChild.textContent = JSON.stringify({ username: u }, null, 2);
       document.getElementById("overlay").classList.add("show");
     }
 

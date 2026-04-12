@@ -114,7 +114,6 @@ function renderLangIcon(x, y, lang, size) {
 
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json"), "utf8"));
 const username = config.username;
-const theme = config.theme || "noir";
 const layout = config.layout || [
   { type: "header", width: "full" },
   { type: "stats", width: "full" },
@@ -237,7 +236,7 @@ const LANG_COLORS = {
 };
 
 async function main() {
-  console.log(`Generating stats for @${username} with theme "${theme}"...`);
+  console.log(`Generating stats for @${username} (all themes)...`);
 
   // Fetch user
   const user = await fetchJSON(`https://api.github.com/users/${username}`);
@@ -296,7 +295,12 @@ async function main() {
   // 🐱 Prefetch language icons
   await prefetchAllIcons(langSorted.map(([l]) => l));
 
-  const t = THEMES[theme] || THEMES.noir;
+  // 🐱 Generate ALL themes
+  const allThemeNames = Object.keys(THEMES);
+  const outDir = path.join(__dirname, "..");
+
+  for (const theme of allThemeNames) {
+  const t = THEMES[theme];
   const W = 480, pad = 28, contentW = W - pad * 2;
 
   const allStats = {
@@ -502,9 +506,18 @@ async function main() {
 
   o += `</svg>`;
 
-  const outPath = path.join(__dirname, "..", "stats.svg");
+  const outPath = path.join(outDir, `stats-${theme}.svg`);
   fs.writeFileSync(outPath, o);
-  console.log(`Done! Written to stats.svg (${(o.length / 1024).toFixed(1)} KB)`);
+  console.log(`  ${theme}: ${(o.length / 1024).toFixed(1)} KB`);
+  } // end theme loop
+
+  // 🐱 Also write default stats.svg (noir)
+  const defaultSrc = path.join(outDir, "stats-noir.svg");
+  if (fs.existsSync(defaultSrc)) {
+    fs.copyFileSync(defaultSrc, path.join(outDir, "stats.svg"));
+  }
+
+  console.log(`Done! Generated ${allThemeNames.length} themes.`);
   console.log(`Rank: ${rank} | Commits: ${commits} | PRs: ${pullRequests} | Repos: ${user.public_repos}`);
 }
 
