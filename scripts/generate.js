@@ -22,6 +22,7 @@ const LANG_ICON_MAP = {
   CoffeeScript:["coffeescript","coffeescript"],Nim:["nim","nim"],Racket:["racket","racket"],
   "Common Lisp":[null,"commonlisp"],TOML:[null,"toml"],HCL:[null,"hcl"],
   Ada:[null,"ada"],D:[null,"d"],WebAssembly:[null,"webassembly"],
+  Nextflow:[null,"nextflow"],
   Markdown:["markdown","markdown"],JSON:["json","json"],XML:["xml","xml"],YAML:["yaml","yaml"],
 };
 
@@ -251,7 +252,7 @@ const LANG_COLORS = {
   Shell:"#89e051",R:"#276DC3","Jupyter Notebook":"#F37626",Go:"#00ADD8",Rust:"#dea584",
   Java:"#ED8B00",C:"#A8B9CC","C++":"#00599C","C#":"#178600",Ruby:"#CC342D",PHP:"#777BB4",
   Swift:"#F05138",Kotlin:"#7F52FF",Dart:"#0175C2",Lua:"#2C2D72",TeX:"#3D6117",
-  "Common Lisp":"#3fb68b",Gnuplot:"#f0c040",Batchfile:"#C1F12E",PowerShell:"#012456",
+  "Common Lisp":"#3fb68b",Gnuplot:"#f0c040",Batchfile:"#C1F12E",PowerShell:"#012456",Nextflow:"#3ac486",
   SCSS:"#CD6799",Dockerfile:"#2496ED",Makefile:"#427819",Vim:"#199f4b",
   "Emacs Lisp":"#7F5AB6",Nix:"#7EBAE4",Svelte:"#ff3e00",
 };
