@@ -109,8 +109,13 @@ function renderLangIcon(x, y, lang, size) {
     const scale = size / Math.max(vb[2] || 128, vb[3] || 128);
     return `<g transform="translate(${x},${y}) scale(${scale.toFixed(4)})">${data.body}</g>`;
   }
-  // Fallback: colored circle
-  return `<circle cx="${x + size / 2}" cy="${y + size / 2}" r="${size / 2}" fill="${LANG_COLORS[lang] || "#555"}"/>`;
+  // Fallback: colored badge with abbreviation
+  const color = LANG_COLORS[lang] || "#555";
+  const short = lang.length <= 2 ? lang : lang.replace(/[a-z ]/g, "").slice(0, 2) || lang.slice(0, 2);
+  // Determine text color based on background brightness
+  const r2 = parseInt(color.slice(1, 3), 16), g2 = parseInt(color.slice(3, 5), 16), b2 = parseInt(color.slice(5, 7), 16);
+  const textColor = (r2 * 299 + g2 * 587 + b2 * 114) / 1000 > 140 ? "#000" : "#fff";
+  return `<rect x="${x}" y="${y}" width="${size}" height="${size}" rx="4" fill="${color}"/><text x="${x + size / 2}" y="${y + size / 2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="${size * 0.45}" font-weight="700" fill="${textColor}" font-family="ui-monospace,monospace">${short}</text>`;
 }
 
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json"), "utf8"));
