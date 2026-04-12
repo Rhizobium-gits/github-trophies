@@ -2,7 +2,75 @@
 
 ![Demo](./svg/stats-noir.svg)
 
-### [English](#english) | [日本語](#japanese) | [中文](#chinese)
+### [日本語](#日本語) | [English](#english) | [中文](#中文)
+
+---
+
+## 日本語
+
+### これは何？
+
+あなたの GitHub のアクティビティ（コミット数、PR数、使用言語など）をきれいなカードにして、README に表示できるツールです。自動で更新され、プログラミングの知識は不要です。
+
+### 使い方（かんたん3ステップ）
+
+**1. このリポジトリをフォークする**
+
+このページの右上にある **Fork** ボタンをクリックしてください。あなた専用のコピーが作られます。
+
+**2. ユーザー名を設定する**
+
+フォークしたリポジトリの `config.json` を開いて、ユーザー名を自分のものに変えてください:
+
+```json
+{
+  "username": "USERNAME"
+}
+```
+
+**3. トークンを作成して登録する**
+
+このツールがあなたの GitHub データを読み取るために、トークンが必要です。
+
+1. [github.com/settings/tokens](https://github.com/settings/tokens) を開く
+2. **Generate new token (classic)** をクリック
+3. `read:user` にチェックを入れる
+4. **Generate token** をクリックして、表示されたトークンをコピー
+5. フォークしたリポジトリに戻る
+6. **Settings** → **Secrets and variables** → **Actions** を開く
+7. **New repository secret** をクリック
+8. Name に `GH_TOKEN`、Value にコピーしたトークンを貼り付け
+9. **Add secret** をクリック
+
+**これで完了です!** **Actions** タブを開いて、**Generate Stats Card** → **Run workflow** をクリックしてください。約1分待つと、`svg/` フォルダに全32テーマのカードが生成されます。
+
+### README に貼り付ける
+
+以下のコードをコピーして、好きな README に貼り付けてください:
+
+```
+![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-noir.svg)
+```
+
+- `USERNAME` を自分の GitHub ユーザー名に変えてください
+- `noir` を好きなテーマ名に変えてください
+
+カードは6時間ごとに自動で更新されます。
+
+**テーマを選ぶ前に全部見たい方は** [プレビューページ](https://rhizobium-gits.github.io/github-trophies/)をご覧ください。
+
+### テーマ一覧
+
+| | | |
+|---|---|---|
+| ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
+| `noir` | `dracula` | `tokyo-night` |
+| ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| `github-dark` | `nord` | `light` |
+
+**全32テーマ:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
+
+**[全テーマをプレビュー](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
@@ -74,75 +142,7 @@ Your card will update automatically every 6 hours.
 
 ---
 
-## Japanese
-
-### これは何？
-
-あなたの GitHub のアクティビティ（コミット数、PR数、使用言語など）をきれいなカードにして、README に表示できるツールです。自動で更新され、プログラミングの知識は不要です。
-
-### 使い方（かんたん3ステップ）
-
-**1. このリポジトリをフォークする**
-
-このページの右上にある **Fork** ボタンをクリックしてください。あなた専用のコピーが作られます。
-
-**2. ユーザー名を設定する**
-
-フォークしたリポジトリの `config.json` を開いて、ユーザー名を自分のものに変えてください:
-
-```json
-{
-  "username": "USERNAME"
-}
-```
-
-**3. トークンを作成して登録する**
-
-このツールがあなたの GitHub データを読み取るために、トークンが必要です。
-
-1. [github.com/settings/tokens](https://github.com/settings/tokens) を開く
-2. **Generate new token (classic)** をクリック
-3. `read:user` にチェックを入れる
-4. **Generate token** をクリックして、表示されたトークンをコピー
-5. フォークしたリポジトリに戻る
-6. **Settings** → **Secrets and variables** → **Actions** を開く
-7. **New repository secret** をクリック
-8. Name に `GH_TOKEN`、Value にコピーしたトークンを貼り付け
-9. **Add secret** をクリック
-
-**これで完了です!** **Actions** タブを開いて、**Generate Stats Card** → **Run workflow** をクリックしてください。約1分待つと、`svg/` フォルダに全32テーマのカードが生成されます。
-
-### README に貼り付ける
-
-以下のコードをコピーして、好きな README に貼り付けてください:
-
-```
-![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-noir.svg)
-```
-
-- `USERNAME` を自分の GitHub ユーザー名に変えてください
-- `noir` を好きなテーマ名に変えてください
-
-カードは6時間ごとに自動で更新されます。
-
-**テーマを選ぶ前に全部見たい方は** [プレビューページ](https://rhizobium-gits.github.io/github-trophies/)をご覧ください。
-
-### テーマ一覧
-
-| | | |
-|---|---|---|
-| ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
-| `noir` | `dracula` | `tokyo-night` |
-| ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
-| `github-dark` | `nord` | `light` |
-
-**全32テーマ:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
-
-**[全テーマをプレビュー](https://rhizobium-gits.github.io/github-trophies/)**
-
----
-
-## Chinese
+## 中文
 
 ### 这是什么？
 
