@@ -15,17 +15,13 @@
     input { width: 200px; }
     button { padding: 10px 20px; font-size: 14px; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
     button:hover { opacity: 0.85; }
-    .result { margin-top: 24px; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 520px; }
+    .result { margin-top: 24px; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 540px; padding: 20px; border-radius: 18px; transition: background 0.3s; }
     .code-section { margin-top: 20px; width: 100%; max-width: 520px; }
     .code-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
     .code-box { padding: 12px 14px; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #2a7; user-select: all; word-break: break-all; line-height: 1.6; cursor: pointer; position: relative; }
     .code-box:hover { border-color: #aaa; }
     .copied { position: absolute; top: -8px; right: 8px; font-size: 10px; background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; font-family: system-ui; }
     .copied.show { opacity: 1; }
-    .config-box { margin-top: 12px; }
-    .config-btn { width: 100%; padding: 10px; font-size: 12px; font-weight: 600; background: #f0f0f0; border: 1px solid #e0e0e0; border-radius: 10px; color: #888; cursor: pointer; }
-    .config-btn:hover { background: #eee; }
-    .config-pre { margin-top: 6px; padding: 14px; background: #fff; border-radius: 10px; border: 1px solid #e0e0e0; font-family: ui-monospace, monospace; font-size: 11px; color: #2a7; white-space: pre; user-select: all; overflow-x: auto; }
     .steps { margin-top: 24px; width: 100%; max-width: 520px; font-size: 13px; color: #888; line-height: 2; }
     .steps ol { padding-left: 20px; }
     .steps a { color: #0969da; }
@@ -40,15 +36,14 @@
 
   <div class="form">
     <input id="username" placeholder="GitHub username" value="">
-    <select id="theme"></select>
+    <select id="theme" onchange="if(submitted) generate()"></select>
     <button onclick="generate()">Preview</button>
   </div>
 
   <div id="result" class="result" style="display:none">
-    <img id="preview" src="" alt="Stats" style="width:100%;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
+    <img id="preview" src="" alt="Stats" style="width:100%;border-radius:14px;">
   </div>
 
-  <!-- Generated codes -->
   <div id="codes" class="code-section" style="display:none">
     <div class="code-label">README Markdown (copy & paste)</div>
     <div class="code-box" id="md-code" onclick="copyCode('md-code')">
@@ -79,6 +74,18 @@
   <script>
     const themes = ["noir","dracula","one-dark","monokai","tokyo-night","nord","github-dark","catppuccin","gruvbox-dark","solarized-dark","synthwave","cobalt","ayu","material-ocean","rose","night-owl","palenight","shades-of-purple","panda","horizon","vitesse","everforest","kanagawa","fleet","light","github-light","solarized-light","gruvbox-light","catppuccin-latte","light-owl","everforest-light","vitesse-light"];
 
+    // Theme background colors for preview area
+    const themeBg = {
+      noir:"#0a0a0a",dracula:"#21222c","one-dark":"#21252b",monokai:"#1e1f1c","tokyo-night":"#16161e",
+      nord:"#282e3a","github-dark":"#010409",catppuccin:"#181825","gruvbox-dark":"#1d2021",
+      "solarized-dark":"#001e26",synthwave:"#150d22",cobalt:"#132d3f",ayu:"#0a0d12",
+      "material-ocean":"#0b0d14",rose:"#180810","night-owl":"#010e1a",palenight:"#242837",
+      "shades-of-purple":"#261f4e",panda:"#252627",horizon:"#181a21",vitesse:"#0e0e0e",
+      everforest:"#272e33",kanagawa:"#1a1a22",fleet:"#141414",
+      light:"#f0f0f0","github-light":"#f0f0f0","solarized-light":"#f0ead8","gruvbox-light":"#ede4b7",
+      "catppuccin-latte":"#e0e3e9","light-owl":"#efefef","everforest-light":"#efe9d5","vitesse-light":"#f0f0f0",
+    };
+
     const sel = document.getElementById("theme");
     themes.forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; sel.appendChild(o); });
 
@@ -86,19 +93,23 @@
     if (params.get("username")) document.getElementById("username").value = params.get("username");
     if (params.get("theme")) sel.value = params.get("theme");
 
+    let submitted = false;
+
     function generate() {
       const u = document.getElementById("username").value.trim();
       const t = sel.value;
       if (!u) return;
+      submitted = true;
 
       document.getElementById("preview").src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
+
+      // Set preview background to match theme
+      const bg = themeBg[t] || "#f0f0f0";
+      document.getElementById("result").style.background = bg;
       document.getElementById("result").style.display = "flex";
+
       document.getElementById("codes").style.display = "block";
-
-      // Markdown code — full URL so it works in any repo's README
       document.getElementById("md-code").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats.svg)`;
-
-      // Config code
       document.getElementById("config-code").firstChild.textContent = JSON.stringify({ username: u, theme: t }, null, 2);
     }
 
