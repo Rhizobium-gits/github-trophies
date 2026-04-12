@@ -364,7 +364,13 @@ async function main() {
       if (!activity) return { svg: "", height: 0 };
       let s = `<text x="0" y="12" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
       s += `<text x="${w}" y="12" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M2}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
-      const wks2 = activity.weeks, graphH = 40, yOff = 20;
+      const rawWks = activity.weeks;
+      const wks2 = [];
+      for (let i = 0; i < rawWks.length; i += 2) {
+        const a2 = rawWks[i], b2 = rawWks[i + 1];
+        wks2.push({ total: a2.total + (b2 ? b2.total : 0), date: a2.date });
+      }
+      const graphH = 40, yOff = 20;
       const maxWk2 = Math.max(...wks2.map(wk3 => wk3.total), 1);
       const stepX = w / (wks2.length - 1);
       const points = wks2.map((wk3, i) => `${(i * stepX).toFixed(1)},${(yOff + graphH - (wk3.total / maxWk2) * graphH).toFixed(1)}`);

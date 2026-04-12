@@ -299,8 +299,13 @@ export async function GET(req: NextRequest) {
       o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
       y += actLabelH;
 
-      // 🐱 53-week line graph
-      const wks = activity.weeks;
+      // 🐱 Biweekly line graph (2-week intervals)
+      const raw = activity.weeks;
+      const wks: { total: number; date: string }[] = [];
+      for (let i = 0; i < raw.length; i += 2) {
+        const a = raw[i], b = raw[i + 1];
+        wks.push({ total: a.total + (b ? b.total : 0), date: a.date });
+      }
       const graphH = 40;
       const maxWk = Math.max(...wks.map(w => w.total), 1);
       const stepX = contentW / (wks.length - 1);
