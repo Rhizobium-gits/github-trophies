@@ -1,6 +1,6 @@
 # GitHub Trophies
 
-![Demo](./svg/stats-noir.svg)
+![Demo](./svg_readme/stats-noir.svg)
 
 ### [日本語](#日本語) | [English](#english) | [中文](#中文)
 
@@ -65,9 +65,9 @@
 
 | | | |
 |---|---|---|
-| ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
+| ![](./svg_readme/stats-noir.svg) | ![](./svg_readme/stats-dracula.svg) | ![](./svg_readme/stats-tokyo-night.svg) |
 | `noir` | `dracula` | `tokyo-night` |
-| ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| ![](./svg_readme/stats-github-dark.svg) | ![](./svg_readme/stats-nord.svg) | ![](./svg_readme/stats-light.svg) |
 | `github-dark` | `nord` | `light` |
 
 **全32テーマ:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
@@ -135,9 +135,9 @@ Your card will update automatically every 6 hours.
 
 | | | |
 |---|---|---|
-| ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
+| ![](./svg_readme/stats-noir.svg) | ![](./svg_readme/stats-dracula.svg) | ![](./svg_readme/stats-tokyo-night.svg) |
 | `noir` | `dracula` | `tokyo-night` |
-| ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| ![](./svg_readme/stats-github-dark.svg) | ![](./svg_readme/stats-nord.svg) | ![](./svg_readme/stats-light.svg) |
 | `github-dark` | `nord` | `light` |
 
 **All 32 themes:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
@@ -205,9 +205,9 @@ Your card will update automatically every 6 hours.
 
 | | | |
 |---|---|---|
-| ![](./svg/stats-noir.svg) | ![](./svg/stats-dracula.svg) | ![](./svg/stats-tokyo-night.svg) |
+| ![](./svg_readme/stats-noir.svg) | ![](./svg_readme/stats-dracula.svg) | ![](./svg_readme/stats-tokyo-night.svg) |
 | `noir` | `dracula` | `tokyo-night` |
-| ![](./svg/stats-github-dark.svg) | ![](./svg/stats-nord.svg) | ![](./svg/stats-light.svg) |
+| ![](./svg_readme/stats-github-dark.svg) | ![](./svg_readme/stats-nord.svg) | ![](./svg_readme/stats-light.svg) |
 | `github-dark` | `nord` | `light` |
 
 **全部32个主题:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
