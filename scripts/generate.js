@@ -324,7 +324,7 @@ async function main() {
   // Language processing
   const langAll = Object.entries(languages).sort((a, b) => b[1] - a[1]);
   const langTotal = langAll.reduce((s, [, c]) => s + c, 0);
-  const langSorted = langAll.filter(([, c]) => langTotal > 0 && (c / langTotal) >= 0.001);
+  const langSorted = langAll.filter(([, c]) => langTotal > 0 && c > 0);
 
   // 🐱 Prefetch language icons
   await prefetchAllIcons(langSorted.map(([l]) => l));
