@@ -7,6 +7,13 @@ const path = require("path");
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "config.json"), "utf8"));
 const username = config.username;
 const theme = config.theme || "noir";
+const layout = config.layout || [
+  { type: "header", width: "full" },
+  { type: "rank", width: "half" },
+  { type: "stats", width: "full" },
+  { type: "contributions", width: "full" },
+  { type: "languages", width: "full" },
+];
 
 if (!username) {
   console.error("Error: username not set in config.json");
@@ -171,129 +178,185 @@ async function main() {
   const t = THEMES[theme] || THEMES.noir;
   const W = 480, pad = 28, contentW = W - pad * 2;
 
-  // Height
-  const headerH = 64, div = 20, statsH = 132;
-  const hasAct = !!activity;
-  const actLabelH = hasAct ? 20 : 0, actGraphH = hasAct ? 30 : 0;
-  const actTotalH = actLabelH + actGraphH, actDiv = hasAct ? 20 : 0;
-  const langRows = Math.ceil(langSorted.length / 2);
-  const donutH = langSorted.length > 0 ? 80 : 0;
-  const langLegH = langRows * 24;
-  const langSectionH = langSorted.length > 0 ? 24 + Math.max(donutH, langLegH) : 0;
-  const H = pad + headerH + div + statsH + div + actTotalH + actDiv + langSectionH + pad;
+  const allStats = {
+    "stat-commits": { label: "Total Commits", value: commits.toLocaleString() },
+    "stat-prs": { label: "Pull Requests", value: pullRequests.toLocaleString() },
+    "stat-issues": { label: "Issues", value: issues.toLocaleString() },
+    "stat-stars": { label: "Stars Earned", value: stars.toLocaleString() },
+    "stat-repos": { label: "Repositories", value: user.public_repos.toLocaleString() },
+    "stat-experience": { label: "Experience", value: `${experience} yr` },
+  };
 
-  const statItems = [
-    { label: "Total Commits", value: commits.toLocaleString() },
-    { label: "Pull Requests", value: pullRequests.toLocaleString() },
-    { label: "Issues", value: issues.toLocaleString() },
-    { label: "Stars Earned", value: stars.toLocaleString() },
-    { label: "Repositories", value: user.public_repos.toLocaleString() },
-    { label: "Experience", value: `${experience} yr` },
-  ];
+  // 🐱 Widget renderers — each returns { svg, height }
+  const widgets = {
+    header(x, w) {
+      let s = "";
+      if (avatar) {
+        s += `<clipPath id="avclip"><circle cx="${x + 24}" cy="${24}" r="24"/></clipPath>`;
+        s += `<image x="${x}" y="0" width="48" height="48" href="${avatar}" clip-path="url(#avclip)"/>`;
+        s += `<circle cx="${x + 24}" cy="24" r="24" fill="none" stroke="${t.avatarStroke}" stroke-width="1.5"/>`;
+      }
+      const tx2 = avatar ? x + 60 : x;
+      s += `<text x="${tx2}" y="20" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(user.name || user.login)}</text>`;
+      s += `<text x="${tx2}" y="38" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(user.login)}</text>`;
+      if (user.bio) {
+        const bio = user.bio.length > 44 ? user.bio.slice(0, 41) + "..." : user.bio;
+        s += `<text x="${tx2}" y="54" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
+      }
+      return { svg: s, height: 58 };
+    },
+    rank(x, w) {
+      const rcx = x + w / 2, rcy = 24, cr2 = 24;
+      const circ2 = 2 * Math.PI * cr2, dOff2 = circ2 - (score / 100) * circ2;
+      let s = `<circle cx="${rcx}" cy="${rcy}" r="${cr2}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
+      s += `<circle cx="${rcx}" cy="${rcy}" r="${cr2}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ2.toFixed(1)}" stroke-dashoffset="${dOff2.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${rcx} ${rcy})" opacity="0.9"/>`;
+      s += `<text x="${rcx}" y="${rcy + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
+      return { svg: s, height: 52 };
+    },
+    stats(x, w) {
+      const items = Object.values(allStats);
+      let s = "";
+      items.forEach((item, i) => {
+        const iy = i * 22;
+        s += `<circle cx="${4}" cy="${iy + 5}" r="2" fill="${t.dot}"/>`;
+        s += `<text x="14" y="${iy + 9}" font-size="12" fill="${t.label}" font-family="${F}">${item.label}</text>`;
+        s += `<line x1="130" y1="${iy + 6}" x2="${w - 70}" y2="${iy + 6}" stroke="${t.dashLine}" stroke-width="1" stroke-dasharray="2,4"/>`;
+        s += `<text x="${w}" y="${iy + 9}" text-anchor="end" font-size="13" font-weight="600" fill="${t.value}" font-family="${M2}">${item.value}</text>`;
+      });
+      return { svg: s, height: items.length * 22 };
+    },
+    contributions(x, w) {
+      if (!activity) return { svg: "", height: 0 };
+      let s = `<text x="0" y="12" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
+      s += `<text x="${w}" y="12" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M2}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
+      const wks = activity.weeks, gap = 1, barW2 = (w - (wks.length - 1) * gap) / wks.length;
+      const maxWk = Math.max(...wks.map(wk2 => wk2.total), 1), barMaxH = 16, yOff = 20;
+      wks.forEach((wk, i) => {
+        const bx = i * (barW2 + gap), bh = wk.total === 0 ? 1 : Math.max((wk.total / maxWk) * barMaxH, 2);
+        const by = yOff + barMaxH - bh, op = wk.total === 0 ? 0.08 : 0.25 + (wk.total / maxWk) * 0.75;
+        s += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${Math.max(barW2, 1).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="${t.bar}" opacity="${op.toFixed(2)}"/>`;
+      });
+      let lastMonth2 = "", my = yOff + barMaxH + 2;
+      const months2 = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      wks.forEach((wk, i) => {
+        if (wk.month !== lastMonth2 && wk.month !== "0") {
+          s += `<text x="${(i * (barW2 + gap)).toFixed(1)}" y="${my + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M2}">${months2[parseInt(wk.month)] || ""}</text>`;
+          lastMonth2 = wk.month;
+        }
+      });
+      return { svg: s, height: my + 12 };
+    },
+    "languages-donut"(x, w) {
+      if (!langSorted.length) return { svg: "", height: 0 };
+      const dCx = 40, dCy = 40, dR = 32, dIR = 20;
+      let s = "", sa2 = -90;
+      langSorted.forEach(([lang2, count2]) => {
+        const color2 = LANG_COLORS[lang2] || "#555";
+        const pct2 = count2 / langTotal, angle2 = pct2 * 360, ea2 = sa2 + angle2;
+        const sr2 = (sa2 * Math.PI) / 180, er2 = (ea2 * Math.PI) / 180;
+        const x1 = dCx + dR * Math.cos(sr2), y1 = dCy + dR * Math.sin(sr2);
+        const x2 = dCx + dR * Math.cos(er2), y2 = dCy + dR * Math.sin(er2);
+        const ix1 = dCx + dIR * Math.cos(er2), iy1 = dCy + dIR * Math.sin(er2);
+        const ix2 = dCx + dIR * Math.cos(sr2), iy2 = dCy + dIR * Math.sin(sr2);
+        s += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${dR},${dR} 0 ${angle2 > 180 ? 1 : 0},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${dIR},${dIR} 0 ${angle2 > 180 ? 1 : 0},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${color2}"/>`;
+        sa2 = ea2;
+      });
+      s += `<text x="${dCx}" y="${dCy + 1}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="${t.donutCenter}" font-family="${M2}">${langSorted.length}</text>`;
+      return { svg: s, height: 80 };
+    },
+    "languages-list"(x, w) {
+      if (!langSorted.length) return { svg: "", height: 0 };
+      let s = "";
+      langSorted.forEach(([lang2, count2], i) => {
+        const col = i % 2, row = Math.floor(i / 2);
+        const lx = col * (w / 2), ly = row * 24;
+        const pct2 = ((count2 / langTotal) * 100).toFixed(1);
+        s += `<circle cx="${lx + 5}" cy="${ly + 9}" r="5" fill="${LANG_COLORS[lang2] || "#555"}"/>`;
+        s += `<text x="${lx + 16}" y="${ly + 13}" font-size="11" fill="${t.legendText}" font-family="${F}">${esc(lang2)}</text>`;
+        s += `<text x="${lx + w / 2 - 4}" y="${ly + 13}" text-anchor="end" font-size="10" font-weight="600" fill="${t.legendSub}" font-family="${M2}">${pct2}%</text>`;
+      });
+      return { svg: s, height: Math.ceil(langSorted.length / 2) * 24 };
+    },
+    languages(x, w) {
+      if (!langSorted.length) return { svg: "", height: 0 };
+      let s = `<text x="0" y="14" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">MOST USED LANGUAGES</text>`;
+      const donut = widgets["languages-donut"](0, w);
+      const list = widgets["languages-list"](100, w - 100);
+      s += `<g transform="translate(0,24)">${donut.svg}</g>`;
+      s += `<g transform="translate(100,28)">${list.svg}</g>`;
+      return { svg: s, height: 24 + Math.max(donut.height, list.height) };
+    },
+    divider(x, w) {
+      return { svg: `<line x1="0" y1="5" x2="${w}" y2="5" stroke="${t.divider}" stroke-width="1"/>`, height: 10 };
+    },
+  };
 
-  // Build SVG
-  let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  // 🐱 Individual stat widgets
+  for (const [key, item] of Object.entries(allStats)) {
+    widgets[key] = (x, w) => {
+      let s = `<circle cx="4" cy="5" r="2" fill="${t.dot}"/>`;
+      s += `<text x="14" y="9" font-size="12" fill="${t.label}" font-family="${F}">${item.label}</text>`;
+      s += `<line x1="130" y1="6" x2="${w - 70}" y2="6" stroke="${t.dashLine}" stroke-width="1" stroke-dasharray="2,4"/>`;
+      s += `<text x="${w}" y="9" text-anchor="end" font-size="13" font-weight="600" fill="${t.value}" font-family="${M2}">${item.value}</text>`;
+      return { svg: s, height: 22 };
+    };
+  }
+
+  // 🐱 Two-pass: calculate height, then render
+  // Pass 1: measure heights
+  let totalH = pad;
+  const measured = [];
+  let rowWidgets = [];
+
+  for (const item of layout) {
+    const widgetFn = widgets[item.type];
+    if (!widgetFn) continue;
+    const isHalf = item.width === "half";
+    const w = isHalf ? Math.floor(contentW / 2) - 4 : contentW;
+    const { height } = widgetFn(0, w);
+
+    if (isHalf) {
+      rowWidgets.push({ ...item, w, height });
+      if (rowWidgets.length === 2) {
+        totalH += Math.max(rowWidgets[0].height, rowWidgets[1].height) + 8;
+        measured.push([...rowWidgets]);
+        rowWidgets = [];
+      }
+    } else {
+      if (rowWidgets.length) {
+        totalH += rowWidgets[0].height + 8;
+        measured.push([...rowWidgets]);
+        rowWidgets = [];
+      }
+      measured.push([{ ...item, w, height }]);
+      totalH += height + 8;
+    }
+  }
+  if (rowWidgets.length) {
+    totalH += rowWidgets[0].height + 8;
+    measured.push([...rowWidgets]);
+  }
+  totalH += pad;
+
+  // Pass 2: render
+  let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${totalH}" viewBox="0 0 ${W} ${totalH}">
 <defs><linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0%" stop-color="${t.bgGrad1}"/><stop offset="100%" stop-color="${t.bgGrad2}"/></linearGradient></defs>
-<rect width="${W}" height="${H}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
+<rect width="${W}" height="${totalH}" rx="14" fill="url(#bg)" stroke="${t.stroke}" stroke-width="1"/>
 `;
   let y = pad;
 
-  // Avatar
-  if (avatar) {
-    o += `<clipPath id="avclip"><circle cx="${pad + 24}" cy="${y + 24}" r="24"/></clipPath>`;
-    o += `<image x="${pad}" y="${y}" width="48" height="48" href="${avatar}" clip-path="url(#avclip)"/>`;
-    o += `<circle cx="${pad + 24}" cy="${y + 24}" r="24" fill="none" stroke="${t.avatarStroke}" stroke-width="1.5"/>`;
-  }
-  const tx = avatar ? pad + 60 : pad;
-  o += `<text x="${tx}" y="${y+20}" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(user.name || user.login)}</text>`;
-  o += `<text x="${tx}" y="${y+38}" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(user.login)}</text>`;
-  if (user.bio) {
-    const bio = user.bio.length > 44 ? user.bio.slice(0, 41) + "..." : user.bio;
-    o += `<text x="${tx}" y="${y+54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
-  }
-
-  // Rank
-  const cx = W - pad - 28, cy2 = y + 24, cr = 24;
-  const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
-  o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
-  o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
-  o += `<text x="${cx}" y="${cy2+1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
-  y += headerH;
-
-  o += `<line x1="${pad}" y1="${y+10}" x2="${W-pad}" y2="${y+10}" stroke="${t.divider}" stroke-width="1"/>`;
-  y += div;
-
-  // Stats
-  statItems.forEach((item, i) => {
-    const iy = y + i * 22;
-    o += `<circle cx="${pad+4}" cy="${iy+5}" r="2" fill="${t.dot}"/>`;
-    o += `<text x="${pad+14}" y="${iy+9}" font-size="12" fill="${t.label}" font-family="${F}">${item.label}</text>`;
-    o += `<line x1="${pad+130}" y1="${iy+6}" x2="${W-pad-70}" y2="${iy+6}" stroke="${t.dashLine}" stroke-width="1" stroke-dasharray="2,4"/>`;
-    o += `<text x="${W-pad}" y="${iy+9}" text-anchor="end" font-size="13" font-weight="600" fill="${t.value}" font-family="${M2}">${item.value}</text>`;
-  });
-  y += statsH;
-
-  o += `<line x1="${pad}" y1="${y+10}" x2="${W-pad}" y2="${y+10}" stroke="${t.divider}" stroke-width="1"/>`;
-  y += div;
-
-  // Contributions
-  if (hasAct && activity) {
-    o += `<text x="${pad}" y="${y+12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
-    o += `<text x="${W-pad}" y="${y+12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M2}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
-    y += actLabelH;
-    const wks = activity.weeks, gap = 1;
-    const barW = (contentW - (wks.length - 1) * gap) / wks.length;
-    const maxWk = Math.max(...wks.map(w => w.total), 1), barMaxH = 16;
-    wks.forEach((wk, i) => {
-      const bx = pad + i * (barW + gap);
-      const bh = wk.total === 0 ? 1 : Math.max((wk.total / maxWk) * barMaxH, 2);
-      const by = y + barMaxH - bh;
-      const op = wk.total === 0 ? 0.08 : 0.25 + (wk.total / maxWk) * 0.75;
-      o += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${Math.max(barW,1).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="${t.bar}" opacity="${op.toFixed(2)}"/>`;
-    });
-    y += barMaxH + 2;
-    let lastMonth = "";
-    const months = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    wks.forEach((wk, i) => {
-      if (wk.month !== lastMonth && wk.month !== "0") {
-        o += `<text x="${(pad + i * (barW + gap)).toFixed(1)}" y="${y+9}" font-size="7" fill="${t.sectionLabel}" font-family="${M2}">${months[parseInt(wk.month)]||""}</text>`;
-        lastMonth = wk.month;
-      }
-    });
-    y += 12;
-    o += `<line x1="${pad}" y1="${y+10}" x2="${W-pad}" y2="${y+10}" stroke="${t.divider}" stroke-width="1"/>`;
-    y += actDiv;
-  }
-
-  // Languages (donut + legend, no external icon fetch for simplicity)
-  if (langSorted.length > 0) {
-    o += `<text x="${pad}" y="${y+14}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">MOST USED LANGUAGES</text>`;
-    y += 24;
-    const dCx = pad + 40, dCy = y + 40, dR = 32, dIR = 20;
-    let sa = -90;
-    langSorted.forEach(([lang, count]) => {
-      const color = LANG_COLORS[lang] || "#555";
-      const pct = count / langTotal, angle = pct * 360, ea = sa + angle;
-      const sr = (sa * Math.PI) / 180, er = (ea * Math.PI) / 180;
-      const x1 = dCx + dR * Math.cos(sr), y1 = dCy + dR * Math.sin(sr);
-      const x2 = dCx + dR * Math.cos(er), y2 = dCy + dR * Math.sin(er);
-      const ix1 = dCx + dIR * Math.cos(er), iy1 = dCy + dIR * Math.sin(er);
-      const ix2 = dCx + dIR * Math.cos(sr), iy2 = dCy + dIR * Math.sin(sr);
-      const la = angle > 180 ? 1 : 0;
-      o += `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${dR},${dR} 0 ${la},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${dIR},${dIR} 0 ${la},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${color}"/>`;
-      sa = ea;
-    });
-    o += `<text x="${dCx}" y="${dCy+1}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="700" fill="${t.donutCenter}" font-family="${M2}">${langSorted.length}</text>`;
-    const legX = pad + 100, legW = contentW - 100;
-    langSorted.forEach(([lang, count], i) => {
-      const col = i % 2, row = Math.floor(i / 2);
-      const lx = legX + col * (legW / 2), ly = y + 4 + row * 24;
-      const pct = ((count / langTotal) * 100).toFixed(1);
-      const color = LANG_COLORS[lang] || "#555";
-      o += `<circle cx="${lx+5}" cy="${ly+9}" r="5" fill="${color}"/>`;
-      o += `<text x="${lx+16}" y="${ly+13}" font-size="11" fill="${t.legendText}" font-family="${F}">${esc(lang)}</text>`;
-      o += `<text x="${lx+legW/2-4}" y="${ly+13}" text-anchor="end" font-size="10" font-weight="600" fill="${t.legendSub}" font-family="${M2}">${pct}%</text>`;
-    });
+  for (const row of measured) {
+    if (row.length === 2) {
+      const h1 = widgets[row[0].type](0, row[0].w);
+      const h2 = widgets[row[1].type](0, row[1].w);
+      o += `<g transform="translate(${pad},${y})">${h1.svg}</g>`;
+      o += `<g transform="translate(${pad + row[0].w + 8},${y})">${h2.svg}</g>`;
+      y += Math.max(row[0].height, row[1].height) + 8;
+    } else {
+      const h1 = widgets[row[0].type](0, row[0].w);
+      o += `<g transform="translate(${pad},${y})">${h1.svg}</g>`;
+      y += row[0].height + 8;
+    }
   }
 
   o += `</svg>`;
