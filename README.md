@@ -2,7 +2,7 @@
 
 ![Demo](./svg/stats-noir.svg)
 
-[English](#english) | [日本語](#japanese) | [中文](#chinese)
+### [English](#english) | [日本語](#japanese) | [中文](#chinese)
 
 ---
 
