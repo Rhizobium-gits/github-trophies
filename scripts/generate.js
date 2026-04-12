@@ -166,8 +166,8 @@ function logNormCdf(x, median) {
 }
 
 function calcRank(commits, prs, issues, stars, followers) {
-  const W = { c: 3, p: 3, i: 2, s: 1, f: 1 }, TW = 10;
-  const M = { c: 250, p: 40, i: 20, s: 50, f: 10 };
+  const W = { c: 2, p: 3, i: 1, s: 4, f: 1 }, TW = 11;
+  const M = { c: 250, p: 50, i: 25, s: 50, f: 10 };
   const pct = (1 - (expCdf(commits, M.c) * W.c + expCdf(prs, M.p) * W.p + expCdf(issues, M.i) * W.i + logNormCdf(stars, M.s) * W.s + logNormCdf(followers, M.f) * W.f) / TW) * 100;
   const tiers = [[1, "S"], [12.5, "A+"], [25, "A"], [37.5, "A-"], [50, "B+"], [62.5, "B"], [75, "B-"], [87.5, "C+"], [100, "C"]];
   for (const [max, rank] of tiers) { if (pct <= max) return { rank, score: Math.round(100 - pct) }; }
