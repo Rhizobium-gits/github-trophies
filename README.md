@@ -175,6 +175,19 @@ GitHub 统计卡片生成工具。完全基于 GitHub Actions 运行，无需外
 
 ---
 
+## Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| Card Generation | Node.js, SVG |
+| CI/CD | GitHub Actions |
+| Preview API | Next.js, Vercel (optional) |
+| Preview Site | GitHub Pages (static HTML) |
+| Data Source | GitHub REST API, GitHub GraphQL API |
+| Language Icons | [devicons](https://github.com/devicons/devicon), [Simple Icons](https://github.com/simple-icons/simple-icons) |
+| Rank Algorithm | CDF Percentile (based on [github-readme-stats](https://github.com/anuraghazra/github-readme-stats)) |
+| Language Stats | Byte-count based (via GitHub Linguist API) |
+
 ## License
 
 MIT
