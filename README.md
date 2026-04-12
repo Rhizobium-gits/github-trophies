@@ -1,89 +1,132 @@
 # GitHub Trophies
 
-GitHub の統計情報をカード形式で README に表示するツール。
-
 ![Demo](./stats.svg)
 
 ---
 
-## セットアップ（3ステップ）
+## English
 
-### 1. フォーク
+A GitHub stats card generator for your README. Runs entirely on GitHub Actions — no external services needed.
 
-このリポジトリ右上の **Fork** ボタンを押してください。
+### Setup
 
-### 2. `config.json` を編集
+1. **Fork** this repository
+2. Edit `config.json` — set your GitHub username and theme:
+   ```json
+   {
+     "username": "your-github-username",
+     "theme": "noir"
+   }
+   ```
+3. Go to **Settings > Secrets and variables > Actions**, click **New repository secret**
+   - Name: `GH_TOKEN`
+   - Value: a [Personal Access Token](https://github.com/settings/tokens) with `read:user` scope
+4. Go to **Actions** tab > **Generate Stats Card** > **Run workflow**
+5. Add this to your README:
+   ```markdown
+   ![GitHub Stats](./stats.svg)
+   ```
 
-フォークしたリポジトリの `config.json` を開いて、自分のユーザー名とテーマを設定:
+The card updates automatically every 6 hours.
 
-```json
-{
-  "username": "あなたのGitHubユーザー名",
-  "theme": "noir"
-}
-```
+### Themes (32)
 
-### 3. GitHub Token を設定
+**Dark:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet`
 
-1. [GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens) にアクセス
-2. **Generate new token (classic)** をクリック
-3. `read:user` スコープにチェックを入れて生成
-4. フォークしたリポジトリの **Settings** > **Secrets and variables** > **Actions** で **New repository secret** をクリック
-5. Name: `GH_TOKEN`、Value: 生成したトークンを貼り付けて保存
+**Light:** `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-### 完了！
+### What's shown
 
-**Actions** タブ > **Generate Stats Card** > **Run workflow** で手動実行するか、6時間ごとに自動で `stats.svg` が更新されます。
-
----
-
-## README に貼る
-
-フォークしたリポジトリの `stats.svg` を参照:
-
-```markdown
-![GitHub Stats](https://raw.githubusercontent.com/あなたのユーザー名/github-trophies/main/stats.svg)
-```
-
-または同じリポジトリの README なら:
-
-```markdown
-![GitHub Stats](./stats.svg)
-```
-
----
-
-## テーマ一覧
-
-`config.json` の `theme` に指定:
-
-### Dark (24)
-
-`noir` · `dracula` · `one-dark` · `monokai` · `tokyo-night` · `nord` · `github-dark` · `catppuccin` · `gruvbox-dark` · `solarized-dark` · `synthwave` · `cobalt` · `ayu` · `material-ocean` · `rose` · `night-owl` · `palenight` · `shades-of-purple` · `panda` · `horizon` · `vitesse` · `everforest` · `kanagawa` · `fleet`
-
-### Light (8)
-
-`light` · `github-light` · `solarized-light` · `gruvbox-light` · `catppuccin-latte` · `light-owl` · `everforest-light` · `vitesse-light`
-
----
-
-## 表示内容
-
-- ユーザーアバター・名前・bio
-- ランク (S / A+ / A / A- / B+ / B / B- / C+ / C)
+- Avatar, name, bio, rank (S / A+ / A / A- / B+ / B / B- / C+ / C)
 - Total Commits / Pull Requests / Issues / Stars / Repositories / Experience
-- 1年間の Contribution グラフ
-- 使用言語のドーナツチャート（バイト数ベース）
+- 1-year contribution graph
+- Language donut chart with percentages (byte-count based)
+- Language logos from [devicons](https://github.com/devicons/devicon) and [Simple Icons](https://github.com/simple-icons/simple-icons)
 
 ---
 
-## 仕組み
+## Japanese
 
-- GitHub Actions が6時間ごとに `stats.svg` を自動生成・コミット
-- 各自のフォーク内で完結するため、他人の API 枠を消費しない
-- GitHub REST API + GraphQL API を使用
-- ランクは [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) と同様の CDF パーセンタイル方式
+GitHub の統計情報をカード形式で README に表示するツール。GitHub Actions だけで動作し、外部サービスは不要です。
 
-## ライセンス
+### セットアップ
+
+1. このリポジトリを **Fork**
+2. `config.json` を編集 — ユーザー名とテーマを設定:
+   ```json
+   {
+     "username": "あなたのGitHubユーザー名",
+     "theme": "noir"
+   }
+   ```
+3. **Settings > Secrets and variables > Actions** で **New repository secret** をクリック
+   - Name: `GH_TOKEN`
+   - Value: [Personal Access Token](https://github.com/settings/tokens)（`read:user` スコープ）
+4. **Actions** タブ > **Generate Stats Card** > **Run workflow** で実行
+5. README に以下を追加:
+   ```markdown
+   ![GitHub Stats](./stats.svg)
+   ```
+
+カードは6時間ごとに自動更新されます。
+
+### テーマ (32種)
+
+**ダーク:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet`
+
+**ライト:** `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
+
+### 表示内容
+
+- アバター、名前、bio、ランク (S ~ C)
+- Commits / PRs / Issues / Stars / Repos / Experience
+- 1年間の Contribution グラフ
+- 言語ドーナツチャート（バイト数ベース）
+- [devicons](https://github.com/devicons/devicon) と [Simple Icons](https://github.com/simple-icons/simple-icons) の言語ロゴ
+
+---
+
+## Chinese
+
+GitHub 统计卡片生成工具，用于在 README 中展示你的 GitHub 数据。完全基于 GitHub Actions 运行，无需外部服务。
+
+### 设置步骤
+
+1. **Fork** 本仓库
+2. 编辑 `config.json` — 设置你的 GitHub 用户名和主题：
+   ```json
+   {
+     "username": "你的GitHub用户名",
+     "theme": "noir"
+   }
+   ```
+3. 进入 **Settings > Secrets and variables > Actions**，点击 **New repository secret**
+   - Name: `GH_TOKEN`
+   - Value: [Personal Access Token](https://github.com/settings/tokens)（需要 `read:user` 权限）
+4. 进入 **Actions** 标签 > **Generate Stats Card** > **Run workflow** 手动运行
+5. 在 README 中添加：
+   ```markdown
+   ![GitHub Stats](./stats.svg)
+   ```
+
+卡片每6小时自动更新。
+
+### 主题 (32种)
+
+**深色:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet`
+
+**浅色:** `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
+
+### 展示内容
+
+- 头像、用户名、简介、等级 (S ~ C)
+- 提交数 / PR 数 / Issue 数 / Star 数 / 仓库数 / 经验年数
+- 一年贡献图表
+- 语言甜甜圈图（按代码字节数计算）
+- 来自 [devicons](https://github.com/devicons/devicon) 和 [Simple Icons](https://github.com/simple-icons/simple-icons) 的语言图标
+
+---
+
+## License
 
 MIT
