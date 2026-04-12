@@ -68,9 +68,9 @@ THEMES.v6 = THEMES.nord;
 THEMES.v7 = THEMES.light;
 THEMES.v8 = THEMES.catppuccin;
 
-// 🐱 Contribution calendar (1 year, weekly) via GitHub GraphQL API
+// 🐱 Contribution calendar (1 year, daily) via GitHub GraphQL API
 interface ActivityData {
-  weeks: { total: number; date: string }[];  // 53 weeks
+  days: { count: number; date: string }[];
   totalContributions: number;
 }
 
@@ -90,12 +90,10 @@ async function fetchContributions(username: string): Promise<ActivityData | null
     const cal = json?.data?.user?.contributionsCollection?.contributionCalendar;
     if (!cal) return null;
 
-    const weeks = cal.weeks.map((w: { contributionDays: { contributionCount: number; date: string }[] }) => ({
-      total: w.contributionDays.reduce((s: number, d: { contributionCount: number }) => s + d.contributionCount, 0),
-      date: w.contributionDays[0]?.date || "",
-    }));
-
-    return { weeks, totalContributions: cal.totalContributions };
+    const days = cal.weeks.flatMap((w: { contributionDays: { contributionCount: number; date: string }[] }) =>
+      w.contributionDays.map((d: { contributionCount: number; date: string }) => ({ count: d.contributionCount, date: d.date }))
+    );
+    return { days, totalContributions: cal.totalContributions };
   } catch { return null; }
 }
 
@@ -299,33 +297,34 @@ export async function GET(req: NextRequest) {
       o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
       y += actLabelH;
 
-      // 🐱 Biweekly line graph (2-week intervals)
-      const raw = activity.weeks;
-      const wks: { total: number; date: string }[] = [];
-      for (let i = 0; i < raw.length; i += 2) {
-        const a = raw[i], b = raw[i + 1];
-        wks.push({ total: a.total + (b ? b.total : 0), date: a.date });
+      // 🐱 3-day interval line graph (~122 points)
+      const rawDays = activity.days;
+      const pts: { total: number; date: string }[] = [];
+      for (let i = 0; i < rawDays.length; i += 3) {
+        let sum = 0;
+        for (let j = i; j < i + 3 && j < rawDays.length; j++) sum += rawDays[j].count;
+        pts.push({ total: sum, date: rawDays[i].date });
       }
       const graphH = 40;
-      const maxWk = Math.max(...wks.map(w => w.total), 1);
-      const stepX = contentW / (wks.length - 1);
+      const maxPt = Math.max(...pts.map(p => p.total), 1);
+      const stepX = contentW / (pts.length - 1);
 
-      const points = wks.map((wk, i) => {
+      const points = pts.map((p, i) => {
         const px = pad + i * stepX;
-        const py = y + graphH - (wk.total / maxWk) * graphH;
+        const py = y + graphH - (p.total / maxPt) * graphH;
         return `${px.toFixed(1)},${py.toFixed(1)}`;
       });
 
       const areaPoints = [`${pad},${y + graphH}`, ...points, `${(pad + contentW).toFixed(1)},${y + graphH}`].join(" ");
       o += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.06"/>`;
-      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
+      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
 
       y += graphH + 2;
 
       let lastMonth = "";
-      wks.forEach((wk, i) => {
-        if (!wk.date) return;
-        const mStr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][new Date(wk.date).getMonth()];
+      pts.forEach((p, i) => {
+        if (!p.date) return;
+        const mStr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][new Date(p.date).getMonth()];
         if (mStr !== lastMonth) {
           o += `<text x="${(pad + i * stepX).toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${mStr}</text>`;
           lastMonth = mStr;
