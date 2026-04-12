@@ -197,8 +197,11 @@ async function fetchContributions(username) {
     const json = await res.json();
     const cal = json?.data?.user?.contributionsCollection?.contributionCalendar;
     if (!cal) return null;
-    const days = cal.weeks.flatMap(w => w.contributionDays.map(d => ({ count: d.contributionCount, date: d.date })));
-    return { days, totalContributions: cal.totalContributions };
+    const weeks = cal.weeks.map(w => ({
+      total: w.contributionDays.reduce((s, d) => s + d.contributionCount, 0),
+      date: w.contributionDays[0]?.date || "",
+    }));
+    return { weeks, totalContributions: cal.totalContributions };
   } catch { return null; }
 }
 
@@ -361,17 +364,18 @@ async function main() {
       if (!activity) return { svg: "", height: 0 };
       let s = `<text x="0" y="12" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
       s += `<text x="${w}" y="12" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M2}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
-      const days = activity.days, graphH = 40, yOff = 20;
-      const maxDay = Math.max(...days.map(d2 => d2.count), 1);
-      const stepX = w / (days.length - 1);
-      const points = days.map((d2, i) => `${(i * stepX).toFixed(1)},${(yOff + graphH - (d2.count / maxDay) * graphH).toFixed(1)}`);
+      const wks2 = activity.weeks, graphH = 40, yOff = 20;
+      const maxWk2 = Math.max(...wks2.map(wk3 => wk3.total), 1);
+      const stepX = w / (wks2.length - 1);
+      const points = wks2.map((wk3, i) => `${(i * stepX).toFixed(1)},${(yOff + graphH - (wk3.total / maxWk2) * graphH).toFixed(1)}`);
       const areaPoints = [`0,${yOff + graphH}`, ...points, `${w},${yOff + graphH}`].join(" ");
       s += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.06"/>`;
-      s += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
+      s += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
       let lastMonth2 = "", my = yOff + graphH + 2;
       const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      days.forEach((d2, i) => {
-        const mStr = monthNames[new Date(d2.date).getMonth()];
+      wks2.forEach((wk3, i) => {
+        if (!wk3.date) return;
+        const mStr = monthNames[new Date(wk3.date).getMonth()];
         if (mStr !== lastMonth2) {
           s += `<text x="${(i * stepX).toFixed(1)}" y="${my + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M2}">${mStr}</text>`;
           lastMonth2 = mStr;

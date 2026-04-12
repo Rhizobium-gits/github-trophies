@@ -68,9 +68,9 @@ THEMES.v6 = THEMES.nord;
 THEMES.v7 = THEMES.light;
 THEMES.v8 = THEMES.catppuccin;
 
-// 🐱 Contribution calendar (1 year, daily) via GitHub GraphQL API
+// 🐱 Contribution calendar (1 year, weekly) via GitHub GraphQL API
 interface ActivityData {
-  days: { count: number; date: string }[];  // 365 days
+  weeks: { total: number; date: string }[];  // 53 weeks
   totalContributions: number;
 }
 
@@ -90,14 +90,12 @@ async function fetchContributions(username: string): Promise<ActivityData | null
     const cal = json?.data?.user?.contributionsCollection?.contributionCalendar;
     if (!cal) return null;
 
-    const days = cal.weeks.flatMap((w: { contributionDays: { contributionCount: number; date: string }[] }) =>
-      w.contributionDays.map((d: { contributionCount: number; date: string }) => ({
-        count: d.contributionCount,
-        date: d.date,
-      }))
-    );
+    const weeks = cal.weeks.map((w: { contributionDays: { contributionCount: number; date: string }[] }) => ({
+      total: w.contributionDays.reduce((s: number, d: { contributionCount: number }) => s + d.contributionCount, 0),
+      date: w.contributionDays[0]?.date || "",
+    }));
 
-    return { days, totalContributions: cal.totalContributions };
+    return { weeks, totalContributions: cal.totalContributions };
   } catch { return null; }
 }
 
@@ -301,40 +299,30 @@ export async function GET(req: NextRequest) {
       o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
       y += actLabelH;
 
-      // 🐱 365-day line graph
-      const days = activity.days;
+      // 🐱 53-week line graph
+      const wks = activity.weeks;
       const graphH = 40;
-      const maxDay = Math.max(...days.map(d => d.count), 1);
-      const stepX = contentW / (days.length - 1);
+      const maxWk = Math.max(...wks.map(w => w.total), 1);
+      const stepX = contentW / (wks.length - 1);
 
-      // 🐱 Build polyline points (365 data points)
-      const points = days.map((d, i) => {
+      const points = wks.map((wk, i) => {
         const px = pad + i * stepX;
-        const py = y + graphH - (d.count / maxDay) * graphH;
+        const py = y + graphH - (wk.total / maxWk) * graphH;
         return `${px.toFixed(1)},${py.toFixed(1)}`;
       });
 
-      // 🐱 Area fill
-      const areaPoints = [
-        `${pad},${y + graphH}`,
-        ...points,
-        `${(pad + contentW).toFixed(1)},${y + graphH}`,
-      ].join(" ");
+      const areaPoints = [`${pad},${y + graphH}`, ...points, `${(pad + contentW).toFixed(1)},${y + graphH}`].join(" ");
       o += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.06"/>`;
-
-      // 🐱 Line
-      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
+      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>`;
 
       y += graphH + 2;
 
-      // 🐱 Month labels
       let lastMonth = "";
-      days.forEach((d, i) => {
-        const m = new Date(d.date).getMonth();
-        const mStr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m];
+      wks.forEach((wk, i) => {
+        if (!wk.date) return;
+        const mStr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][new Date(wk.date).getMonth()];
         if (mStr !== lastMonth) {
-          const mx = pad + i * stepX;
-          o += `<text x="${mx.toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${mStr}</text>`;
+          o += `<text x="${(pad + i * stepX).toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${mStr}</text>`;
           lastMonth = mStr;
         }
       });
