@@ -6,123 +6,130 @@
   <title>GitHub Trophies</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #fafafa; color: #111; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background: #fafafa; color: #111; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 48px 20px; }
     h1 { font-size: 28px; font-weight: 300; letter-spacing: 1px; margin-bottom: 4px; }
-    .sub { font-size: 14px; color: #999; margin-bottom: 32px; }
-    .form { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; justify-content: center; }
-    input, select { padding: 10px 14px; font-size: 14px; background: #fff; border: 1px solid #ddd; border-radius: 10px; color: #111; outline: none; }
-    input:focus, select:focus { border-color: #aaa; }
-    input { width: 200px; }
-    button { padding: 10px 20px; font-size: 14px; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
-    button:hover { opacity: 0.85; }
-    .result { margin-top: 24px; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 540px; padding: 20px; border-radius: 18px; transition: background 0.3s; }
-    .code-section { margin-top: 20px; width: 100%; max-width: 520px; }
-    .code-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-    .code-box { padding: 12px 14px; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #2a7; user-select: all; word-break: break-all; line-height: 1.6; cursor: pointer; position: relative; }
-    .code-box:hover { border-color: #aaa; }
-    .copied { position: absolute; top: -8px; right: 8px; font-size: 10px; background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; font-family: system-ui; }
-    .copied.show { opacity: 1; }
-    .steps { margin-top: 24px; width: 100%; max-width: 520px; font-size: 13px; color: #888; line-height: 2; }
+    .sub { font-size: 14px; color: #999; margin-bottom: 28px; }
+    .search { display: flex; gap: 8px; margin-bottom: 24px; }
+    .search input { padding: 10px 14px; font-size: 14px; background: #fff; border: 1px solid #ddd; border-radius: 10px; color: #111; outline: none; width: 220px; }
+    .search input:focus { border-color: #aaa; }
+    .search button { padding: 10px 20px; font-size: 14px; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .search button:hover { opacity: 0.85; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); gap: 16px; width: 100%; max-width: 980px; }
+    .card { border-radius: 16px; padding: 16px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; position: relative; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+    .card img { width: 100%; border-radius: 10px; display: block; }
+    .card-label { position: absolute; top: 8px; left: 12px; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: rgba(0,0,0,0.5); color: #fff; letter-spacing: 0.5px; }
+    .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+    .overlay.show { display: flex; }
+    .modal { background: #fff; border-radius: 16px; padding: 24px; max-width: 560px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .modal h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    .modal-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; margin-top: 14px; }
+    .modal-code { padding: 10px 12px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; font-family: ui-monospace, monospace; font-size: 11px; color: #2a7; word-break: break-all; line-height: 1.6; cursor: pointer; position: relative; user-select: all; }
+    .modal-code:hover { border-color: #aaa; }
+    .modal-code .cp { position: absolute; top: -6px; right: 6px; font-size: 9px; background: #111; color: #fff; padding: 1px 6px; border-radius: 3px; opacity: 0; transition: opacity 0.2s; font-family: system-ui; }
+    .modal-code .cp.show { opacity: 1; }
+    .modal-close { margin-top: 16px; padding: 8px 16px; font-size: 13px; background: #111; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .modal img { width: 100%; border-radius: 10px; margin-bottom: 8px; }
+    .steps { margin-top: 32px; width: 100%; max-width: 520px; font-size: 13px; color: #888; line-height: 2; }
     .steps ol { padding-left: 20px; }
     .steps a { color: #0969da; }
     .steps code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #2a7; }
-    .footer { margin-top: 40px; font-size: 13px; color: #ccc; }
+    .footer { margin-top: 32px; font-size: 13px; color: #ccc; }
     .footer a { color: #aaa; }
+    #loading { display: none; margin: 40px 0; color: #999; font-size: 14px; }
   </style>
 </head>
 <body>
   <h1>GitHub Trophies</h1>
-  <p class="sub">GitHub stats card for your README</p>
+  <p class="sub">Pick a theme, get the code for your README</p>
 
-  <div class="form">
-    <input id="username" placeholder="GitHub username" value="">
-    <select id="theme" onchange="if(submitted) generate()"></select>
-    <button onclick="generate()">Preview</button>
+  <div class="search">
+    <input id="username" placeholder="GitHub username">
+    <button onclick="generate()">Generate All</button>
   </div>
 
-  <div id="result" class="result" style="display:none">
-    <img id="preview" src="" alt="Stats" style="width:100%;border-radius:14px;">
-  </div>
+  <div id="loading">Loading previews...</div>
+  <div id="grid" class="grid"></div>
 
-  <div id="codes" class="code-section" style="display:none">
-    <div class="code-label">README Markdown (copy & paste)</div>
-    <div class="code-box" id="md-code" onclick="copyCode('md-code')">
-      <span class="copied" id="md-copied">Copied!</span>
-    </div>
-
-    <div style="margin-top: 12px">
-      <div class="code-label">config.json</div>
-      <div class="code-box" id="config-code" onclick="copyCode('config-code')">
-        <span class="copied" id="config-copied">Copied!</span>
-      </div>
+  <!-- Modal -->
+  <div id="overlay" class="overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h2 id="modal-title"></h2>
+      <img id="modal-img" src="" alt="">
+      <div class="modal-label">README Markdown</div>
+      <div class="modal-code" id="modal-md" onclick="copy('modal-md')"><span class="cp" id="modal-md-cp">Copied!</span></div>
+      <div class="modal-label">config.json</div>
+      <div class="modal-code" id="modal-config" onclick="copy('modal-config')"><span class="cp" id="modal-config-cp">Copied!</span></div>
+      <button class="modal-close" onclick="closeModal()">Close</button>
     </div>
   </div>
 
   <div class="steps">
     <ol>
-      <li>Fork <a href="https://github.com/Rhizobium-gits/github-trophies">this repo</a></li>
-      <li>Paste the config.json above into your fork's <code>config.json</code></li>
-      <li>Add <code>GH_TOKEN</code> in Settings > Secrets > Actions</li>
-      <li>Run the Action, then paste the Markdown code into your README</li>
+      <li>Enter your GitHub username and click <strong>Generate All</strong></li>
+      <li>Click on a theme you like</li>
+      <li>Copy the config.json and paste into your forked repo</li>
+      <li>Copy the Markdown and paste into any README</li>
     </ol>
+    <p style="margin-top:8px"><a href="https://github.com/Rhizobium-gits/github-trophies">Fork the repo here</a> &mdash; Add <code>GH_TOKEN</code> secret, run the Action, done.</p>
   </div>
 
-  <div class="footer">
-    <a href="https://github.com/Rhizobium-gits/github-trophies">GitHub</a>
-  </div>
+  <div class="footer"><a href="https://github.com/Rhizobium-gits/github-trophies">GitHub</a></div>
 
   <script>
     const themes = ["noir","dracula","one-dark","monokai","tokyo-night","nord","github-dark","catppuccin","gruvbox-dark","solarized-dark","synthwave","cobalt","ayu","material-ocean","rose","night-owl","palenight","shades-of-purple","panda","horizon","vitesse","everforest","kanagawa","fleet","light","github-light","solarized-light","gruvbox-light","catppuccin-latte","light-owl","everforest-light","vitesse-light"];
-
-    // Theme background colors for preview area
-    const themeBg = {
-      noir:"#0a0a0a",dracula:"#21222c","one-dark":"#21252b",monokai:"#1e1f1c","tokyo-night":"#16161e",
-      nord:"#282e3a","github-dark":"#010409",catppuccin:"#181825","gruvbox-dark":"#1d2021",
-      "solarized-dark":"#001e26",synthwave:"#150d22",cobalt:"#132d3f",ayu:"#0a0d12",
-      "material-ocean":"#0b0d14",rose:"#180810","night-owl":"#010e1a",palenight:"#242837",
-      "shades-of-purple":"#261f4e",panda:"#252627",horizon:"#181a21",vitesse:"#0e0e0e",
-      everforest:"#272e33",kanagawa:"#1a1a22",fleet:"#141414",
-      light:"#f0f0f0","github-light":"#f0f0f0","solarized-light":"#f0ead8","gruvbox-light":"#ede4b7",
-      "catppuccin-latte":"#e0e3e9","light-owl":"#efefef","everforest-light":"#efe9d5","vitesse-light":"#f0f0f0",
-    };
-
-    const sel = document.getElementById("theme");
-    themes.forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; sel.appendChild(o); });
+    const bg = {noir:"#0a0a0a",dracula:"#21222c","one-dark":"#21252b",monokai:"#1e1f1c","tokyo-night":"#16161e",nord:"#282e3a","github-dark":"#010409",catppuccin:"#181825","gruvbox-dark":"#1d2021","solarized-dark":"#001e26",synthwave:"#150d22",cobalt:"#132d3f",ayu:"#0a0d12","material-ocean":"#0b0d14",rose:"#180810","night-owl":"#010e1a",palenight:"#242837","shades-of-purple":"#261f4e",panda:"#252627",horizon:"#181a21",vitesse:"#0e0e0e",everforest:"#272e33",kanagawa:"#1a1a22",fleet:"#141414",light:"#f0f0f0","github-light":"#f0f0f0","solarized-light":"#f0ead8","gruvbox-light":"#ede4b7","catppuccin-latte":"#e0e3e9","light-owl":"#efefef","everforest-light":"#efe9d5","vitesse-light":"#f0f0f0"};
 
     const params = new URLSearchParams(location.search);
-    if (params.get("username")) document.getElementById("username").value = params.get("username");
-    if (params.get("theme")) sel.value = params.get("theme");
+    if (params.get("username")) { document.getElementById("username").value = params.get("username"); setTimeout(generate, 100); }
 
-    let submitted = false;
+    let currentUser = "";
 
     function generate() {
       const u = document.getElementById("username").value.trim();
-      const t = sel.value;
       if (!u) return;
-      submitted = true;
+      currentUser = u;
 
-      document.getElementById("preview").src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+      document.getElementById("loading").style.display = "block";
 
-      // Set preview background to match theme
-      const bg = themeBg[t] || "#f0f0f0";
-      document.getElementById("result").style.background = bg;
-      document.getElementById("result").style.display = "flex";
+      const v = Date.now();
+      themes.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.background = bg[t] || "#f0f0f0";
+        card.onclick = () => openModal(u, t);
+        card.innerHTML = `<span class="card-label">${t}</span><img src="https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${v}" alt="${t}" loading="lazy">`;
+        grid.appendChild(card);
+      });
 
-      document.getElementById("codes").style.display = "block";
-      document.getElementById("md-code").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats.svg)`;
-      document.getElementById("config-code").firstChild.textContent = JSON.stringify({ username: u, theme: t }, null, 2);
+      // Hide loading after first image loads
+      const firstImg = grid.querySelector("img");
+      if (firstImg) firstImg.onload = () => document.getElementById("loading").style.display = "none";
     }
 
-    function copyCode(id) {
+    function openModal(u, t) {
+      document.getElementById("modal-title").textContent = t;
+      document.getElementById("modal-img").src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
+      document.getElementById("modal-md").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/${u}/github-trophies/main/stats.svg)`;
+      document.getElementById("modal-config").firstChild.textContent = JSON.stringify({ username: u, theme: t }, null, 2);
+      document.getElementById("overlay").classList.add("show");
+    }
+
+    function closeModal() {
+      document.getElementById("overlay").classList.remove("show");
+    }
+
+    function copy(id) {
       const el = document.getElementById(id);
-      const text = el.firstChild.textContent;
-      navigator.clipboard.writeText(text);
-      const badge = document.getElementById(id.replace("code", "copied"));
-      badge.classList.add("show");
-      setTimeout(() => badge.classList.remove("show"), 1500);
+      navigator.clipboard.writeText(el.firstChild.textContent);
+      const cp = document.getElementById(id + "-cp");
+      cp.classList.add("show");
+      setTimeout(() => cp.classList.remove("show"), 1500);
     }
 
-    if (params.get("username")) generate();
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
   </script>
 </body>
 </html>
