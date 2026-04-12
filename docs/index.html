@@ -57,10 +57,11 @@
     <div class="modal" onclick="event.stopPropagation()">
       <h2 id="modal-title"></h2>
       <img id="modal-img" src="" alt="">
-      <div class="modal-label">README Markdown</div>
-      <div class="modal-code" id="modal-md" onclick="copy('modal-md')"><span class="cp" id="modal-md-cp">Copied!</span></div>
-      <div class="modal-label">config.json</div>
+      <div class="modal-label">Step 1: Paste this into your fork's config.json</div>
       <div class="modal-code" id="modal-config" onclick="copy('modal-config')"><span class="cp" id="modal-config-cp">Copied!</span></div>
+      <div class="modal-label" style="margin-top:18px">Step 2: Run the Action, then paste this into any README</div>
+      <div class="modal-code" id="modal-md" onclick="copy('modal-md')"><span class="cp" id="modal-md-cp">Copied!</span></div>
+      <p style="margin-top:14px;font-size:11px;color:#999;line-height:1.6">config.json を更新して Action を実行すると、選択したテーマで stats.svg が生成されます。<br>Update config.json and run the Action to generate stats.svg with this theme.</p>
       <button class="modal-close" onclick="closeModal()">Close</button>
     </div>
   </div>
