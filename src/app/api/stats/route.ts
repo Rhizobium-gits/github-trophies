@@ -147,6 +147,7 @@ function calcRank(
 
   // 🐱 Percentile → rank tier
   for (const t of [
+    { max: 0.5,  rank: "S+" },
     { max: 1,    rank: "S" },
     { max: 12.5, rank: "A+" },
     { max: 25,   rank: "A" },
