@@ -57,7 +57,7 @@
 
 カードは6時間ごとに自動で更新されます。
 
-**テーマを選ぶ前に全部見たい方は** [プレビューページ](https://rhizobium-gits.github.io/github-trophies/)をご覧ください。
+**全32テーマのプレビューとコピペ用コードは [こちらのページ](https://rhizobium-gits.github.io/github-trophies/) ですべて取得できます。**
 
 ### テーマ一覧
 
@@ -70,7 +70,7 @@
 
 **全32テーマ:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-**[全テーマをプレビュー](https://rhizobium-gits.github.io/github-trophies/)**
+**[全テーマのプレビューとコードを取得](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
@@ -125,7 +125,7 @@ Copy this line and paste it into any README file:
 
 Your card will update automatically every 6 hours.
 
-**Want to see all themes before choosing?** Visit the [preview page](https://rhizobium-gits.github.io/github-trophies/).
+**All 32 theme previews and copy-paste code are available on [this page](https://rhizobium-gits.github.io/github-trophies/).**
 
 ### Available Themes
 
@@ -138,7 +138,7 @@ Your card will update automatically every 6 hours.
 
 **All 32 themes:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-**[Preview all themes here](https://rhizobium-gits.github.io/github-trophies/)**
+**[Get all theme previews and code](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
@@ -193,7 +193,7 @@ Your card will update automatically every 6 hours.
 
 卡片每6小时自动更新。
 
-**想先看看所有主题？** 请访问[预览页面](https://rhizobium-gits.github.io/github-trophies/)。
+**全部32个主题的预览和复制粘贴代码都可以在 [这个页面](https://rhizobium-gits.github.io/github-trophies/) 获取。**
 
 ### 主题一览
 
@@ -206,7 +206,7 @@ Your card will update automatically every 6 hours.
 
 **全部32个主题:** `noir` `dracula` `one-dark` `monokai` `tokyo-night` `nord` `github-dark` `catppuccin` `gruvbox-dark` `solarized-dark` `synthwave` `cobalt` `ayu` `material-ocean` `rose` `night-owl` `palenight` `shades-of-purple` `panda` `horizon` `vitesse` `everforest` `kanagawa` `fleet` `light` `github-light` `solarized-light` `gruvbox-light` `catppuccin-latte` `light-owl` `everforest-light` `vitesse-light`
 
-**[预览全部主题](https://rhizobium-gits.github.io/github-trophies/)**
+**[获取全部主题预览和代码](https://rhizobium-gits.github.io/github-trophies/)**
 
 ---
 
