@@ -17,15 +17,15 @@
     .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .overlay.show { display: flex; }
     .modal { background: #fff; border-radius: 16px; padding: 24px; max-width: 540px; width: 90%; max-height: 90vh; overflow-y: auto; }
-    .modal h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
-    .modal-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; margin-top: 14px; }
-    .modal-code { padding: 10px 12px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; font-family: ui-monospace, monospace; font-size: 11px; color: #2a7; word-break: break-all; line-height: 1.6; cursor: pointer; position: relative; user-select: all; transition: border-color 0.15s; }
-    .modal-code:hover { border-color: #aaa; }
-    .modal-code::after { content: "Tap to copy"; position: absolute; bottom: -16px; right: 0; font-size: 9px; color: #bbb; font-family: system-ui; }
-    .modal-code .cp { position: absolute; top: -6px; right: 6px; font-size: 9px; background: #111; color: #fff; padding: 1px 6px; border-radius: 3px; opacity: 0; transition: opacity 0.2s; font-family: system-ui; }
-    .modal-code .cp.show { opacity: 1; }
-    .modal-close { margin-top: 20px; padding: 8px 16px; font-size: 13px; background: #111; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-    .modal-note { margin-top: 12px; font-size: 11px; color: #999; line-height: 1.6; }
+    .modal h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    .modal-label { font-size: 12px; color: #666; margin-bottom: 6px; }
+    .modal-code { padding: 12px 14px; background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 8px; font-family: ui-monospace, monospace; font-size: 11px; color: #2a7; word-break: break-all; line-height: 1.6; user-select: all; }
+    .copy-btn { margin-top: 10px; width: 100%; padding: 12px; font-size: 14px; font-weight: 600; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+    .copy-btn:hover { background: #333; }
+    .copy-btn.copied { background: #16a34a; }
+    .modal-note { margin-top: 14px; font-size: 12px; color: #888; line-height: 1.6; text-align: center; }
+    .modal-note code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; color: #c03; font-weight: 600; }
+    .modal-close { margin-top: 16px; width: 100%; padding: 10px; font-size: 13px; background: #f0f0f0; color: #666; border: none; border-radius: 8px; cursor: pointer; }
     .steps { margin-top: 32px; width: 100%; max-width: 520px; font-size: 13px; color: #888; line-height: 2; }
     .steps a { color: #0969da; }
     .steps code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #2a7; }
@@ -42,11 +42,12 @@
   <div id="overlay" class="overlay" onclick="closeModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <h2 id="modal-title"></h2>
-      <div class="modal-label">Paste this into your README / README に貼り付け</div>
-      <div class="modal-code" id="modal-md" onclick="copy('modal-md')"><span class="cp" id="modal-md-cp">Copied!</span></div>
+      <div class="modal-label">Code for your README:</div>
+      <div class="modal-code" id="modal-md"></div>
+      <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copy Code</button>
       <p class="modal-note">
-        <code>USERNAME</code> を自分の GitHub ユーザー名に変えてください。<br>
-        Replace <code>USERNAME</code> with your GitHub username.
+        <code>USERNAME</code> を自分のユーザー名に変更<br>
+        Replace <code>USERNAME</code> with yours
       </p>
       <button class="modal-close" onclick="closeModal()">Close</button>
     </div>
@@ -66,6 +67,7 @@
 
     const base = "https://raw.githubusercontent.com/Rhizobium-gits/github-trophies/main/svg";
     const grid = document.getElementById("grid");
+    let currentCode = "";
 
     themes.forEach(t => {
       const card = document.createElement("div");
@@ -78,7 +80,11 @@
 
     function openModal(t) {
       document.getElementById("modal-title").textContent = t;
-      document.getElementById("modal-md").firstChild.textContent = `![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-${t}.svg)`;
+      currentCode = `![GitHub Stats](https://raw.githubusercontent.com/USERNAME/github-trophies/main/svg/stats-${t}.svg)`;
+      document.getElementById("modal-md").textContent = currentCode;
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "Copy Code";
+      btn.classList.remove("copied");
       document.getElementById("overlay").classList.add("show");
     }
 
@@ -86,12 +92,12 @@
       document.getElementById("overlay").classList.remove("show");
     }
 
-    function copy(id) {
-      const el = document.getElementById(id);
-      navigator.clipboard.writeText(el.firstChild.textContent);
-      const cp = document.getElementById(id + "-cp");
-      cp.classList.add("show");
-      setTimeout(() => cp.classList.remove("show"), 1500);
+    function copyCode() {
+      navigator.clipboard.writeText(currentCode);
+      const btn = document.getElementById("copy-btn");
+      btn.textContent = "Copied!";
+      btn.classList.add("copied");
+      setTimeout(() => { btn.textContent = "Copy Code"; btn.classList.remove("copied"); }, 2000);
     }
 
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
