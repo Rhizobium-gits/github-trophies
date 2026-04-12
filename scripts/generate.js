@@ -6,6 +6,7 @@ const path = require("path");
 
 // 🐱 Language icon mappings (devicon name, simple-icons slug)
 const LANG_ICON_MAP = {
+  // 🐱 Major languages
   Python:["python","python"],JavaScript:["javascript","javascript"],TypeScript:["typescript","typescript"],
   HTML:["html5","html5"],CSS:["css3","css3"],Shell:["bash","gnubash"],R:["r","r"],
   "Jupyter Notebook":["jupyter","jupyter"],Go:["go","go"],Rust:["rust","rust"],
@@ -14,15 +15,38 @@ const LANG_ICON_MAP = {
   Dart:["dart","dart"],Lua:["lua","lua"],Vue:["vuejs","vuedotjs"],Scala:["scala","scala"],
   Haskell:["haskell","haskell"],Perl:["perl","perl"],Elixir:["elixir","elixir"],
   Clojure:["clojure","clojure"],OCaml:["ocaml","ocaml"],Julia:["julia","julia"],
+  // 🐱 DevOps / Config
   Dockerfile:["docker","docker"],TeX:["latex","latex"],Svelte:["svelte","svelte"],
   Zig:["zig","zig"],"Emacs Lisp":["emacs","gnuemacs"],Vim:["vim","vim"],
-  SCSS:["sass","sass"],PowerShell:["powershell",null],Groovy:["groovy","apachegroovy"],
+  "Vim Script":["vim","vim"],SCSS:["sass","sass"],Sass:["sass","sass"],
+  PowerShell:["powershell",null],Groovy:["groovy","apachegroovy"],
   Erlang:["erlang","erlang"],Nix:["nixos","nixos"],Fortran:["fortran","fortran"],
   MATLAB:["matlab",null],Elm:["elm",null],"F#":["fsharp",null],
   CoffeeScript:["coffeescript","coffeescript"],Nim:["nim","nim"],Racket:["racket","racket"],
+  // 🐱 Simple Icons only
   "Common Lisp":[null,"commonlisp"],TOML:[null,"toml"],HCL:[null,"hcl"],
   Ada:[null,"ada"],D:[null,"d"],WebAssembly:[null,"webassembly"],
-  Nextflow:[null,"nextflow"],
+  Nextflow:[null,"nextflow"],Solidity:[null,"solidity"],PureScript:[null,"purescript"],
+  Terraform:[null,"terraform"],PostCSS:[null,"postcss"],Ballerina:[null,"ballerina"],
+  AutoHotkey:[null,"autohotkey"],Liquid:[null,"shopify"],Bicep:[null,"microsoftazure"],
+  // 🐱 Devicon + Simple
+  "Objective-C":["objectivec","apple"],"Objective-C++":["objectivec","apple"],
+  GraphQL:["graphql","graphql"],Crystal:["crystal","crystal"],
+  ClojureScript:["clojurescript","clojurescript"],Astro:["astro","astro"],
+  Arduino:["arduino","arduino"],Processing:["processing","processing"],
+  Prolog:["prolog","prolog"],Handlebars:["handlebars","handlebarsdotjs"],
+  Pug:["pug","pug"],Less:["less","less"],Stylus:["stylus","stylus"],
+  AWK:["awk","awk"],Delphi:["delphi","delphi"],Pascal:["delphi",null],
+  "Visual Basic":["visualbasic",null],COBOL:["cobol",null],
+  CMake:["cmake","cmake"],Makefile:["cmake","cmake"],
+  GDScript:["godot","godotengine"],
+  // 🐱 Aliases (use same icon as parent language)
+  Cython:["python","python"],Starlark:["python","python"],
+  BibTeX:["latex","latex"],
+  Cuda:[null,"nvidia"],GLSL:[null,"opengl"],
+  Twig:[null,"symfony"],Vala:[null,"gnome"],
+  Apex:[null,"salesforce"],
+  // 🐱 Markup & Data
   Markdown:["markdown","markdown"],JSON:["json","json"],XML:["xml","xml"],YAML:["yaml","yaml"],
 };
 
@@ -258,8 +282,19 @@ const LANG_COLORS = {
   Java:"#ED8B00",C:"#A8B9CC","C++":"#00599C","C#":"#178600",Ruby:"#CC342D",PHP:"#777BB4",
   Swift:"#F05138",Kotlin:"#7F52FF",Dart:"#0175C2",Lua:"#2C2D72",TeX:"#3D6117",
   "Common Lisp":"#3fb68b",Gnuplot:"#f0c040",Batchfile:"#C1F12E",PowerShell:"#012456",Nextflow:"#3ac486",
-  SCSS:"#CD6799",Dockerfile:"#2496ED",Makefile:"#427819",Vim:"#199f4b",
+  SCSS:"#CD6799",Sass:"#CD6799",Dockerfile:"#2496ED",Makefile:"#427819",Vim:"#199f4b","Vim Script":"#199f4b",
   "Emacs Lisp":"#7F5AB6",Nix:"#7EBAE4",Svelte:"#ff3e00",
+  // 🐱 Extended colors
+  "Objective-C":"#438eff","Objective-C++":"#438eff",GraphQL:"#e10098",Crystal:"#000100",
+  ClojureScript:"#db5855",Astro:"#ff5d01",Arduino:"#00878F",Processing:"#0096D8",
+  Prolog:"#74283c",Handlebars:"#f7931e",Pug:"#a86454",Less:"#1d365d",Stylus:"#ff6347",
+  AWK:"#c30e9b",Delphi:"#EE1F35",Pascal:"#E3F171","Visual Basic":"#945db7",
+  COBOL:"#003366",CMake:"#064F8C",GDScript:"#355570",
+  Solidity:"#AA6746",PureScript:"#1D222D",Terraform:"#844FBA",PostCSS:"#DD3A0A",
+  Ballerina:"#FF5000",AutoHotkey:"#6594b9",Liquid:"#67b5a4",Bicep:"#519aba",
+  Cython:"#3572A5",Starlark:"#76d275",BibTeX:"#3D6117",
+  Cuda:"#76b900",GLSL:"#5686a5",Twig:"#000000",Vala:"#403757",Apex:"#1797C0",
+  Ada:"#02f88c",D:"#BA595E",WebAssembly:"#654FF0",TOML:"#9c4221",HCL:"#844FBA",
 };
 
 async function main() {
