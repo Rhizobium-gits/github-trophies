@@ -42,7 +42,9 @@
 8. Name に `GH_TOKEN`、Value にコピーしたトークンを貼り付け
 9. **Add secret** をクリック
 
-**これで完了です!** **Actions** タブを開いて、**Generate Stats Card** → **Run workflow** をクリックしてください。約1分待つと、`svg/` フォルダに全32テーマのカードが生成されます。
+> **⚠️ この手順を必ず実行してください！これをしないとカードは表示されません。**
+>
+> **Actions** タブを開いて、**Generate Stats Card** → **Run workflow** をクリックしてください。約1分待つと、`svg/` フォルダに全32テーマのカードが生成されます。この手順を飛ばすと、README に貼り付けても何も表示されません。
 
 ### README に貼り付ける
 
@@ -112,7 +114,9 @@ You need a GitHub token so the tool can read your stats.
 8. Type `GH_TOKEN` as the name, paste your token as the value
 9. Click **Add secret**
 
-**That's it!** Now go to the **Actions** tab, click **Generate Stats Card**, then click **Run workflow**. Wait about 1 minute. All 32 theme cards will appear in the `svg/` folder.
+> **⚠️ You MUST do this step! Without it, nothing will show up.**
+>
+> Go to the **Actions** tab, click **Generate Stats Card**, then click **Run workflow**. Wait about 1 minute. All 32 theme cards will appear in the `svg/` folder. If you skip this step, your README card will be blank.
 
 ### Put it in your README
 
@@ -182,7 +186,9 @@ Your card will update automatically every 6 hours.
 8. Name 填 `GH_TOKEN`，Value 粘贴你的令牌
 9. 点击 **Add secret**
 
-**完成了！** 打开 **Actions** 标签，点击 **Generate Stats Card** → **Run workflow**。等待大约1分钟，`svg/` 文件夹中会生成全部32个主题的卡片。
+> **⚠️ 这一步必须执行！不执行的话卡片不会显示。**
+>
+> 打开 **Actions** 标签，点击 **Generate Stats Card** → **Run workflow**。等待大约1分钟，`svg/` 文件夹中会生成全部32个主题的卡片。跳过这一步的话，README 中不会显示任何内容。
 
 ### 添加到你的 README
 
