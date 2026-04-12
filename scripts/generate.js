@@ -209,15 +209,36 @@ const THEMES = {
   noir:T("#111","#0a0a0a","#2a2a2a","#fff","#555","#888","#eee","#555","#444","#1e1e1e","#1a1a1a","#fff","#151515","#222","#fff","#fff","#333","#bbb","#555","#fff"),
   dracula:T("#282a36","#21222c","#44475a","#f8f8f2","#6272a4","#bd93f9","#f8f8f2","#6272a4","#44475a","#44475a","#44475a","#bd93f9","#2c2e3a","#44475a","#ff79c6","#f8f8f2","#44475a","#f8f8f2","#6272a4","#f8f8f2"),
   "one-dark":T("#282c34","#21252b","#3e4451","#abb2bf","#5c6370","#828997","#e5c07b","#5c6370","#4b5263","#3e4451","#3e4451","#61afef","#2c313a","#3e4451","#61afef","#abb2bf","#3e4451","#abb2bf","#5c6370","#abb2bf"),
+  monokai:T("#272822","#1e1f1c","#49483e","#f8f8f2","#75715e","#a6e22e","#f8f8f2","#75715e","#49483e","#49483e","#49483e","#f92672","#2d2e27","#49483e","#f92672","#f8f8f2","#49483e","#e6db74","#75715e","#f8f8f2"),
   "tokyo-night":T("#1a1b26","#16161e","#292e42","#c0caf5","#565f89","#7aa2f7","#c0caf5","#565f89","#3b4261","#292e42","#292e42","#7aa2f7","#1e1f2e","#292e42","#bb9af7","#c0caf5","#292e42","#a9b1d6","#565f89","#c0caf5"),
   nord:T("#2e3440","#282e3a","#3b4252","#eceff4","#7b88a0","#8a95aa","#d8dee9","#6a7585","#5a6577","#3b4252","#3b4252","#88c0d0","#333a48","#434c5e","#88c0d0","#d8dee9","#434c5e","#b0bcc8","#6a7585","#d8dee9"),
   "github-dark":T("#0d1117","#010409","#30363d","#e6edf3","#7d8590","#7d8590","#e6edf3","#484f58","#484f58","#21262d","#21262d","#58a6ff","#161b22","#30363d","#58a6ff","#e6edf3","#30363d","#c9d1d9","#484f58","#e6edf3"),
+  catppuccin:T("#1e1e2e","#181825","#313244","#cdd6f4","#6c7086","#a6adc8","#cdd6f4","#585b70","#45475a","#313244","#313244","#cba6f7","#24243a","#313244","#cba6f7","#cdd6f4","#313244","#bac2de","#585b70","#cdd6f4"),
+  "gruvbox-dark":T("#282828","#1d2021","#3c3836","#ebdbb2","#928374","#a89984","#ebdbb2","#7c6f64","#665c54","#3c3836","#3c3836","#b8bb26","#32302f","#3c3836","#fabd2f","#ebdbb2","#3c3836","#d5c4a1","#7c6f64","#ebdbb2"),
+  "solarized-dark":T("#002b36","#001e26","#073642","#839496","#586e75","#657b83","#93a1a1","#586e75","#586e75","#073642","#073642","#268bd2","#003440","#073642","#b58900","#93a1a1","#073642","#839496","#586e75","#93a1a1"),
+  synthwave:T("#1a1028","#150d22","#2d1f4e","#f0e0ff","#8a6aaa","#c8a0e8","#f0d0ff","#7a5a9a","#5a3d7a","#2d1f4e","#2d1f4e","#ff6eee","#201430","#2d1f4e","#ff6eee","#f0d0ff","#2d1f4e","#d0b0e8","#8a6aaa","#f0d0ff"),
+  cobalt:T("#193549","#132d3f","#1f4662","#e1efff","#4a7da8","#6a9ec8","#fff","#4a7da8","#2d5a80","#1f4662","#1f4662","#ffc600","#1a3a50","#1f4662","#ffc600","#fff","#1f4662","#c8e4ff","#4a7da8","#fff"),
+  ayu:T("#0b0e14","#0a0d12","#11151c","#bfbdb6","#565b66","#6c7380","#e6e1cf","#565b66","#3d424d","#11151c","#11151c","#e6b450","#0d1018","#11151c","#e6b450","#e6e1cf","#11151c","#acb6bf","#565b66","#e6e1cf"),
+  "material-ocean":T("#0f111a","#0b0d14","#1f2233","#a6accd","#4e5579","#717cb4","#a6accd","#4e5579","#3b3f5c","#1f2233","#1f2233","#c792ea","#131520","#1f2233","#c792ea","#a6accd","#1f2233","#a6accd","#4e5579","#a6accd"),
+  rose:T("#1e0a14","#180810","#4a1a30","#ffe0ee","#aa4a70","#cc6a90","#ffc8dd","#aa4a70","#8a3a5a","#3a1228","#3a1228","#f472b6","#240e18","#4a1a30","#f472b6","#ffc8dd","#4a1a30","#e090b8","#aa4a70","#ffc8dd"),
+  "night-owl":T("#011627","#010e1a","#1d3b53","#d6deeb","#5f7e97","#7fdbca","#d6deeb","#5f7e97","#456075","#1d3b53","#1d3b53","#82aaff","#0b2942","#1d3b53","#c792ea","#d6deeb","#1d3b53","#d6deeb","#5f7e97","#d6deeb"),
+  palenight:T("#292d3e","#242837","#3a3f58","#a6accd","#676e95","#c3e88d","#a6accd","#676e95","#4e5579","#3a3f58","#3a3f58","#c792ea","#2f3347","#3a3f58","#82aaff","#a6accd","#3a3f58","#a6accd","#676e95","#a6accd"),
+  "shades-of-purple":T("#2d2b55","#261f4e","#4d21fc","#fad000","#a599e9","#fad000","#fff","#a599e9","#6943ff","#4d21fc","#4d21fc","#ff7200","#332f62","#4d21fc","#ff7200","#fff","#4d21fc","#fad000","#a599e9","#fff"),
+  panda:T("#292a2b","#252627","#3e4042","#e6e6e6","#757575","#b4b4b4","#e6e6e6","#757575","#535455","#3e4042","#3e4042","#19f9d8","#2e3032","#3e4042","#ff75b5","#e6e6e6","#3e4042","#e6e6e6","#757575","#e6e6e6"),
+  horizon:T("#1c1e26","#181a21","#2e303e","#d5d8da","#6c6f93","#e95678","#d5d8da","#6c6f93","#4e5166","#2e303e","#2e303e","#e95678","#232530","#2e303e","#fab795","#d5d8da","#2e303e","#d5d8da","#6c6f93","#d5d8da"),
+  vitesse:T("#121212","#0e0e0e","#282828","#dbd7ca","#555","#4d9375","#dbd7ca","#555","#393939","#282828","#282828","#80a665","#1a1a1a","#282828","#80a665","#dbd7ca","#282828","#dbd7ca","#555","#dbd7ca"),
+  everforest:T("#2d353b","#272e33","#3d484d","#d3c6aa","#859289","#a7c080","#d3c6aa","#859289","#4f5b58","#3d484d","#3d484d","#a7c080","#323c41","#3d484d","#dbbc7f","#d3c6aa","#3d484d","#d3c6aa","#859289","#d3c6aa"),
+  kanagawa:T("#1f1f28","#1a1a22","#2a2a37","#dcd7ba","#727169","#7e9cd8","#dcd7ba","#727169","#54546d","#2a2a37","#2a2a37","#7fb4ca","#252535","#2a2a37","#e6c384","#dcd7ba","#2a2a37","#dcd7ba","#727169","#dcd7ba"),
+  fleet:T("#181818","#141414","#2a2a2a","#c4c4c4","#666","#87c3ff","#c4c4c4","#666","#444","#2a2a2a","#2a2a2a","#87c3ff","#1e1e1e","#2a2a2a","#87c3ff","#c4c4c4","#2a2a2a","#c4c4c4","#666","#c4c4c4"),
   light:T("#fff","#f8f8f8","#e0e0e0","#111","#888","#666","#111","#999","#bbb","#eee","#eee","#333","#f0f0f0","#ddd","#111","#111","#ddd","#444","#999","#111"),
   "github-light":T("#fff","#f6f8fa","#d0d7de","#1f2328","#656d76","#656d76","#1f2328","#8c959f","#8c959f","#d8dee4","#d8dee4","#0969da","#f6f8fa","#d0d7de","#0969da","#1f2328","#d0d7de","#1f2328","#656d76","#1f2328"),
+  "solarized-light":T("#fdf6e3","#f5efdc","#eee8d5","#657b83","#93a1a1","#839496","#586e75","#93a1a1","#93a1a1","#eee8d5","#eee8d5","#268bd2","#eee8d5","#d6cdb8","#b58900","#586e75","#d6cdb8","#586e75","#93a1a1","#586e75"),
+  "gruvbox-light":T("#fbf1c7","#f2e6be","#d5c4a1","#3c3836","#928374","#7c6f64","#3c3836","#a89984","#a89984","#d5c4a1","#d5c4a1","#b57614","#ebdbb2","#d5c4a1","#b57614","#3c3836","#d5c4a1","#504945","#928374","#3c3836"),
+  "catppuccin-latte":T("#eff1f5","#e6e9ef","#ccd0da","#4c4f69","#8c8fa1","#7c7f93","#4c4f69","#9ca0b0","#9ca0b0","#ccd0da","#ccd0da","#8839ef","#e6e9ef","#bcc0cc","#8839ef","#4c4f69","#bcc0cc","#5c5f77","#8c8fa1","#4c4f69"),
+  "light-owl":T("#fbfbfb","#f5f5f5","#e0e0e0","#403f53","#90a4ae","#2aa298","#403f53","#90a4ae","#b0bec5","#e0e0e0","#e0e0e0","#4876d6","#f0f0f0","#d6d6d6","#bc5454","#403f53","#d6d6d6","#403f53","#90a4ae","#403f53"),
+  "everforest-light":T("#fdf6e3","#f4eed7","#e0dcc7","#5c6a72","#939f91","#8da101","#5c6a72","#a6b0a0","#a6b0a0","#e0dcc7","#e0dcc7","#8da101","#eee8d5","#d5cfba","#dfa000","#5c6a72","#d5cfba","#5c6a72","#939f91","#5c6a72"),
+  "vitesse-light":T("#ffffff","#f7f7f7","#e5e5e5","#393a34","#999","#1e754f","#393a34","#999","#bbb","#e5e5e5","#e5e5e5","#1e754f","#f5f5f5","#ddd","#1e754f","#393a34","#ddd","#393a34","#999","#393a34"),
 };
-// Add more themes as aliases
-const more = { monokai:"noir",catppuccin:"dracula","gruvbox-dark":"nord","solarized-dark":"nord",synthwave:"dracula",cobalt:"github-dark",ayu:"noir","material-ocean":"dracula",rose:"dracula","night-owl":"github-dark",palenight:"dracula","shades-of-purple":"dracula",panda:"noir",horizon:"dracula",vitesse:"noir",everforest:"nord",kanagawa:"tokyo-night",fleet:"noir","solarized-light":"light","gruvbox-light":"light","catppuccin-latte":"github-light","light-owl":"light","everforest-light":"light","vitesse-light":"light" };
-for (const [k, v] of Object.entries(more)) { if (!THEMES[k]) THEMES[k] = THEMES[v]; }
 
 const F = "system-ui, -apple-system, sans-serif";
 const M2 = "ui-monospace, SFMono-Regular, monospace";
