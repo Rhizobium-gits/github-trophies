@@ -16,7 +16,13 @@
     button { padding: 10px 20px; font-size: 14px; background: #111; color: #fff; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; }
     button:hover { opacity: 0.85; }
     .result { margin-top: 24px; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 520px; }
-    .config-box { margin-top: 16px; width: 100%; max-width: 520px; }
+    .code-section { margin-top: 20px; width: 100%; max-width: 520px; }
+    .code-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .code-box { padding: 12px 14px; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; font-family: ui-monospace, monospace; font-size: 12px; color: #2a7; user-select: all; word-break: break-all; line-height: 1.6; cursor: pointer; position: relative; }
+    .code-box:hover { border-color: #aaa; }
+    .copied { position: absolute; top: -8px; right: 8px; font-size: 10px; background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; font-family: system-ui; }
+    .copied.show { opacity: 1; }
+    .config-box { margin-top: 12px; }
     .config-btn { width: 100%; padding: 10px; font-size: 12px; font-weight: 600; background: #f0f0f0; border: 1px solid #e0e0e0; border-radius: 10px; color: #888; cursor: pointer; }
     .config-btn:hover { background: #eee; }
     .config-pre { margin-top: 6px; padding: 14px; background: #fff; border-radius: 10px; border: 1px solid #e0e0e0; font-family: ui-monospace, monospace; font-size: 11px; color: #2a7; white-space: pre; user-select: all; overflow-x: auto; }
@@ -26,12 +32,6 @@
     .steps code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #2a7; }
     .footer { margin-top: 40px; font-size: 13px; color: #ccc; }
     .footer a { color: #aaa; }
-    .theme-grid { margin-top: 32px; width: 100%; max-width: 520px; }
-    .theme-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .theme-list { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; }
-    .theme-chip { padding: 4px 8px; font-size: 11px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; color: #555; }
-    .theme-chip:hover { border-color: #aaa; }
-    .theme-chip.active { background: #111; color: #fff; border-color: #111; }
   </style>
 </head>
 <body>
@@ -48,17 +48,27 @@
     <img id="preview" src="" alt="Stats" style="width:100%;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
   </div>
 
-  <div id="config-box" class="config-box" style="display:none">
-    <button class="config-btn" onclick="toggleConfig()">config.json</button>
-    <pre id="config-pre" class="config-pre" style="display:none"></pre>
+  <!-- Generated codes -->
+  <div id="codes" class="code-section" style="display:none">
+    <div class="code-label">README Markdown (copy & paste)</div>
+    <div class="code-box" id="md-code" onclick="copyCode('md-code')">
+      <span class="copied" id="md-copied">Copied!</span>
+    </div>
+
+    <div style="margin-top: 12px">
+      <div class="code-label">config.json</div>
+      <div class="code-box" id="config-code" onclick="copyCode('config-code')">
+        <span class="copied" id="config-copied">Copied!</span>
+      </div>
+    </div>
   </div>
 
   <div class="steps">
     <ol>
       <li>Fork <a href="https://github.com/Rhizobium-gits/github-trophies">this repo</a></li>
-      <li>Paste the config above into <code>config.json</code></li>
+      <li>Paste the config.json above into your fork's <code>config.json</code></li>
       <li>Add <code>GH_TOKEN</code> in Settings > Secrets > Actions</li>
-      <li>Run the Action, then use <code>![](./stats.svg)</code></li>
+      <li>Run the Action, then paste the Markdown code into your README</li>
     </ol>
   </div>
 
@@ -72,7 +82,6 @@
     const sel = document.getElementById("theme");
     themes.forEach(t => { const o = document.createElement("option"); o.value = t; o.textContent = t; sel.appendChild(o); });
 
-    // Pre-fill from URL params
     const params = new URLSearchParams(location.search);
     if (params.get("username")) document.getElementById("username").value = params.get("username");
     if (params.get("theme")) sel.value = params.get("theme");
@@ -82,23 +91,26 @@
       const t = sel.value;
       if (!u) return;
 
-      // Use the repo's own Vercel or any deployed instance for preview
-      // For GitHub Pages, we generate config only — preview is optional
-      const img = document.getElementById("preview");
-      img.src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
+      document.getElementById("preview").src = `https://github-trophies-rho.vercel.app/api/stats?username=${u}&theme=${t}&v=${Date.now()}`;
       document.getElementById("result").style.display = "flex";
-      document.getElementById("config-box").style.display = "block";
+      document.getElementById("codes").style.display = "block";
 
-      const config = JSON.stringify({ username: u, theme: t }, null, 2);
-      document.getElementById("config-pre").textContent = config;
+      // Markdown code
+      document.getElementById("md-code").firstChild.textContent = `![GitHub Stats](./stats.svg)`;
+
+      // Config code
+      document.getElementById("config-code").firstChild.textContent = JSON.stringify({ username: u, theme: t }, null, 2);
     }
 
-    function toggleConfig() {
-      const pre = document.getElementById("config-pre");
-      pre.style.display = pre.style.display === "none" ? "block" : "none";
+    function copyCode(id) {
+      const el = document.getElementById(id);
+      const text = el.firstChild.textContent;
+      navigator.clipboard.writeText(text);
+      const badge = document.getElementById(id.replace("code", "copied"));
+      badge.classList.add("show");
+      setTimeout(() => badge.classList.remove("show"), 1500);
     }
 
-    // Auto-generate if params provided
     if (params.get("username")) generate();
   </script>
 </body>
