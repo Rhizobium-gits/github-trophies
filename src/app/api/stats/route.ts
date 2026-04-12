@@ -215,7 +215,7 @@ export async function GET(req: NextRequest) {
     const hasAct = !!activity;
     // Activity: 1-year contribution graph (53 weeks)
     const actLabelH = hasAct ? 20 : 0;
-    const actGraphH = hasAct ? 30 : 0; // bar height + date labels
+    const actGraphH = hasAct ? 46 : 0; // line graph 32px + month labels 14px
     const actTotalH = actLabelH + actGraphH;
     const actDiv = hasAct ? 20 : 0;
     // 🐱 Languages: icon(18) + name + pct per row, 2 cols, 24px per row
@@ -265,18 +265,13 @@ export async function GET(req: NextRequest) {
 
     const tx = avatarB64 ? pad + avatarSize + 12 : pad;
     o += `<text x="${tx}" y="${y + 20}" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(s.user.name || s.user.login)}</text>`;
+    // 🐱 Rank inline with username (right end)
+    o += `<text x="${W - pad}" y="${y + 20}" text-anchor="end" font-size="14" font-weight="800" fill="${t.rankCircleArc}" font-family="${M}">${rank}</text>`;
     o += `<text x="${tx}" y="${y + 38}" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(s.user.login)}</text>`;
     if (s.user.bio) {
       const bio = s.user.bio.length > 44 ? s.user.bio.slice(0, 41) + "..." : s.user.bio;
       o += `<text x="${tx}" y="${y + 54}" font-size="10" fill="${t.subtitle}" font-family="${F}" opacity="0.7">${esc(bio)}</text>`;
     }
-
-    // 🐱 Rank circle
-    const cx = W - pad - 28, cy2 = y + 24, cr = 24;
-    const circ = 2 * Math.PI * cr, dOff = circ - (score / 100) * circ;
-    o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
-    o += `<circle cx="${cx}" cy="${cy2}" r="${cr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy2})" opacity="0.9"/>`;
-    o += `<text x="${cx}" y="${cy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
 
     y += headerH;
 
@@ -296,35 +291,45 @@ export async function GET(req: NextRequest) {
     o += `<line x1="${pad}" y1="${y + 10}" x2="${W - pad}" y2="${y + 10}" stroke="${t.divider}" stroke-width="1"/>`;
     y += div;
 
-    // ==================== CONTRIBUTIONS (1 YEAR) ====================
+    // ==================== CONTRIBUTIONS (1 YEAR) — LINE GRAPH ====================
     if (hasAct && activity) {
       o += `<text x="${pad}" y="${y + 12}" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
       o += `<text x="${W - pad}" y="${y + 12}" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
       y += actLabelH;
 
-      // 🐱 53-week bar graph, full width, edge to edge
+      // 🐱 Line graph
       const wks = activity.weeks;
-      const gap = 1;
-      const barW = (contentW - (wks.length - 1) * gap) / wks.length;
+      const graphH = 32;
       const maxWk = Math.max(...wks.map(w => w.total), 1);
-      const barMaxH = 16;
+      const stepX = contentW / (wks.length - 1);
 
-      wks.forEach((wk, i) => {
-        const bx = pad + i * (barW + gap);
-        const bh = wk.total === 0 ? 1 : Math.max((wk.total / maxWk) * barMaxH, 2);
-        const by = y + barMaxH - bh;
-        const op = wk.total === 0 ? 0.08 : 0.25 + (wk.total / maxWk) * 0.75;
-        o += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${Math.max(barW, 1).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="${t.bar}" opacity="${op.toFixed(2)}"/>`;
+      // 🐱 Build polyline points
+      const points = wks.map((wk, i) => {
+        const px = pad + i * stepX;
+        const py = y + graphH - (wk.total / maxWk) * graphH;
+        return `${px.toFixed(1)},${py.toFixed(1)}`;
       });
-      y += barMaxH + 2;
 
-      // 🐱 Month labels along the bottom
+      // 🐱 Area fill (gradient under the line)
+      const areaPoints = [
+        `${pad},${y + graphH}`,
+        ...points,
+        `${pad + contentW},${y + graphH}`,
+      ].join(" ");
+      o += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.08"/>`;
+
+      // 🐱 Line
+      o += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.6"/>`;
+
+      y += graphH + 2;
+
+      // 🐱 Month labels
       let lastMonth = "";
       wks.forEach((wk, i) => {
         if (wk.month !== lastMonth && wk.month !== "0") {
           const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-          const bx = pad + i * (barW + gap);
-          o += `<text x="${bx.toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${months[parseInt(wk.month)] || ""}</text>`;
+          const mx = pad + i * stepX;
+          o += `<text x="${mx.toFixed(1)}" y="${y + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M}">${months[parseInt(wk.month)] || ""}</text>`;
           lastMonth = wk.month;
         }
       });

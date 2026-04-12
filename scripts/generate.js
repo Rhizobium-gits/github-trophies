@@ -217,6 +217,7 @@ async function main() {
       }
       const tx2 = avatar ? x + 60 : x;
       s += `<text x="${tx2}" y="20" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(user.name || user.login)}</text>`;
+      s += `<text x="${w}" y="20" text-anchor="end" font-size="14" font-weight="800" fill="${t.rankCircleArc}" font-family="${M2}">${rank}</text>`;
       s += `<text x="${tx2}" y="38" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(user.login)}</text>`;
       if (user.bio) {
         const bio = user.bio.length > 44 ? user.bio.slice(0, 41) + "..." : user.bio;
@@ -225,6 +226,7 @@ async function main() {
       return { svg: s, height: 58 };
     },
     rank(x, w) {
+      // Rank is now inline in header, this renders just the circle for standalone use
       const rcx = x + w / 2, rcy = 24, cr2 = 24;
       const circ2 = 2 * Math.PI * cr2, dOff2 = circ2 - (score / 100) * circ2;
       let s = `<circle cx="${rcx}" cy="${rcy}" r="${cr2}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="2"/>`;
@@ -248,18 +250,18 @@ async function main() {
       if (!activity) return { svg: "", height: 0 };
       let s = `<text x="0" y="12" font-size="10" font-weight="600" fill="${t.sectionLabel}" font-family="${F}" letter-spacing="1">CONTRIBUTIONS</text>`;
       s += `<text x="${w}" y="12" text-anchor="end" font-size="9" fill="${t.sectionLabel}" font-family="${M2}">${activity.totalContributions.toLocaleString()} in the last year</text>`;
-      const wks = activity.weeks, gap = 1, barW2 = (w - (wks.length - 1) * gap) / wks.length;
-      const maxWk = Math.max(...wks.map(wk2 => wk2.total), 1), barMaxH = 16, yOff = 20;
-      wks.forEach((wk, i) => {
-        const bx = i * (barW2 + gap), bh = wk.total === 0 ? 1 : Math.max((wk.total / maxWk) * barMaxH, 2);
-        const by = yOff + barMaxH - bh, op = wk.total === 0 ? 0.08 : 0.25 + (wk.total / maxWk) * 0.75;
-        s += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${Math.max(barW2, 1).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="${t.bar}" opacity="${op.toFixed(2)}"/>`;
-      });
-      let lastMonth2 = "", my = yOff + barMaxH + 2;
+      const wks = activity.weeks, graphH = 32, yOff = 20;
+      const maxWk = Math.max(...wks.map(wk2 => wk2.total), 1);
+      const stepX = w / (wks.length - 1);
+      const points = wks.map((wk, i) => `${(i * stepX).toFixed(1)},${(yOff + graphH - (wk.total / maxWk) * graphH).toFixed(1)}`);
+      const areaPoints = [`0,${yOff + graphH}`, ...points, `${w},${yOff + graphH}`].join(" ");
+      s += `<polygon points="${areaPoints}" fill="${t.rankCircleArc}" opacity="0.08"/>`;
+      s += `<polyline points="${points.join(" ")}" fill="none" stroke="${t.rankCircleArc}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.6"/>`;
+      let lastMonth2 = "", my = yOff + graphH + 2;
       const months2 = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       wks.forEach((wk, i) => {
         if (wk.month !== lastMonth2 && wk.month !== "0") {
-          s += `<text x="${(i * (barW2 + gap)).toFixed(1)}" y="${my + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M2}">${months2[parseInt(wk.month)] || ""}</text>`;
+          s += `<text x="${(i * stepX).toFixed(1)}" y="${my + 9}" font-size="7" fill="${t.sectionLabel}" font-family="${M2}">${months2[parseInt(wk.month)] || ""}</text>`;
           lastMonth2 = wk.month;
         }
       });
