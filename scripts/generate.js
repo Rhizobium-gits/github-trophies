@@ -161,6 +161,21 @@ async function main() {
   try { pullRequests = (await fetchJSON(`https://api.github.com/search/issues?q=author:${username}+type:pr`)).total_count || 0; } catch {}
   try { issues = (await fetchJSON(`https://api.github.com/search/issues?q=author:${username}+type:issue`)).total_count || 0; } catch {}
 
+  // Reviews + Contributed To via GraphQL
+  let reviews = 0, contributedTo = 0;
+  try {
+    const query = `query{user(login:"${username}"){contributionsCollection{totalPullRequestReviewContributions} repositoriesContributedTo(first:0){totalCount}}}`;
+    const res = await fetch("https://api.github.com/graphql", {
+      method: "POST", headers: { Authorization: `bearer ${TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+    if (res.ok) {
+      const d = await res.json();
+      reviews = d?.data?.user?.contributionsCollection?.totalPullRequestReviewContributions || 0;
+      contributedTo = d?.data?.user?.repositoriesContributedTo?.totalCount || 0;
+    }
+  } catch {}
+
   const experience = Math.floor((Date.now() - new Date(user.created_at).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   const { rank, score } = calcRank(commits, pullRequests, issues, stars, user.followers);
 
@@ -181,9 +196,13 @@ async function main() {
   const allStats = {
     "stat-commits": { label: "Total Commits", value: commits.toLocaleString() },
     "stat-prs": { label: "Pull Requests", value: pullRequests.toLocaleString() },
+    "stat-reviews": { label: "Code Reviews", value: reviews.toLocaleString() },
     "stat-issues": { label: "Issues", value: issues.toLocaleString() },
     "stat-stars": { label: "Stars Earned", value: stars.toLocaleString() },
     "stat-repos": { label: "Repositories", value: user.public_repos.toLocaleString() },
+    "stat-contributed": { label: "Contributed To", value: contributedTo.toLocaleString() },
+    "stat-followers": { label: "Followers", value: user.followers.toLocaleString() },
+    "stat-following": { label: "Following", value: user.following.toLocaleString() },
     "stat-experience": { label: "Experience", value: `${experience} yr` },
   };
 

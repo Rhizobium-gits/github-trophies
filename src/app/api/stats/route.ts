@@ -211,7 +211,7 @@ export async function GET(req: NextRequest) {
     await prefetchIcons(langSorted.map(([l]) => l));
 
     // 🐱 Height
-    const headerH = 64, div = 20, statsH = 132;
+    const headerH = 64, div = 20, statsH = 220;
     const hasAct = !!activity;
     // Activity: 1-year contribution graph (53 weeks)
     const actLabelH = hasAct ? 20 : 0;
@@ -229,9 +229,13 @@ export async function GET(req: NextRequest) {
     const stats = [
       { label: "Total Commits", value: s.commits.toLocaleString() },
       { label: "Pull Requests", value: s.pullRequests.toLocaleString() },
+      { label: "Code Reviews", value: s.reviews.toLocaleString() },
       { label: "Issues", value: s.issues.toLocaleString() },
       { label: "Stars Earned", value: s.stars.toLocaleString() },
       { label: "Repositories", value: s.repositories.toLocaleString() },
+      { label: "Contributed To", value: s.contributedTo.toLocaleString() },
+      { label: "Followers", value: s.followers.toLocaleString() },
+      { label: "Following", value: s.following.toLocaleString() },
       { label: "Experience", value: `${s.experience} yr` },
     ];
 

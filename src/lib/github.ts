@@ -31,9 +31,12 @@ export interface GitHubStats {
   commits: number;
   pullRequests: number;
   issues: number;
+  reviews: number;
   repositories: number;
   stars: number;
   followers: number;
+  following: number;
+  contributedTo: number;
   languages: Record<string, number>;
   experience: number;
 }
@@ -145,9 +148,26 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
     if (r.ok) issues = (await r.json()).total_count || 0;
   } catch {}
 
+  // 🐱 Reviews + Contributed To via GraphQL
+  let reviews = 0, contributedTo = 0;
+  if (process.env.GITHUB_TOKEN) {
+    try {
+      const query = `query{user(login:"${username}"){contributionsCollection{totalPullRequestReviewContributions} repositoriesContributedTo(first:0){totalCount}}}`;
+      const r = await fetch("https://api.github.com/graphql", {
+        method: "POST", headers: { Authorization: `bearer ${process.env.GITHUB_TOKEN}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+      if (r.ok) {
+        const d = await r.json();
+        reviews = d?.data?.user?.contributionsCollection?.totalPullRequestReviewContributions || 0;
+        contributedTo = d?.data?.user?.repositoriesContributedTo?.totalCount || 0;
+      }
+    } catch {}
+  }
+
   const experience = Math.floor((Date.now() - new Date(user.created_at).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
 
-  const stats: GitHubStats = { user, commits, pullRequests, issues, repositories, stars, followers: user.followers, languages, experience };
+  const stats: GitHubStats = { user, commits, pullRequests, issues, reviews, repositories, stars, followers: user.followers, following: user.following, contributedTo, languages, experience };
 
   // 🐱 Cache with eviction
   if (cache.size >= MAX_ENTRIES) {
