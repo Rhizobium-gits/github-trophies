@@ -327,11 +327,11 @@ async function main() {
       const tx2 = avatar ? x + 60 : x;
       s += `<text x="${tx2}" y="20" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(user.name || user.login)}</text>`;
       // 🐱 Rank circle at right end
-      const rcx2 = w - 20, rcy2 = 18, cr3 = 18;
+      const rcx2 = w - 22, rcy2 = 20, cr3 = 22;
       const circ3 = 2 * Math.PI * cr3, dOff3 = circ3 - (score / 100) * circ3;
       s += `<circle cx="${rcx2}" cy="${rcy2}" r="${cr3}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="1.5"/>`;
-      s += `<circle cx="${rcx2}" cy="${rcy2}" r="${cr3}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2" stroke-dasharray="${circ3.toFixed(1)}" stroke-dashoffset="${dOff3.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${rcx2} ${rcy2})" opacity="0.9"/>`;
-      s += `<text x="${rcx2}" y="${rcy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
+      s += `<circle cx="${rcx2}" cy="${rcy2}" r="${cr3}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2.5" stroke-dasharray="${circ3.toFixed(1)}" stroke-dashoffset="${dOff3.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${rcx2} ${rcy2})" opacity="0.9"/>`;
+      s += `<text x="${rcx2}" y="${rcy2 + 1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
       s += `<text x="${tx2}" y="38" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(user.login)}</text>`;
       if (user.bio) {
         const bio = user.bio.length > 44 ? user.bio.slice(0, 41) + "..." : user.bio;
