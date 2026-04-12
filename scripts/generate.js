@@ -262,12 +262,24 @@ async function main() {
   // Fetch user
   const user = await fetchJSON(`https://api.github.com/users/${username}`);
 
-  // Fetch repos
-  const repos = await fetchAllPages(`https://api.github.com/users/${username}/repos?type=owner`);
-  const nonFork = repos.filter(r => !r.fork);
+  // Fetch repos (personal + org)
+  const personalRepos = await fetchAllPages(`https://api.github.com/users/${username}/repos?type=owner`);
+
+  // 🐱 Fetch org repos
+  let orgRepos = [];
+  try {
+    const orgs = await fetchJSON(`https://api.github.com/users/${username}/orgs`);
+    const orgResults = await Promise.all(orgs.map(org => fetchAllPages(`https://api.github.com/orgs/${org.login}/repos?per_page=100`)));
+    orgRepos = orgResults.flat();
+  } catch {}
+
+  // 🐱 Merge and deduplicate by full_name
+  const seen = new Set();
+  const allRepos = [...personalRepos, ...orgRepos].filter(r => { if (seen.has(r.full_name)) return false; seen.add(r.full_name); return true; });
+  const nonFork = allRepos.filter(r => !r.fork);
 
   // Stars
-  const stars = repos.reduce((s, r) => s + r.stargazers_count, 0);
+  const stars = allRepos.reduce((s, r) => s + r.stargazers_count, 0);
 
   // Languages (byte count)
   const languages = {};
@@ -331,7 +343,7 @@ async function main() {
     "stat-reviews": { label: "Code Reviews", value: reviews.toLocaleString() },
     "stat-issues": { label: "Issues", value: issues.toLocaleString() },
     "stat-stars": { label: "Stars Earned", value: stars.toLocaleString() },
-    "stat-repos": { label: "Repositories", value: user.public_repos.toLocaleString() },
+    "stat-repos": { label: "Repositories", value: allRepos.length.toLocaleString() },
     "stat-contributed": { label: "Contributed To", value: contributedTo.toLocaleString() },
     "stat-followers": { label: "Followers", value: user.followers.toLocaleString() },
     "stat-following": { label: "Following", value: user.following.toLocaleString() },
@@ -540,7 +552,7 @@ async function main() {
   }
 
   console.log(`Done! Generated ${allThemeNames.length} themes.`);
-  console.log(`Rank: ${rank} | Commits: ${commits} | PRs: ${pullRequests} | Repos: ${user.public_repos}`);
+  console.log(`Rank: ${rank} | Commits: ${commits} | PRs: ${pullRequests} | Repos: ${allRepos.length}`);
 }
 
 main().catch(e => { console.error(e); process.exit(1); });
