@@ -265,8 +265,12 @@ export async function GET(req: NextRequest) {
 
     const tx = avatarB64 ? pad + avatarSize + 12 : pad;
     o += `<text x="${tx}" y="${y + 20}" font-size="17" font-weight="700" fill="${t.title}" font-family="${F}">${esc(s.user.name || s.user.login)}</text>`;
-    // 🐱 Rank inline with username (right end)
-    o += `<text x="${W - pad}" y="${y + 20}" text-anchor="end" font-size="14" font-weight="800" fill="${t.rankCircleArc}" font-family="${M}">${rank}</text>`;
+    // 🐱 Rank circle at right end of header
+    const rcx = W - pad - 20, rcy = y + 18, rcr = 18;
+    const rcirc = 2 * Math.PI * rcr, rdOff = rcirc - (score / 100) * rcirc;
+    o += `<circle cx="${rcx}" cy="${rcy}" r="${rcr}" fill="${t.rankCircleBg}" stroke="${t.rankCircleTrack}" stroke-width="1.5"/>`;
+    o += `<circle cx="${rcx}" cy="${rcy}" r="${rcr}" fill="none" stroke="${t.rankCircleArc}" stroke-width="2" stroke-dasharray="${rcirc.toFixed(1)}" stroke-dashoffset="${rdOff.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 ${rcx} ${rcy})" opacity="0.9"/>`;
+    o += `<text x="${rcx}" y="${rcy + 1}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="800" fill="${t.rankText}" font-family="${F}">${rank}</text>`;
     o += `<text x="${tx}" y="${y + 38}" font-size="11" fill="${t.subtitle}" font-family="${F}">@${esc(s.user.login)}</text>`;
     if (s.user.bio) {
       const bio = s.user.bio.length > 44 ? s.user.bio.slice(0, 41) + "..." : s.user.bio;
