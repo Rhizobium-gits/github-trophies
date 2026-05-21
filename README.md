@@ -84,6 +84,29 @@
 - Contributionグラフ: GitHubプロフィール設定で「Private contributions」を有効にしている場合、プライベートリポへの貢献数が含まれることがあります
 - `read:user` トークンは読み取り専用で、データの変更はできません
 
+### 対処法（カードが更新されなくなったとき）
+
+GitHub Actions のログに `Error: https://api.github.com/users/...: 401` と出ていたら、**PAT (Personal Access Token) が期限切れ**です。GitHub API の無料枠（5000リクエスト/時）超過ではありません。エラーコードで原因が分かります:
+
+- **401 Unauthorized** → トークンが無効/期限切れ ← よくあるのはこれ
+- **403 Forbidden** + `rate limit exceeded` → レート制限
+- **429 Too Many Requests** → レート制限
+
+**修復手順:**
+
+1. [github.com/settings/tokens?type=beta](https://github.com/settings/tokens?type=beta) を開いて **Fine-grained PAT** を新規発行
+   - **Token name**: 自由（例: `github-trophies-action`）
+   - **Expiration**: `Custom...` で最大1年後を指定（毎回切れるのを防げる）
+   - **Repository access**: `Public Repositories (read-only)` を選択（追加 Permissions は不要）
+2. 生成された `github_pat_...` をコピー（**一度しか表示されません**）
+3. ターミナルで実行（プロンプトにトークンを貼り付け）:
+   ```
+   gh secret set GH_TOKEN --repo YOUR_USERNAME/github-trophies
+   ```
+   または GitHub Web UI: フォークしたリポ → **Settings** → **Secrets and variables** → **Actions** → `GH_TOKEN` を **Update**
+4. **Actions** タブ → **Generate Stats Card** → **Run workflow** で手動実行して確認
+5. expiration の1週間前くらいにカレンダーリマインダーを入れておくと再発を防げます
+
 ---
 
 ## English
@@ -164,6 +187,29 @@ This tool only uses **public data**. Your private repositories are never accesse
 - Contribution graph: may include private contribution counts if you have enabled "Private contributions" in your GitHub profile settings
 - The `read:user` token scope is read-only and cannot modify any data
 
+### Troubleshooting (when your card stops updating)
+
+If you see `Error: https://api.github.com/users/...: 401` in the GitHub Actions log, your **PAT (Personal Access Token) has expired**. This is **not** a free-tier limit issue (the API allows 5000 requests/hour authenticated). The status code tells you the real cause:
+
+- **401 Unauthorized** → token invalid/expired ← this is the common one
+- **403 Forbidden** + `rate limit exceeded` → rate limit hit
+- **429 Too Many Requests** → rate limit hit
+
+**How to fix:**
+
+1. Open [github.com/settings/tokens?type=beta](https://github.com/settings/tokens?type=beta) and generate a new **Fine-grained PAT**
+   - **Token name**: anything (e.g. `github-trophies-action`)
+   - **Expiration**: `Custom...` with the maximum 1-year date (prevents frequent re-issuing)
+   - **Repository access**: `Public Repositories (read-only)` (no extra Permissions needed)
+2. Copy the generated `github_pat_...` token (**shown only once**)
+3. In your terminal (paste the token at the prompt):
+   ```
+   gh secret set GH_TOKEN --repo YOUR_USERNAME/github-trophies
+   ```
+   Or via the GitHub Web UI: your fork → **Settings** → **Secrets and variables** → **Actions** → **Update** `GH_TOKEN`
+4. Go to the **Actions** tab → **Generate Stats Card** → **Run workflow** to verify
+5. Set a calendar reminder for ~1 week before the expiration date so you don't get caught again
+
 ---
 
 ## 中文
@@ -243,6 +289,29 @@ This tool only uses **public data**. Your private repositories are never accesse
 - 语言 / Star / 仓库数: 仅公开仓库（REST API, `type=owner`）
 - 贡献图表: 如果你在 GitHub 个人资料设置中启用了「Private contributions」，可能会包含私有仓库的贡献数量
 - `read:user` 令牌为只读权限，无法修改任何数据
+
+### 故障排除（卡片不再更新时）
+
+如果 GitHub Actions 日志中出现 `Error: https://api.github.com/users/...: 401`，说明你的 **PAT（个人访问令牌）已过期**。这**不是**免费额度问题（API 认证后允许 5000 请求/小时）。错误码可以判断真正原因:
+
+- **401 Unauthorized** → 令牌失效/过期 ← 最常见
+- **403 Forbidden** + `rate limit exceeded` → 触发速率限制
+- **429 Too Many Requests** → 触发速率限制
+
+**修复步骤:**
+
+1. 打开 [github.com/settings/tokens?type=beta](https://github.com/settings/tokens?type=beta)，生成新的 **Fine-grained PAT**
+   - **Token name**: 任意名称（例如 `github-trophies-action`）
+   - **Expiration**: 选 `Custom...` 并设为最大 1 年后（避免频繁更新）
+   - **Repository access**: 选择 `Public Repositories (read-only)`（无需额外 Permissions）
+2. 复制生成的 `github_pat_...` 令牌（**仅显示一次**）
+3. 在终端运行（提示时粘贴令牌）:
+   ```
+   gh secret set GH_TOKEN --repo YOUR_USERNAME/github-trophies
+   ```
+   或通过 GitHub Web UI: fork 仓库 → **Settings** → **Secrets and variables** → **Actions** → **Update** `GH_TOKEN`
+4. 打开 **Actions** 标签 → **Generate Stats Card** → **Run workflow** 手动验证
+5. 在过期日期前约 1 周设置日历提醒，避免再次中断
 
 ---
 
